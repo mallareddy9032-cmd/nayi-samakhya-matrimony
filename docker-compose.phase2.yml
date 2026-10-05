@@ -1,0 +1,31 @@
+# Phase 2 local database: PostgreSQL 17 with a stand-in parent portal schema.
+#   ./scripts/exit-gate-2.sh        (fresh container, migrations, assertion suites)
+# Passwords below are LOCAL defaults; override via env, never reuse them anywhere real.
+name: nsm-phase2
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    # terse: constraint errors otherwise log "Failing row contains (...)" with personal data.
+    # log_min_error_statement=panic: a failing statement is otherwise logged verbatim (literals, keys).
+    command: ["postgres", "-c", "log_statement=none", "-c", "log_min_duration_statement=-1", "-c", "log_error_verbosity=terse", "-c", "log_min_error_statement=panic"]
+    environment:
+      POSTGRES_DB: nayisamakhya
+      POSTGRES_PASSWORD: ${NSM_PG_ADMIN_PASSWORD:-local-admin-only}
+      NSM_APP_PASSWORD: ${NSM_APP_PASSWORD:-local-app-only}
+      NSM_MIGRATOR_PASSWORD: ${NSM_MIGRATOR_PASSWORD:-local-migrator-only}
+      NSM_GRIEVANCE_RO_PASSWORD: ${NSM_GRIEVANCE_RO_PASSWORD:-local-grievance-only}
+      ADMIN_URL: postgresql:///nayisamakhya?user=postgres
+      MIGRATOR_URL: postgresql://nsm_migrator:${NSM_MIGRATOR_PASSWORD:-local-migrator-only}@127.0.0.1:5432/nayisamakhya
+    ports:
+      - "127.0.0.1:${NSM_PG_PORT:-5433}:5432"
+    volumes:
+      - ./db:/nsm/db:ro
+      - ./scripts/migrate.sh:/nsm/scripts/migrate.sh:ro
+      - ./db/fixtures/parent_portal.sql:/docker-entrypoint-initdb.d/000_parent_portal.sql:ro
+    healthcheck:
+      # TCP probe: the initdb bootstrap server listens on the socket only, so this waits for the real one.
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U postgres -d nayisamakhya"]
+      interval: 2s
+      timeout: 3s
+      retries: 30

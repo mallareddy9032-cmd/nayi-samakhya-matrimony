@@ -1,0 +1,26 @@
+---
+description: TypeScript, validation and server-boundary rules for the NSM Next.js app
+globs: **/*.ts,**/*.tsx
+alwaysApply: false
+---
+
+# TypeScript rules
+
+- `strict`, `noUncheckedIndexedAccess`. No `any`, no `as` on external data, no `@ts-ignore`.
+- Validate every trust boundary (body, query, params, JWT header/claims, env, parent API, JWKS)
+  with `zod`; use only the parsed value.
+- SQL is parameterised (`$1, $2`). Never build SQL from input with template strings.
+- Modules holding secrets or DB access (`db`, `crypto`, `session`) import `server-only`.
+  `src/lib/sso.ts` and `src/lib/config.ts` hold only public keys/URLs and stay importable by
+  `src/proxy.ts` and `node:test`.
+- Client errors are generic; details go to logs without personal data.
+- Prefer the platform: `node:crypto`, `fetch`, route handlers, Proxy.
+- Tests: `node:test` + `node:assert/strict`, files in `test/*.test.ts`, run with `npm test`
+  (Node 24 strips types natively; import local files with the `.ts` extension).
+
+```ts
+// ❌ trusts client input for identity
+const userId = req.headers.get('x-user-id');
+// ✅ identity only from the verified token
+const { sub } = await requireSession();
+```

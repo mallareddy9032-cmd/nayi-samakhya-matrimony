@@ -1,0 +1,58 @@
+---
+description: PostgreSQL schema, roles, RLS and SQL naming for NSM
+globs: db/**/*.sql,src/lib/db.ts,src/lib/crypto.ts,scripts/migrate.sh
+alwaysApply: false
+---
+
+# Database: schema, roles, RLS, naming
+
+## Isolation and roles
+
+- All objects in schema `matrimony_shared`. Every SQL file starts with
+  `SET search_path = matrimony_shared, pg_temp;`. Never touch `public` or parent schemas.
+- `nsm_owner` (NOLOGIN, BYPASSRLS) owns everything; BYPASSRLS exists only so SECURITY DEFINER
+  functions (the audited bypass points) work under FORCE RLS. `nsm_migrator` (LOGIN, member of
+  owner) runs migrations. `nsm_app_user` (LOGIN, NOSUPERUSER, NOBYPASSRLS, not owner) is the only
+  app role. `nsm_grievance_ro` reads audit/grievance tables only.
+- No NSM role has privileges outside `matrimony_shared`; `fn_assert_isolation()` enforces it and
+  runs at the end of every migration run.
+
+## RLS
+
+- Every table: `ENABLE` + `FORCE ROW LEVEL SECURITY`, with policies. No policy = bug.
+- Context only via transaction-local
+  `SELECT set_config('request.jwt.claim.sub', $1, true), set_config('request.jwt.claim.roles', $2, true)`
+  (roles as a JSON array). `sub` is the verified JWT `sub` = `profiles.root_user_id`. Never
+  session-level `SET` (leaks across the pool).
+- All app DB access goes through `withTx(ctx, fn)` in `src/lib/db.ts`. No bare `pool.query`.
+- Policies needing the viewer's own row (Sagothra exclusion, coordinator scope) call a
+  `STABLE SECURITY DEFINER` function with `SET search_path = matrimony_shared, pg_temp`, wrapped
+  as `(SELECT fn())` (cast to its array type when used with `= ANY`).
+- Coordinator scope comes from `sub_admins` (NSM-side assignment) AND the token role; never
+  table-wide.
+- Workflow columns (`status`, `assigned_coordinator_user_id`, `matrimonial_id`, `submitted_at`,
+  review fields) are never app-writable; they change only inside SECURITY DEFINER functions
+  (`fn_submit_profile`, coordinator transitions), which `fn_guard_profile_update` detects via
+  `current_user <> 'nsm_app_user'`.
+- Gothras: members see only `is_verified` rows (plus the gothra of profiles they can see);
+  proposals go through `fn_propose_gothra` and block verification until ratified.
+
+## Naming
+
+- snake_case; tables plural, columns singular; FKs `<singular>_id`.
+- PK `id uuid PRIMARY KEY DEFAULT gen_random_uuid()`. No serial public IDs.
+- Mutable tables: `created_at`/`updated_at timestamptz NOT NULL DEFAULT now()`, trigger-maintained.
+- `pk_<t>`, `fk_<t>_<col>`, `uq_<t>_<cols>`, `ck_<t>_<rule>`, `ix_<t>_<cols>`,
+  `pol_<t>_<actor>_<action>`, `fn_<verb>_<noun>`, `trg_<t>_<event>`.
+  Exception: `unmask_contact_details` (name fixed by the product spec).
+- Enum values lowercase snake_case (`pending_mandal_review`, `contact_unlocked`).
+- Encrypted columns end `_enc` (bytea); never store plaintext alongside.
+
+## Migrations and tests
+
+- Forward-only, numbered `db/migrations/NNN_<name>.sql`, applied by `scripts/migrate.sh`
+  (sha256-tracked; editing an applied file fails the run). Expand/contract for zero downtime.
+- Each migration ships `db/tests/NNN_<name>.test.sql` (`DO $$ ... ASSERT ... $$`, inside
+  BEGIN/ROLLBACK) acting as `nsm_app_user`, proving allowed cases succeed and forbidden ones
+  return zero rows or raise. `scripts/exit-gate-2.sh` and `exit-gate-3.sh` run them all on a
+  fresh container.

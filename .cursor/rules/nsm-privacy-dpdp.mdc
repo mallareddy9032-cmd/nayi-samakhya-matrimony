@@ -1,0 +1,45 @@
+---
+description: DPDP Act 2023 privacy rules — consent, contact masking, erasure, logging
+alwaysApply: true
+---
+
+# DPDP Act 2023 privacy rules
+
+- Consent: `dpdp_consent_logs` is append-only. `nsm_app_user` gets INSERT and SELECT only; a
+  trigger rejects UPDATE/DELETE/TRUNCATE for every role; each row stores `prev_hash` and
+  `row_hash` (sha256 chain, verified by `fn_verify_consent_chain()`).
+  Withdrawing consent is a NEW row, never an edit.
+- Each consent row: `root_user_id`, `purpose` (enum), `notice_version`, `statement` (exact text
+  shown), `granted`, `ip inet`, `user_agent`, `created_at` (server clock). One purpose per
+  checkbox; never bundle purposes. `contact_share` rows are written only by
+  `fn_grant_contact_share` / `fn_withdraw_contact_share`.
+- Notices exist in English and Telugu, versioned; the version shown is the version logged.
+  Notice texts live only in `NOTICES` (`src/lib/onboarding.ts`); the server writes the statement
+  from there (`<version>.<lang>`), never from client text. Bumping a text means bumping its version.
+- Onboarding writes three separate rows (`community_pledge`, `profile_processing`,
+  `coordinator_verification`) and moves a profile to review only via `fn_submit_profile()`, which
+  re-checks the latest row of each is granted. A profile is locked while `pending_mandal_review`.
+- Consent IP comes only from NGINX's `X-Real-IP` (overwritten from `$remote_addr`); no valid IP
+  -> refuse the consent (400), never store a guess.
+- Withdrawal is as easy as granting (same screen depth, one action).
+- Contact fields (phone, email, WhatsApp, door address) are stored only as `pgp_sym_encrypt`
+  (AES-256) output in `_enc bytea` columns, written via `fn_set_contact_details`. `nsm_app_user`
+  has NO column privilege on them. The only read path is `unmask_contact_details(target_profile_id
+  [, grievance_ticket_id])`, which allows exactly: (a) self; (b) a `contact_unlocked` interest
+  whose latest `contact_share` row is granted for BOTH sides; (c) a grievance officer (token role
+  + `sub_admins` assignment) on an open ticket assigned to them, about that profile, not filed by
+  them. (b) and (c) write `contact_access_audit`. Any other unmask path is a vulnerability.
+  `door_address_enc` has no read path yet (planned: the assigned Mandal Coordinator's
+  field-verification view, audited; needs its own approval and tests).
+- The encryption key never lives in the DB or repo; it comes from the secret manager at runtime
+  and is passed per transaction as `set_config('nsm.contact_key', $1, true)` (`src/lib/crypto.ts`).
+  Roles that pass it run with `log_statement = 'none'` and `log_parameter_max_length = 0`.
+  Every NSM Postgres runs `log_error_verbosity = terse` (no "Failing row contains" data) and
+  `log_min_error_statement = panic` (failing statements are not echoed).
+- Erasure wipes `_enc` columns and photos and anonymises the profile; consent/audit logs remain.
+- Age gate: legal marriage age (21 male, 18 female) via CHECK + server validation. Never store
+  data of anyone under 18.
+- Minimise: a new personal-data column needs a stated purpose in the migration comment.
+- Never log personal data: names, phone, email, address, DOB, gothra, photo URLs, raw JWTs,
+  JWT payloads. Log request IDs, reason codes and hashed user IDs only.
+- Gothra/caste is high-risk: never in URLs, logs, analytics, or third-party requests.

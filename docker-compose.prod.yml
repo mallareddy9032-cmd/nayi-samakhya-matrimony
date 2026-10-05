@@ -1,0 +1,85 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: nsm_prod_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-nsm_admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?database password required}
+      POSTGRES_DB: ${POSTGRES_DB:-nayisamakhya}
+    volumes:
+      - nsm_prod_pgdata:/var/lib/postgresql/data
+    command: >
+      postgres
+      -c log_destination=stderr
+      -c log_min_error_statement=panic
+      -c log_statement=none
+      -c ssl=off
+    networks:
+      - nsm_prod_net
+
+  minio:
+    image: cgr.dev/chainguard/minio@sha256:4cf4831a2bbcf13ddca09c1cbcc9faff716dd3c4247e0babc32864b8ee8e0034
+    container_name: nsm_prod_minio
+    restart: always
+    command: ["server", "/data", "--address", ":9000"]
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:?minio root user required}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?minio root password required}
+      MINIO_BROWSER: "off"
+    volumes:
+      - nsm_prod_miniodata:/data
+    networks:
+      - nsm_prod_net
+
+  nsm-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nsm_prod_app
+    restart: always
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      HOSTNAME: "0.0.0.0"
+      DATABASE_URL: postgresql://${POSTGRES_USER:-nsm_admin}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-nayisamakhya}
+      NSM_CONTACT_KEY: ${NSM_CONTACT_KEY:?contact encryption key required}
+      S3_ENDPOINT: http://minio:9000
+      S3_BUCKET: nsm-profile-photos
+      S3_ACCESS_KEY: ${S3_ACCESS_KEY:?s3 access key required}
+      S3_SECRET_KEY: ${S3_SECRET_KEY:?s3 secret key required}
+      SSO_ISSUER: https://nayisamakhya.org
+      SSO_AUDIENCE: nayisamakhya-matrimony
+      SSO_JWKS_URL: https://nayisamakhya.org/.well-known/jwks.json
+      SSO_LOGIN_URL: https://nayisamakhya.org/login
+      APP_ORIGIN: https://nayisamakhya.org
+    depends_on:
+      - postgres
+      - minio
+    networks:
+      - nsm_prod_net
+
+  nginx:
+    image: nginx:stable-alpine
+    container_name: nsm_prod_nginx
+    restart: always
+    ports:
+      - "8088:8080"
+    volumes:
+      - ./deploy/nginx/matrimony.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./deploy/nginx/matrimony-locations.conf:/etc/nginx/nsm/matrimony-locations.conf:ro
+      - ./deploy/nginx/matrimony-media.conf:/etc/nginx/nsm/matrimony-media.conf:ro
+    depends_on:
+      - nsm-app
+    networks:
+      - nsm_prod_net
+
+volumes:
+  nsm_prod_pgdata:
+  nsm_prod_miniodata:
+
+networks:
+  nsm_prod_net:
+    driver: bridge

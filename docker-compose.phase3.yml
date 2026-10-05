@@ -1,0 +1,13 @@
+# Phase 3 overlay: the Phase 1 stack (nginx + nsm-app + mock-sso) wired to the Phase 2 database.
+#   docker compose -f docker-compose.phase1.yml -f docker-compose.phase2.yml -f docker-compose.phase3.yml up -d --build
+# NSM_CONTACT_KEY has no default on purpose: scripts/exit-gate-3.sh generates a throwaway key.
+name: nsm-phase3
+
+services:
+  nsm-app:
+    environment:
+      DATABASE_URL: postgresql://nsm_app_user:${NSM_APP_PASSWORD:-local-app-only}@postgres:5432/nayisamakhya
+      NSM_CONTACT_KEY: ${NSM_CONTACT_KEY:?set NSM_CONTACT_KEY (exit-gate-3.sh generates one)}
+    depends_on:
+      postgres:
+        condition: service_healthy

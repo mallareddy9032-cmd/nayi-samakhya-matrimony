@@ -1,0 +1,10 @@
+node_modules
+.git
+.cursor
+.antigravity
+test
+db
+deploy
+scripts
+ROADMAP.md
+*.md

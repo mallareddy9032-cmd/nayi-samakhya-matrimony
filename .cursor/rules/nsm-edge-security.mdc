@@ -1,0 +1,38 @@
+---
+description: NGINX ingress, CSP, cookies, CSRF and anti-scraping boundaries
+globs: deploy/**,src/proxy.ts,next.config.ts,docker-compose*.yml
+alwaysApply: false
+---
+
+# Edge & browser security
+
+## NGINX (`deploy/nginx/`)
+
+- `matrimony-locations.conf` is server-context and is included unchanged into the parent
+  portal's `server {}`; `matrimony.conf` holds http-context zones/upstream and the local server.
+- Use `location ^~ /matrimony` so parent regex locations cannot capture NSM assets.
+- Strip `X-Middleware-Subrequest` (CVE-2025-29927 class) before proxying; set `X-Request-ID`.
+- Access log uses `$uri` (no query string) so filters never land in logs.
+- Per-IP `limit_req` zones: general, plus a strict zone on discovery/profile routes. Status 429.
+
+## Headers and CSP
+
+- Proxy sets a per-request nonce CSP: `default-src 'self'`; `script-src 'self' 'nonce-…'
+  'strict-dynamic'`; `object-src 'none'`; `base-uri 'none'`; `frame-ancestors 'none'`;
+  `form-action 'self'`. No external script/style/font/frame origins. Pages render dynamically.
+- NGINX adds HSTS, `nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: same-origin`,
+  `Permissions-Policy`, COOP/CORP, and a script-agnostic fallback CSP.
+
+## Cookies, CORS, CSRF
+
+- NSM cookies: `Path=/matrimony; HttpOnly; Secure; SameSite=Lax`. Never JS-readable secrets.
+  Same origin as the parent portal: CSP is the main isolation, keep it strict.
+- No CORS headers (same-origin only). Mutating methods require `Origin === APP_ORIGIN`; no state
+  change on GET.
+
+## Anti-scraping
+
+- Keyset pagination with a hard page cap; no offset, no export-all, no unbounded results.
+- Per-user daily view quota in the DB plus NGINX per-IP limits.
+- Discovery never returns contact data, exact DOB or full-resolution photos.
+- Sagothra exclusion is RLS-enforced, never only a UI filter.

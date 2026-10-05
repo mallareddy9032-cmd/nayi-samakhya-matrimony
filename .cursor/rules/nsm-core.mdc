@@ -1,0 +1,41 @@
+---
+description: NSM identity, architecture boundaries, SSO contract and change discipline
+alwaysApply: true
+---
+
+# Nayi Samakhya Matrimony (NSM) — Core
+
+NSM is the matrimonial service of nayisamakhya.org at `/matrimony`. It holds caste/gothra, family,
+photo and contact data of real people: every change is security- and privacy-critical. When a rule
+conflicts with convenience, the rule wins. If a request would break a rule, stop and name the rule.
+
+## Architecture
+
+- Served ONLY at `https://nayisamakhya.org/matrimony/...`. Never introduce sub-domains.
+- One Next.js 16 app (App Router, TypeScript, `src/`), `basePath: '/matrimony'`, own container.
+  NGINX (`deploy/nginx/`) proxies `/matrimony` to it. Admin lives at `/matrimony/nsm-admin`.
+- Request gate is `src/proxy.ts` (Next 16 Proxy, Node runtime; `middleware.ts` is deprecated).
+  Pages, route handlers and server actions re-verify the session via `requireSession()`; never rely
+  on the proxy alone.
+- NSM never reads the parent portal database. Parent data arrives only via the signed SSO JWT or a
+  signed server-to-server response.
+- No new runtime dependency without stating why Node / Next.js / `pg` / `zod` cannot do it.
+
+## SSO contract (parent portal)
+
+- Token source: cookie `ns_session_token`, fallback `Authorization: Bearer <token>`.
+- Verify: `alg` pinned to `RS256`; keys from `https://nayisamakhya.org/.well-known/jwks.json`
+  (or `SSO_PUBLIC_KEY` PEM locally); `iss = https://nayisamakhya.org`;
+  `aud = nayisamakhya-matrimony`; `exp`/`nbf` with 60 s clock leeway; reject `crit`.
+- Claims used: `sub` (uuid, stable user key), `ns_membership_id` (display/reference),
+  `is_ns_verified` (must be `true`), `assigned_district`, `assigned_mandal`, `roles`.
+- `phone` and `email` in the token are deliberately discarded (DPDP minimisation). Never read,
+  store or log them.
+- Identity comes ONLY from the verified token. Never from body, query, or client headers.
+- No token / invalid token -> 302 to `SSO_LOGIN_URL?return_to=` (path under `/matrimony` only).
+  Valid but `is_ns_verified !== true` -> 403.
+
+## Change discipline
+
+- Do not implement work from a later `ROADMAP.md` phase without explicit confirmation.
+- Security-relevant logic (JWT, state machine, unmask, consent chain) ships with a `node:test` test.

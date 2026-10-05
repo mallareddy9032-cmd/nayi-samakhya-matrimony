@@ -1,0 +1,53 @@
+# Phase 4 overlay: private MinIO bucket for profile photos, on top of the Phase 3 stack.
+#   docker compose -f docker-compose.phase1.yml -f docker-compose.phase2.yml -f docker-compose.phase3.yml \
+#     -f docker-compose.phase4.yml up -d --build
+# MinIO's own images are no longer published; Chainguard's build is pinned by digest.
+# Credentials below are LOCAL defaults; never reuse them anywhere real.
+name: nsm-phase4
+
+x-s3: &s3
+  S3_BUCKET: nsm-profile-photos
+  S3_ACCESS_KEY: ${NSM_S3_ACCESS_KEY:-nsm-app-photos}
+  S3_SECRET_KEY: ${NSM_S3_SECRET_KEY:-local-s3-app-only}
+
+services:
+  minio:
+    image: cgr.dev/chainguard/minio@sha256:4cf4831a2bbcf13ddca09c1cbcc9faff716dd3c4247e0babc32864b8ee8e0034
+    command: ["server", "/data", "--address", ":9000"]
+    environment:
+      MINIO_ROOT_USER: ${NSM_MINIO_ROOT_USER:-nsm-minio-root}
+      MINIO_ROOT_PASSWORD: ${NSM_MINIO_ROOT_PASSWORD:-local-minio-root-only}
+      MINIO_BROWSER: "off"
+    expose: ["9000"]
+    tmpfs:
+      - /data:uid=65532,gid=65532
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+
+  minio-init:
+    build: ./deploy/minio
+    environment:
+      <<: *s3
+      MINIO_ROOT_USER: ${NSM_MINIO_ROOT_USER:-nsm-minio-root}
+      MINIO_ROOT_PASSWORD: ${NSM_MINIO_ROOT_PASSWORD:-local-minio-root-only}
+    depends_on: [minio]
+    restart: "no"
+    cap_drop: [ALL]
+
+  nsm-app:
+    environment:
+      <<: *s3
+      S3_ENDPOINT: http://minio:9000
+      S3_REGION: us-east-1
+      PHOTO_URL_TTL_SECONDS: ${PHOTO_URL_TTL_SECONDS:-300}
+    depends_on:
+      minio-init:
+        condition: service_completed_successfully
+
+  nginx:
+    volumes:
+      - ./deploy/nginx/matrimony-media.conf:/etc/nginx/nsm/matrimony-media.conf:ro
+    depends_on:
+      minio:
+        condition: service_started
