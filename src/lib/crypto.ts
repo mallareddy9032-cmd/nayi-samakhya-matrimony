@@ -2,7 +2,11 @@ import 'server-only';
 import type { PoolClient } from 'pg';
 import { z } from 'zod';
 
-const KeyEnvSchema = z.object({ NSM_CONTACT_KEY: z.string().min(32) });
+const KeyEnvSchema = z.object({
+  NSM_CONTACT_KEY: z.string().min(32).optional(),
+  PGCRYPTO_KEY: z.string().min(32).optional(),
+}).transform((env) => env.NSM_CONTACT_KEY || env.PGCRYPTO_KEY || '')
+  .refine((val) => val.length >= 32, { message: 'NSM_CONTACT_KEY or PGCRYPTO_KEY (min 32 chars) must be provided' });
 
 const phone = z.string().regex(/^\+?[0-9]{10,15}$/);
 const ContactInputSchema = z.object({
@@ -22,7 +26,7 @@ export type ContactDetails = z.infer<typeof ContactDetailsSchema>;
 
 /** Key lives only for the duration of `fn`, inside the caller's transaction. */
 async function withContactKey<T>(tx: PoolClient, fn: () => Promise<T>): Promise<T> {
-  await tx.query("SELECT set_config('nsm.contact_key', $1, true)", [KeyEnvSchema.parse(process.env).NSM_CONTACT_KEY]);
+  await tx.query("SELECT set_config('nsm.contact_key', $1, true)", [KeyEnvSchema.parse(process.env)]);
   try {
     return await fn();
   } finally {

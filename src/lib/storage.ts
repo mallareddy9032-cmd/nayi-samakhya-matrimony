@@ -5,14 +5,26 @@ import { presign, type SigV4Credentials } from './sigv4.ts';
 
 // Private bucket. The app writes through the internal endpoint; browsers read only through
 // NGINX's /matrimony/media/<bucket>/ location with a short-lived URL signed for the public host.
-const EnvSchema = z.object({
-  S3_ENDPOINT: z.url({ protocol: /^https?$/ }),
+const RawEnvSchema = z.object({
+  S3_ENDPOINT: z.string().transform((url) => (url.startsWith('http://') || url.startsWith('https://') ? url : `http://${url}`)),
   S3_REGION: z.string().min(1).default('us-east-1'),
-  S3_BUCKET: z.string().regex(/^[a-z0-9][a-z0-9.-]{1,61}[a-z0-9]$/).default('nsm-profile-photos'),
-  S3_ACCESS_KEY: z.string().min(3),
-  S3_SECRET_KEY: z.string().min(8),
+  S3_BUCKET: z.string().optional(),
+  S3_BUCKET_NAME: z.string().optional(),
+  S3_ACCESS_KEY: z.string().optional(),
+  S3_SECRET_KEY: z.string().optional(),
+  MINIO_ROOT_USER: z.string().optional(),
+  MINIO_ROOT_PASSWORD: z.string().optional(),
   PHOTO_URL_TTL_SECONDS: z.coerce.number().int().min(1).max(3600).default(300),
 });
+
+const EnvSchema = RawEnvSchema.transform((env) => ({
+  S3_ENDPOINT: z.url({ protocol: /^https?$/ }).parse(env.S3_ENDPOINT),
+  S3_REGION: env.S3_REGION,
+  S3_BUCKET: env.S3_BUCKET || env.S3_BUCKET_NAME || 'nsm-profile-photos',
+  S3_ACCESS_KEY: env.S3_ACCESS_KEY || env.MINIO_ROOT_USER || 'nsm-app-photos',
+  S3_SECRET_KEY: env.S3_SECRET_KEY || env.MINIO_ROOT_PASSWORD || 'local-s3-app-only',
+  PHOTO_URL_TTL_SECONDS: env.PHOTO_URL_TTL_SECONDS,
+}));
 export const MEDIA_PREFIX = '/matrimony/media';
 export type PhotoVariant = 'full' | 'blurred';
 

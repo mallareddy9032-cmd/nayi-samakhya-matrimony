@@ -8,6 +8,7 @@ const EnvSchema = z.object({
   SSO_AUDIENCE: z.string().min(1).default('nayisamakhya-matrimony'),
   SSO_JWKS_URL: httpUrl.default('https://nayisamakhya.org/.well-known/jwks.json'),
   SSO_PUBLIC_KEY: z.string().min(1).optional(),
+  JWT_PUBLIC_KEY: z.string().min(1).optional(),
   SSO_LOGIN_URL: httpUrl.default('https://nayisamakhya.org/login'),
   APP_ORIGIN: httpUrl.default('https://nayisamakhya.org'),
 });
@@ -20,11 +21,12 @@ let cached: SsoConfig | undefined;
 export function getSsoConfig(): SsoConfig {
   if (cached) return cached;
   const env = EnvSchema.parse(process.env);
+  const publicKey = env.SSO_PUBLIC_KEY || env.JWT_PUBLIC_KEY;
   cached = {
     verify: {
       issuer: env.SSO_ISSUER,
       audience: env.SSO_AUDIENCE,
-      resolveKey: env.SSO_PUBLIC_KEY ? pemKeyResolver(env.SSO_PUBLIC_KEY) : jwksKeyResolver(env.SSO_JWKS_URL),
+      resolveKey: publicKey ? pemKeyResolver(publicKey) : jwksKeyResolver(env.SSO_JWKS_URL),
     },
     loginUrl: env.SSO_LOGIN_URL,
     appOrigin: new URL(env.APP_ORIGIN).origin,
