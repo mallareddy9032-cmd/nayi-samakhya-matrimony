@@ -85,7 +85,7 @@ export function todayInIndia(now: Date = new Date()): string {
 }
 
 /** Prohibition of Child Marriage Act, 2006: 21 (male) / 18 (female), exact on the birthday. */
-export function meetsLegalAge(dateOfBirth: string, gender: 'male' | 'female', today: string): boolean {
+export function meetsLegalAge(dateOfBirth: string, gender: 'male' | 'female', today: string = todayInIndia()): boolean {
   const years = gender === 'male' ? 21 : 18;
   const cutoff = `${String(Number(today.slice(0, 4)) - years).padStart(4, '0')}${today.slice(4)}`;
   return dateOfBirth <= cutoff;
