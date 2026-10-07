@@ -9,7 +9,7 @@ const EnvSchema = z.object({
   SSO_JWKS_URL: httpUrl.default('https://nayisamakhya.org/.well-known/jwks.json'),
   SSO_PUBLIC_KEY: z.string().min(1).optional(),
   JWT_PUBLIC_KEY: z.string().min(1).optional(),
-  SSO_LOGIN_URL: httpUrl.default('https://nayisamakhya.org/login'),
+  SSO_LOGIN_URL: httpUrl.default('https://nayisamakhya.org/admin/login'),
   APP_ORIGIN: httpUrl.default('https://nayisamakhya.org'),
 });
 
