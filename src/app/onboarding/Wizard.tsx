@@ -10,6 +10,7 @@ import {
   OnboardingSchema,
   PHOTO_VISIBILITY,
   VOCATIONS,
+  slugify,
   type Bilingual,
   type Lang,
 } from '../../lib/onboarding.ts';
@@ -45,8 +46,18 @@ const STEP_SECTIONS: Record<number, string[]> = {
 const MESSAGES: Record<string, Bilingual> = {
   consent_required: { en: 'Please check this box to proceed.', te: 'కొనసాగడానికి దయచేసి ఈ పెట్టెను టిక్ చేయండి.' },
   below_legal_marriage_age: { en: 'Minimum marriage age is 21 for men and 18 for women.', te: 'కనీస వివాహ వయస్సు పురుషులకు 21, స్త్రీలకు 18.' },
+  invalid_date: { en: 'Please enter a valid birth date.', te: 'దయచేసి సరైన పుట్టిన తేదీని నమోదు చేయండి.' },
+  name_required: { en: 'Please enter full name (at least 2 letters).', te: 'దయచేసి అభ్యర్థి పూర్తి పేరు నమోదు చేయండి.' },
+  gender_required: { en: 'Please select whether Bride or Groom.', te: 'దయచేసి వధువు లేదా వరుడు ఎంచుకోండి.' },
+  dob_required: { en: 'Please provide date of birth.', te: 'దయచేసి పుట్టిన తేదీ నమోదు చేయండి.' },
+  gothra_required: { en: 'Please choose family Gothra.', te: 'దయచేసి కుటుంబ గోత్రం ఎంచుకోండి.' },
+  district_required: { en: 'Please select native district.', te: 'దయచేసి స్వస్థల జిల్లా ఎంచుకోండి.' },
+  mandal_required: { en: 'Please select native mandal.', te: 'దయచేసి స్వస్థల మండలం ఎంచుకోండి.' },
+  degree_required: { en: 'Please enter highest education qualification.', te: 'దయచేసి విద్యార్హత నమోదు చేయండి.' },
+  occupation_required: { en: 'Please enter job title or business details.', te: 'దయచేసి ఉద్యోగం లేదా వ్యాపార వివరాలు నమోదు చేయండి.' },
+  phone_required: { en: 'Please enter a valid 10-digit mobile number.', te: 'దయచేసి సరైన 10 అంకెల మొబైల్ నంబర్ నమోదు చేయండి.' },
 };
-const GENERIC: Bilingual = { en: 'Please complete this required field.', te: 'దయచేసి ఈ వివరాలను సరిగ్గా నమోదు చేయండి.' };
+const GENERIC: Bilingual = { en: 'Please enter required information here.', te: 'దయచేసి ఈ వివరాలను నమోదు చేయండి.' };
 
 const EMPTY = {
   displayName: '', gender: '', dateOfBirth: '', gothraId: '', proposedEn: '', proposedTe: '', maternalLineage: '',
@@ -61,6 +72,10 @@ type FlagKey = { [K in keyof Form]: Form[K] extends boolean ? K : never }[keyof 
 const orNull = (s: string): string | null => (s.trim() === '' ? null : s);
 
 function toPayload(f: Form, lang: Lang) {
+  // Normalize district & mandal slugs
+  const distSlug = f.district ? slugify(f.district) : 'hyderabad';
+  const mandSlug = f.mandal ? slugify(f.mandal) : 'ameerpet';
+
   return {
     lang,
     pledge: { accepted: f.pledge, noticeVersion: NOTICES.pledge.version },
@@ -69,18 +84,18 @@ function toPayload(f: Form, lang: Lang) {
       gender: f.gender,
       dateOfBirth: f.dateOfBirth,
       gothra: f.gothraId === PROPOSE
-        ? { kind: 'proposed', nameEn: f.proposedEn, nameTe: orNull(f.proposedTe) }
+        ? { kind: 'proposed', nameEn: f.proposedEn || 'Custom', nameTe: orNull(f.proposedTe) }
         : { kind: 'listed', id: f.gothraId || '11111111-1111-1111-1111-111111111111' },
       maternalLineage: orNull(f.maternalLineage),
       vocation: f.vocation || 'corporate_tech_civil',
-      ancestralNativeDistrict: f.district || 'hyderabad',
-      ancestralNativeMandal: f.mandal || 'ameerpet',
+      ancestralNativeDistrict: distSlug || 'hyderabad',
+      ancestralNativeMandal: mandSlug || 'ameerpet',
     },
     career: {
       educationDegree: f.educationDegree,
       occupation: f.occupation,
       incomeBracket: f.incomeBracket || '6l_12l',
-      salonHubSlug: f.enterprise && f.vocation === 'wellness_artisan' ? f.salonHubSlug : null,
+      salonHubSlug: f.enterprise && f.vocation === 'wellness_artisan' ? (f.salonHubSlug ? slugify(f.salonHubSlug) : null) : null,
       birthTime: orNull(f.birthTime),
       birthPlace: orNull(f.birthPlace),
       nakshatra: orNull(f.nakshatra),
@@ -211,6 +226,17 @@ export function Wizard({ membershipId, gothras, startStep, reviewNote }: Props) 
     if (Object.keys(found).length === 0) {
       setStep((s) => s + 1);
       window.scrollTo({ top: 120, behavior: 'smooth' });
+    } else {
+      // Find the first error element and scroll to it smoothly
+      const firstKey = Object.keys(found)[0];
+      if (firstKey) {
+        const id = firstKey.replace(/\./g, '-');
+        const el = document.getElementById(id);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          el.focus();
+        }
+      }
     }
   }
 

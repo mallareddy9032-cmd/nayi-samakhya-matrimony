@@ -1,26 +1,26 @@
 :root {
-  /* Concept 1: Kalyana Shubhodayam Theme Palette */
-  --bg-page: #FAF7F2;
+  /* Auspicious South Indian Kalyana Theme: Royal Maroon, Temple Gold & Warm Silk Cream */
+  --bg-page: #FAF6F0;
   --bg-card: #FFFFFF;
   --bg-card-subtle: #FFFDF9;
-  --bg-surface: #F5EFEB;
-  --border-light: #E8DFD5;
+  --bg-surface: #F5EEE6;
+  --border-light: #E7DCD0;
   --border-maroon: #D4AF37;
   
-  --maroon: #8B1D2C;
-  --maroon-dark: #6B1421;
-  --maroon-light: #FFF1F2;
-  --maroon-border: #FECDD3;
+  --maroon: #801426;
+  --maroon-dark: #5B0C1A;
+  --maroon-light: #FFF1F3;
+  --maroon-border: #FDCFD6;
 
-  --gold: #B8860B;
+  --gold: #A16207;
   --gold-bright: #D4AF37;
   --gold-surface: #FEF9E7;
-  --gold-border: #F3E5AB;
+  --gold-border: #F6E5B8;
 
-  --text-main: #2D3748;
-  --text-heading: #1A202C;
+  --text-main: #1E293B;
+  --text-heading: #0F172A;
   --text-muted: #64748B;
-  --text-maroon: #8B1D2C;
+  --text-maroon: #801426;
 
   --danger: #DC2626;
   --danger-bg: #FEF2F2;
@@ -29,19 +29,19 @@
   --success: #16A34A;
   --success-bg: #F0FDF4;
 
-  --radius: 16px;
-  --radius-sm: 10px;
-  --shadow-sm: 0 2px 8px rgba(139, 29, 44, 0.04);
-  --shadow-md: 0 8px 24px rgba(139, 29, 44, 0.08);
-  --shadow-lg: 0 16px 36px rgba(139, 29, 44, 0.12);
+  --radius: 20px;
+  --radius-sm: 12px;
+  --shadow-sm: 0 2px 10px rgba(128, 20, 38, 0.04);
+  --shadow-md: 0 10px 30px rgba(128, 20, 38, 0.08);
+  --shadow-lg: 0 20px 40px rgba(128, 20, 38, 0.12);
 
   /* Legacy variable mappings for backward compatibility */
-  --navy: #FAF7F2;
+  --navy: #FAF6F0;
   --navy-raised: #FFFFFF;
-  --navy-line: #E8DFD5;
-  --amber: #B8860B;
-  --amber-deep: #8B1D2C;
-  --ivory: #2D3748;
+  --navy-line: #E7DCD0;
+  --amber: #A16207;
+  --amber-deep: #801426;
+  --ivory: #1E293B;
   --muted: #64748B;
 
   color-scheme: light;
