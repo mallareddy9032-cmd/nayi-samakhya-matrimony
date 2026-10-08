@@ -318,7 +318,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
                 />
                 <span style={{ position: 'absolute', bottom: '10px', left: '10px', background: 'rgba(255,255,255,0.95)', color: 'var(--maroon)', padding: '0.2rem 0.6rem', borderRadius: '6px', fontSize: '0.72rem', fontWeight: 700, border: '1px solid var(--maroon-border)', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
-                  📷 2 Photos Attached
+                  <Bi en="📷 2 Photos Attached" te="📷 2 ఫోటోలు జతచేయబడ్డాయి" />
                 </span>
               </div>
             ) : (
@@ -351,7 +351,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
                   {p.photoInitials ?? p.displayName.slice(0, 2)}
                 </div>
                 <span style={{ position: 'absolute', bottom: '10px', left: '10px', background: 'rgba(255,255,255,0.95)', color: 'var(--maroon)', padding: '0.2rem 0.6rem', borderRadius: '6px', fontSize: '0.72rem', fontWeight: 700, border: '1px solid var(--maroon-border)' }}>
-                  📷 2 Photos Attached
+                  <Bi en="📷 2 Photos Attached" te="📷 2 ఫోటోలు జతచేయబడ్డాయి" />
                 </span>
               </div>
             )}
@@ -361,11 +361,13 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
                 {p.photoUrl ? (
                   <img src={p.photoUrl} alt="Portrait" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 ) : (
-                  <div style={{ height: '100%', background: 'var(--bg-surface)', display: 'grid', placeItems: 'center', fontSize: '0.75rem', color: 'var(--text-muted)' }}>Photo 1</div>
+                  <div style={{ height: '100%', background: 'var(--bg-surface)', display: 'grid', placeItems: 'center', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                    <Bi en="Photo 1" te="ఫోటో 1" />
+                  </div>
                 )}
               </div>
               <div style={{ height: '65px', borderRadius: '8px', overflow: 'hidden', border: '1px solid var(--border-light)', background: 'var(--bg-surface)', display: 'grid', placeItems: 'center', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                Photo 2 (Full)
+                <Bi en="Photo 2 (Full)" te="ఫోటో 2 (పూర్తి)" />
               </div>
             </div>
           </div>
@@ -377,7 +379,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
                 {p.displayName}, {p.age}
               </h1>
               <span className="badge" style={{ padding: '0.35rem 0.9rem', fontSize: '0.85rem' }}>
-                ✓ Community Verified
+                <Bi en="✓ Community Verified" te="✓ సమాజ ధ్రువీకరణ పొందినది" />
               </span>
             </div>
 
@@ -396,21 +398,27 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
 
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
                 <div>
-                  <span style={{ display: 'block', fontSize: '0.78rem', color: '#64748B', fontWeight: 600 }}>పితృస్వామ్య గోత్రం (Gotra):</span>
+                  <span style={{ display: 'block', fontSize: '0.78rem', color: '#64748B', fontWeight: 600 }}>
+                    <Bi en="Paternal Gotra" te="పితృస్వామ్య గోత్రం" />:
+                  </span>
                   <span style={{ display: 'inline-block', marginTop: '0.2rem', padding: '0.25rem 0.7rem', background: '#FFF1F2', color: '#8B1D2C', borderRadius: '6px', fontWeight: 800, fontSize: '0.95rem', border: '1px solid #FECDD3' }}>
                     {p.gothra}
                   </span>
                 </div>
 
                 <div>
-                  <span style={{ display: 'block', fontSize: '0.78rem', color: '#64748B', fontWeight: 600 }}>జన్మ నక్షత్రం & రాశి (Star & Rasi):</span>
+                  <span style={{ display: 'block', fontSize: '0.78rem', color: '#64748B', fontWeight: 600 }}>
+                    <Bi en="Birth Star & Rasi" te="జన్మ నక్షత్రం & రాశి" />:
+                  </span>
                   <span style={{ display: 'inline-block', marginTop: '0.2rem', padding: '0.25rem 0.7rem', background: '#FEF3C7', color: '#92400E', borderRadius: '6px', fontWeight: 800, fontSize: '0.95rem', border: '1px solid #FDE68A' }}>
                     {p.nakshatra} ({p.rasi})
                   </span>
                 </div>
 
                 <div>
-                  <span style={{ display: 'block', fontSize: '0.78rem', color: '#64748B', fontWeight: 600 }}>జనన సమయం & ప్రదేశం (Birth Time & Place):</span>
+                  <span style={{ display: 'block', fontSize: '0.78rem', color: '#64748B', fontWeight: 600 }}>
+                    <Bi en="Birth Time & Place" te="జనన సమయం & ప్రదేశం" />:
+                  </span>
                   <strong style={{ display: 'block', marginTop: '0.2rem', color: '#1E293B', fontSize: '0.95rem' }}>
                     {p.birthTime} · {p.birthPlace}
                   </strong>
@@ -429,21 +437,27 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
 
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
                 <div>
-                  <span style={{ display: 'block', fontSize: '0.78rem', color: '#64748B', fontWeight: 600 }}>విద్యార్హత (Education):</span>
+                  <span style={{ display: 'block', fontSize: '0.78rem', color: '#64748B', fontWeight: 600 }}>
+                    <Bi en="Education Qualification" te="విద్యార్హత" />:
+                  </span>
                   <strong style={{ display: 'block', marginTop: '0.2rem', color: '#0F172A', fontSize: '0.95rem' }}>
                     {p.educationDegree}
                   </strong>
                 </div>
 
                 <div>
-                  <span style={{ display: 'block', fontSize: '0.78rem', color: '#64748B', fontWeight: 600 }}>ఉద్యోగం / వృత్తి (Profession):</span>
+                  <span style={{ display: 'block', fontSize: '0.78rem', color: '#64748B', fontWeight: 600 }}>
+                    <Bi en="Profession / Occupation" te="ఉద్యోగం / వృత్తి" />:
+                  </span>
                   <strong style={{ display: 'block', marginTop: '0.2rem', color: 'var(--maroon)', fontSize: '0.95rem' }}>
                     {p.occupation}
                   </strong>
                 </div>
 
                 <div>
-                  <span style={{ display: 'block', fontSize: '0.78rem', color: '#64748B', fontWeight: 600 }}>వార్షిక ఆదాయం (Annual Income):</span>
+                  <span style={{ display: 'block', fontSize: '0.78rem', color: '#64748B', fontWeight: 600 }}>
+                    <Bi en="Annual Income" te="వార్షిక ఆదాయం" />:
+                  </span>
                   <span style={{ display: 'inline-block', marginTop: '0.2rem', padding: '0.25rem 0.65rem', background: '#ECFDF5', color: '#065F46', borderRadius: '6px', fontWeight: 800, fontSize: '0.92rem', border: '1px solid #A7F3D0' }}>
                     {INCOME_BRACKETS[p.incomeBracket as keyof typeof INCOME_BRACKETS]?.en ?? 'Confidential'}
                   </span>
@@ -462,21 +476,27 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
 
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
                 <div>
-                  <span style={{ display: 'block', fontSize: '0.78rem', color: '#64748B', fontWeight: 600 }}>తండ్రి వివరాలు (Father's Details):</span>
+                  <span style={{ display: 'block', fontSize: '0.78rem', color: '#64748B', fontWeight: 600 }}>
+                    <Bi en="Father's Details" te="తండ్రి వివరాలు" />:
+                  </span>
                   <strong style={{ display: 'block', marginTop: '0.2rem', color: '#1E293B', fontSize: '0.95rem' }}>
                     {p.fatherName}
                   </strong>
                 </div>
 
                 <div>
-                  <span style={{ display: 'block', fontSize: '0.78rem', color: '#64748B', fontWeight: 600 }}>తల్లి వివరాలు (Mother's Details):</span>
+                  <span style={{ display: 'block', fontSize: '0.78rem', color: '#64748B', fontWeight: 600 }}>
+                    <Bi en="Mother's Details" te="తల్లి వివరాలు" />:
+                  </span>
                   <strong style={{ display: 'block', marginTop: '0.2rem', color: '#1E293B', fontSize: '0.95rem' }}>
                     {p.motherName}
                   </strong>
                 </div>
 
                 <div>
-                  <span style={{ display: 'block', fontSize: '0.78rem', color: '#64748B', fontWeight: 600 }}>తోబుట్టువులు (Siblings):</span>
+                  <span style={{ display: 'block', fontSize: '0.78rem', color: '#64748B', fontWeight: 600 }}>
+                    <Bi en="Siblings" te="తోబుట్టువులు" />:
+                  </span>
                   <strong style={{ display: 'block', marginTop: '0.2rem', color: '#1E293B', fontSize: '0.95rem' }}>
                     {p.siblings}
                   </strong>
@@ -501,7 +521,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
           </div>
 
           <Link href="/onboarding" className="btn link-btn" style={{ fontSize: '1rem', padding: '0.75rem 1.8rem' }}>
-            <Bi en="Send Express Interest (ఉచితం) →" te="ఆసక్తిని పంపండి (ఉచితం) →" />
+            <Bi en="Send Express Interest (Free) →" te="ఆసక్తిని పంపండి (ఉచితం) →" />
           </Link>
         </div>
       </section>
