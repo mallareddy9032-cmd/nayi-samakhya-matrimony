@@ -6,6 +6,7 @@ import { requireSession } from '../../lib/session.ts';
 import { ActionButton } from '../components.tsx';
 import { Nav } from '../Nav.tsx';
 import { Bi } from '../onboarding/Wizard.tsx';
+import { AdminExportPanel } from '../../components/AdminExportPanel.tsx';
 
 const API = '/matrimony/api/admin';
 
@@ -121,6 +122,8 @@ export default async function AdminPage() {
           ))}
         </section>
       )}
+
+      <AdminExportPanel />
     </main>
   );
 }

@@ -194,3 +194,38 @@ export type OnboardingStatus = {
 export function stepForState(state: ProfileState): number {
   return state === 'not_started' || state === 'draft' || state === 'rejected' ? 1 : 7;
 }
+
+/**
+ * Generates an official Community Unique ID: e.g. NS-M1042 (Male) or NS-F1043 (Female)
+ */
+export function generateUniqueId(gender: 'male' | 'female', index: number): string {
+  const prefix = gender === 'female' ? 'NS-F' : 'NS-M';
+  return `${prefix}${1000 + (index % 9000)}`;
+}
+
+/**
+ * Formats a display name for privacy masking:
+ * "S. Sai Krishna" -> "Sai K. · NS-M1042"
+ */
+export function formatMaskedDisplayName(fullName: string, uniqueId?: string): string {
+  if (!fullName) return 'Community Member';
+  const parts = fullName.trim().split(/\s+/).filter(Boolean);
+  
+  let formatted = parts[0] || 'Member';
+  const first = parts[0] || '';
+  const second = parts[1] || '';
+  const third = parts[2] || '';
+
+  if (parts.length === 1) {
+    formatted = first;
+  } else if (first.length <= 2 && second) {
+    // E.g. "S. Sai Krishna" -> "Sai " + initial "K."
+    formatted = `${second} ${third ? third[0] + '.' : first}`;
+  } else if (second) {
+    // E.g. "Sai Krishna" -> "Sai K."
+    formatted = `${first} ${second[0]}.`;
+  }
+
+  return uniqueId ? `${formatted} · ${uniqueId}` : formatted;
+}
+

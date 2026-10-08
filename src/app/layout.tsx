@@ -79,6 +79,7 @@ export const viewport = {
 };
 
 import { LanguageProvider } from '../context/LanguageContext.tsx';
+import { MatrimonyBot } from '../components/MatrimonyBot.tsx';
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
@@ -87,7 +88,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <meta name="google" content="notranslate" />
       </head>
       <body className="notranslate">
-        <LanguageProvider>{children}</LanguageProvider>
+        <LanguageProvider>
+          {children}
+          <MatrimonyBot />
+        </LanguageProvider>
       </body>
     </html>
   );

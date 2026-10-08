@@ -4,11 +4,14 @@ import { Nav } from './Nav.tsx';
 import { Bi } from './onboarding/Wizard.tsx';
 import { AuspiciousHeader } from './onboarding/AuspiciousHeader.tsx';
 import { QuickSearch } from '../components/QuickSearch.tsx';
+import { formatMaskedDisplayName } from '../lib/onboarding.ts';
+import { WhatsAppShareButton } from '../components/WhatsAppShareButton';
 
 // 10 Sample candidates representing community matches across Telangana with real photos
 const FEATURED_PROFILES = [
   {
     id: 'sample-1',
+    uniqueId: 'NS-M1042',
     name: 'S. Sai Krishna',
     age: 27,
     genderEn: 'Groom',
@@ -29,6 +32,7 @@ const FEATURED_PROFILES = [
   },
   {
     id: 'sample-2',
+    uniqueId: 'NS-F1043',
     name: 'K. Snehalatha',
     age: 24,
     genderEn: 'Bride',
@@ -49,6 +53,7 @@ const FEATURED_PROFILES = [
   },
   {
     id: 'sample-3',
+    uniqueId: 'NS-M1044',
     name: 'P. Ravinder Nayi',
     age: 29,
     genderEn: 'Groom',
@@ -69,6 +74,7 @@ const FEATURED_PROFILES = [
   },
   {
     id: 'sample-4',
+    uniqueId: 'NS-F1045',
     name: 'M. Ananya',
     age: 23,
     genderEn: 'Bride',
@@ -89,6 +95,7 @@ const FEATURED_PROFILES = [
   },
   {
     id: 'sample-5',
+    uniqueId: 'NS-M1046',
     name: 'P. Madhav Rao',
     age: 28,
     genderEn: 'Groom',
@@ -109,6 +116,7 @@ const FEATURED_PROFILES = [
   },
   {
     id: 'sample-6',
+    uniqueId: 'NS-F1047',
     name: 'K. Divya Sree',
     age: 25,
     genderEn: 'Bride',
@@ -129,6 +137,7 @@ const FEATURED_PROFILES = [
   },
   {
     id: 'sample-7',
+    uniqueId: 'NS-M1048',
     name: 'T. Vamshi Krishna',
     age: 30,
     genderEn: 'Groom',
@@ -149,6 +158,7 @@ const FEATURED_PROFILES = [
   },
   {
     id: 'sample-8',
+    uniqueId: 'NS-F1049',
     name: 'B. Haritha Devi',
     age: 26,
     genderEn: 'Bride',
@@ -169,6 +179,7 @@ const FEATURED_PROFILES = [
   },
   {
     id: 'sample-9',
+    uniqueId: 'NS-M1050',
     name: 'G. Suresh Kumar',
     age: 28,
     genderEn: 'Groom',
@@ -189,6 +200,7 @@ const FEATURED_PROFILES = [
   },
   {
     id: 'sample-10',
+    uniqueId: 'NS-F1051',
     name: 'N. Sravanthi',
     age: 24,
     genderEn: 'Bride',
@@ -617,14 +629,46 @@ export default function Home() {
         <div className="cards">
           {FEATURED_PROFILES.map((p) => (
             <article key={p.id} className="profile-card">
-              {/* Profile Photo Container (Fixed height, top-centered portrait) */}
+              {/* Profile Photo Container (Fixed height, top-centered portrait with Gaussian blur protection) */}
               <div style={{ height: '280px', width: '100%', position: 'relative', overflow: 'hidden', background: '#F8F4EE' }}>
                 <img 
                   src={p.photoUrl} 
-                  alt={p.name}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top center', display: 'block' }}
+                  alt={formatMaskedDisplayName(p.name, p.uniqueId)}
+                  style={{ 
+                    width: '100%', 
+                    height: '100%', 
+                    objectFit: 'cover', 
+                    objectPosition: 'top center', 
+                    display: 'block',
+                    filter: 'blur(7px) brightness(0.9)',
+                    transform: 'scale(1.06)',
+                    transition: 'all 0.3s ease'
+                  }}
                   loading="lazy"
                 />
+
+                {/* Centered Golden Frosted Lock Badge */}
+                <div style={{
+                  position: 'absolute',
+                  top: '40%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  background: 'rgba(255, 255, 255, 0.94)',
+                  backdropFilter: 'blur(8px)',
+                  border: '1.5px solid #D4AF37',
+                  padding: '0.42rem 0.85rem',
+                  borderRadius: '999px',
+                  boxShadow: '0 4px 14px rgba(0, 0, 0, 0.25)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.4rem',
+                  whiteSpace: 'nowrap'
+                }}>
+                  <span style={{ fontSize: '0.9rem' }}>🔒</span>
+                  <span style={{ fontSize: '0.74rem', fontWeight: 800, color: '#801426' }}>
+                    <Bi en="Login to View Full Photo" te="పూర్తి ఫోటో కోసం లాగిన్ అవ్వండి" />
+                  </span>
+                </div>
 
                 {/* Top Badges */}
                 <div style={{ position: 'absolute', top: '12px', left: '12px', right: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', pointerEvents: 'none' }}>
@@ -671,8 +715,8 @@ export default function Home() {
                   alignItems: 'flex-end'
                 }}>
                   <div>
-                    <h3 style={{ margin: 0, color: '#FFFFFF', fontSize: '1.25rem', fontWeight: 800, textShadow: '0 1px 3px rgba(0,0,0,0.6)' }}>
-                      {p.name}
+                    <h3 style={{ margin: 0, color: '#FFFFFF', fontSize: '1.2rem', fontWeight: 800, textShadow: '0 1px 3px rgba(0,0,0,0.6)' }}>
+                      {formatMaskedDisplayName(p.name, p.uniqueId)}
                     </h3>
                     <p style={{ margin: '0.15rem 0 0', color: '#FCD34D', fontSize: '0.85rem', fontWeight: 700 }}>
                       {p.age} <Bi en="Yrs" te="సం." /> · <Bi en={p.genderEn} te={p.genderTe} />
@@ -732,8 +776,18 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* Full Profile CTA Button */}
-                <div style={{ marginTop: 'auto' }}>
+                {/* Full Profile CTA Button & WhatsApp Family Share */}
+                <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+                  <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <WhatsAppShareButton
+                      uniqueId={p.uniqueId}
+                      displayName={formatMaskedDisplayName(p.name, p.uniqueId)}
+                      age={p.age}
+                      district={p.districtTe}
+                      education={p.educationTe}
+                    />
+                  </div>
+
                   <Link 
                     href={`/profiles/${p.id}`} 
                     className="btn link-btn" 

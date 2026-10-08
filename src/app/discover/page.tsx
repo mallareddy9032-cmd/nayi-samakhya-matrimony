@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { discover } from '../../lib/match-store.ts';
 import { DiscoverQuerySchema, badgesFor, type DiscoverQuery } from '../../lib/matrimony.ts';
-import { VOCATIONS } from '../../lib/onboarding.ts';
+import { VOCATIONS, formatMaskedDisplayName } from '../../lib/onboarding.ts';
 import { dbContext, listDistricts } from '../../lib/onboarding-store.ts';
 import { getOptionalSession } from '../../lib/session.ts';
 import { calculateCompleteness } from '../../lib/completeness.ts';
@@ -9,6 +9,7 @@ import { CompletenessBar } from '../../components/CompletenessBar.tsx';
 import { Nav } from '../Nav.tsx';
 import { Bi } from '../onboarding/Wizard.tsx';
 import { PhotoFrame } from '../profiles/PhotoFrame.tsx';
+import { WhatsAppShareButton } from '../../components/WhatsAppShareButton';
 
 type Search = Promise<Record<string, string | string[] | undefined>>;
 
@@ -16,6 +17,7 @@ type Search = Promise<Record<string, string | string[] | undefined>>;
 const PUBLIC_DISCOVERY_CARDS = [
   {
     id: 'sample-1',
+    uniqueId: 'NS-M1042',
     firstName: 'Sai Krishna',
     fullName: 'S. Sai Krishna',
     age: 27,
@@ -36,6 +38,7 @@ const PUBLIC_DISCOVERY_CARDS = [
   },
   {
     id: 'sample-2',
+    uniqueId: 'NS-F1043',
     firstName: 'Snehalatha',
     fullName: 'K. Snehalatha',
     age: 24,
@@ -56,6 +59,7 @@ const PUBLIC_DISCOVERY_CARDS = [
   },
   {
     id: 'sample-3',
+    uniqueId: 'NS-M1044',
     firstName: 'Ravinder Nayi',
     fullName: 'P. Ravinder Nayi',
     age: 29,
@@ -76,6 +80,7 @@ const PUBLIC_DISCOVERY_CARDS = [
   },
   {
     id: 'sample-4',
+    uniqueId: 'NS-F1045',
     firstName: 'Ananya',
     fullName: 'M. Ananya',
     age: 23,
@@ -96,6 +101,7 @@ const PUBLIC_DISCOVERY_CARDS = [
   },
   {
     id: 'sample-5',
+    uniqueId: 'NS-M1046',
     firstName: 'Madhav Rao',
     fullName: 'P. Madhav Rao',
     age: 28,
@@ -116,6 +122,7 @@ const PUBLIC_DISCOVERY_CARDS = [
   },
   {
     id: 'sample-6',
+    uniqueId: 'NS-F1047',
     firstName: 'Divya Sree',
     fullName: 'K. Divya Sree',
     age: 25,
@@ -136,6 +143,7 @@ const PUBLIC_DISCOVERY_CARDS = [
   },
   {
     id: 'sample-7',
+    uniqueId: 'NS-M1048',
     firstName: 'Vamshi Krishna',
     fullName: 'T. Vamshi Krishna',
     age: 30,
@@ -156,6 +164,7 @@ const PUBLIC_DISCOVERY_CARDS = [
   },
   {
     id: 'sample-8',
+    uniqueId: 'NS-F1049',
     firstName: 'Haritha Devi',
     fullName: 'B. Haritha Devi',
     age: 26,
@@ -176,6 +185,7 @@ const PUBLIC_DISCOVERY_CARDS = [
   },
   {
     id: 'sample-9',
+    uniqueId: 'NS-M1050',
     firstName: 'Suresh Kumar',
     fullName: 'G. Suresh Kumar',
     age: 28,
@@ -196,6 +206,7 @@ const PUBLIC_DISCOVERY_CARDS = [
   },
   {
     id: 'sample-10',
+    uniqueId: 'NS-F1051',
     firstName: 'Sravanthi',
     fullName: 'N. Sravanthi',
     age: 24,
@@ -357,12 +368,45 @@ export default async function DiscoverPage({ searchParams }: { searchParams: Sea
             {/* Profile Photo Container (Fixed height, top-centered portrait) */}
             <div style={{ height: '280px', width: '100%', position: 'relative', overflow: 'hidden', background: '#F8F4EE' }}>
               {c.photoUrl ? (
-                <img 
-                  src={c.photoUrl} 
-                  alt={c.fullName ?? c.firstName} 
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top center', display: 'block' }} 
-                  loading="lazy"
-                />
+                <div style={{ width: '100%', height: '100%', position: 'relative' }}>
+                  <img 
+                    src={c.photoUrl} 
+                    alt={formatMaskedDisplayName(c.fullName ?? c.firstName, c.uniqueId)} 
+                    style={{ 
+                      width: '100%', 
+                      height: '100%', 
+                      objectFit: 'cover', 
+                      objectPosition: 'top center', 
+                      display: 'block',
+                      filter: 'blur(7px) brightness(0.9)',
+                      transform: 'scale(1.06)',
+                      transition: 'all 0.3s ease'
+                    }} 
+                    loading="lazy"
+                  />
+                  {/* Centered Golden Frosted Lock Badge */}
+                  <div style={{
+                    position: 'absolute',
+                    top: '40%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    background: 'rgba(255, 255, 255, 0.94)',
+                    backdropFilter: 'blur(8px)',
+                    border: '1.5px solid #D4AF37',
+                    padding: '0.42rem 0.85rem',
+                    borderRadius: '999px',
+                    boxShadow: '0 4px 14px rgba(0, 0, 0, 0.25)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.4rem',
+                    whiteSpace: 'nowrap'
+                  }}>
+                    <span style={{ fontSize: '0.9rem' }}>🔒</span>
+                    <span style={{ fontSize: '0.74rem', fontWeight: 800, color: '#801426' }}>
+                      <Bi en="Login to View Full Photo" te="పూర్తి ఫోటో కోసం లాగిన్ అవ్వండి" />
+                    </span>
+                  </div>
+                </div>
               ) : c.photoInitials ? (
                 <div style={{
                   width: '100%',
@@ -389,7 +433,7 @@ export default async function DiscoverPage({ searchParams }: { searchParams: Sea
                   </div>
                 </div>
               ) : (
-                <PhotoFrame photo={c.photo} name={c.fullName ?? c.firstName} />
+                <PhotoFrame photo={c.photo} name={formatMaskedDisplayName(c.fullName ?? c.firstName, c.uniqueId)} />
               )}
 
               {/* Top Badges */}
@@ -433,8 +477,8 @@ export default async function DiscoverPage({ searchParams }: { searchParams: Sea
                 alignItems: 'flex-end'
               }}>
                 <div>
-                  <h3 style={{ margin: 0, color: '#FFFFFF', fontSize: '1.25rem', fontWeight: 800, textShadow: '0 1px 3px rgba(0,0,0,0.6)' }}>
-                    {c.fullName ?? c.firstName}
+                  <h3 style={{ margin: 0, color: '#FFFFFF', fontSize: '1.2rem', fontWeight: 800, textShadow: '0 1px 3px rgba(0,0,0,0.6)' }}>
+                    {formatMaskedDisplayName(c.fullName ?? c.firstName, c.uniqueId)}
                   </h3>
                   <p style={{ margin: '0.15rem 0 0', color: '#FCD34D', fontSize: '0.85rem', fontWeight: 700 }}>
                     {c.age} <Bi en="Yrs" te="సం." /> · <Bi en={c.genderEn ?? (c.gender === 'male' ? 'Groom' : 'Bride')} te={c.genderTe ?? (c.gender === 'male' ? 'వరుడు' : 'వధువు')} />
@@ -501,8 +545,18 @@ export default async function DiscoverPage({ searchParams }: { searchParams: Sea
                 </div>
               </div>
 
-              {/* Full Profile CTA Button */}
-              <div style={{ marginTop: 'auto' }}>
+              {/* Full Profile CTA Button & WhatsApp Family Share */}
+              <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                  <WhatsAppShareButton
+                    uniqueId={c.uniqueId}
+                    displayName={formatMaskedDisplayName(c.fullName ?? c.firstName, c.uniqueId)}
+                    age={c.age}
+                    district={c.district?.te || 'తెలంగాణ'}
+                    education={c.educationTe || c.education || 'డిగ్రీ'}
+                  />
+                </div>
+
                 <Link 
                   href={`/profiles/${c.id}`} 
                   className="btn link-btn" 

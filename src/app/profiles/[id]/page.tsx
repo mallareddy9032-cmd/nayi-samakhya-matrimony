@@ -506,7 +506,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
           </div>
         </div>
 
-        {/* Bilateral Interest Action */}
+        {/* Bilateral Interest & Action Suite (A4 Biodata PDF & WhatsApp Share) */}
         <div style={{ marginTop: '2.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--border-light)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
           <div>
             <h3 style={{ margin: 0, fontSize: '1.2rem', color: 'var(--maroon)' }}>
@@ -520,9 +520,33 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
             </p>
           </div>
 
-          <Link href="/onboarding" className="btn link-btn" style={{ fontSize: '1rem', padding: '0.75rem 1.8rem' }}>
-            <Bi en="Send Express Interest (Free) →" te="ఆసక్తిని పంపండి (ఉచితం) →" />
-          </Link>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', flexWrap: 'wrap' }}>
+            {/* WhatsApp Family Share */}
+            <a
+              href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`🙏 *శ్రీ ధన్వంతరి ప్రసన్నః* 🙏\nనాయీ సమాఖ్య వివాహ వేదిక (nayisamakhya.org/matrimony)\nసంబంధం: ${p.displayName} (${p.age} సం.)\nపూర్తి వివరాలు & జాతక పరిశీలన కొరకు: https://nayisamakhya.org/matrimony/profiles/${id}`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn"
+              style={{ background: '#25D366', color: '#FFFFFF', padding: '0.75rem 1.2rem', fontSize: '0.9rem', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', border: 'none' }}
+            >
+              <span>📲</span> వాట్సాప్ షేర్ (WhatsApp)
+            </a>
+
+            {/* A4 Biodata Patrika PDF Download */}
+            <a
+              href={`/matrimony/api/profiles/${id}/biodata-pdf`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn"
+              style={{ background: '#801426', color: '#FFFFFF', padding: '0.75rem 1.2rem', fontSize: '0.9rem', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', border: 'none' }}
+            >
+              <span>📄</span> బయోడేటా పత్రిక (A4 PDF)
+            </a>
+
+            <Link href="/onboarding" className="btn link-btn" style={{ fontSize: '0.95rem', padding: '0.75rem 1.4rem' }}>
+              <Bi en="Send Express Interest (Free) →" te="ఆసక్తిని పంపండి (ఉచితం) →" />
+            </Link>
+          </div>
         </div>
       </section>
     </main>
