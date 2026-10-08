@@ -12,6 +12,35 @@ export interface DistrictItem {
   nameTe: string;
 }
 
+export const ALL_ANDHRA_DISTRICTS: DistrictItem[] = [
+  { slug: 'visakhapatnam', code: 'VSP', nameEn: 'Visakhapatnam', nameTe: 'విశాఖపట్నం' },
+  { slug: 'vijayawada-ntr', code: 'NTR', nameEn: 'NTR (Vijayawada)', nameTe: 'ఎన్టీఆర్ (విజయవాడ)' },
+  { slug: 'guntur', code: 'GNT', nameEn: 'Guntur', nameTe: 'గుంటూరు' },
+  { slug: 'tirupati', code: 'TPT', nameEn: 'Tirupati', nameTe: 'తిరుపతి' },
+  { slug: 'kurnool', code: 'KNL', nameEn: 'Kurnool', nameTe: 'కర్నూలు' },
+  { slug: 'kakinada', code: 'KKD', nameEn: 'Kakinada', nameTe: 'కాకినాడ' },
+  { slug: 'sri-potti-sriramulu-nellore', code: 'NLR', nameEn: 'Nellore', nameTe: 'నెల్లూరు' },
+  { slug: 'east-godavari', code: 'EGOD', nameEn: 'East Godavari (Rajamahendravaram)', nameTe: 'తూర్పు గోదావరి' },
+  { slug: 'west-godavari', code: 'WGOD', nameEn: 'West Godavari (Bhimavaram)', nameTe: 'పశ్చిమ గోదావరి' },
+  { slug: 'krishna', code: 'KSHN', nameEn: 'Krishna (Machilipatnam)', nameTe: 'కృష్ణా' },
+  { slug: 'eluru', code: 'ELR', nameEn: 'Eluru', nameTe: 'ఏలూరు' },
+  { slug: 'prakasam', code: 'PKSM', nameEn: 'Prakasam (Ongole)', nameTe: 'ప్రకాశం' },
+  { slug: 'bapatla', code: 'BPTL', nameEn: 'Bapatla', nameTe: 'బాపట్ల' },
+  { slug: 'palnadu', code: 'PLND', nameEn: 'Palnadu (Narasaraopet)', nameTe: 'పల్నాడు' },
+  { slug: 'kadapa-ysr', code: 'YSR', nameEn: 'YSR Kadapa', nameTe: 'వైఎస్సార్ కడప' },
+  { slug: 'anantapur', code: 'ANTP', nameEn: 'Anantapur', nameTe: 'అనంతపురం' },
+  { slug: 'sri-sathya-sai', code: 'SSSI', nameEn: 'Sri Sathya Sai (Puttaparthi)', nameTe: 'శ్రీ సత్యసాయి' },
+  { slug: 'chittoor', code: 'CHTR', nameEn: 'Chittoor', nameTe: 'చిత్తూరు' },
+  { slug: 'annamayya', code: 'ANMY', nameEn: 'Annamayya (Rayachoti)', nameTe: 'అన్నమయ్య' },
+  { slug: 'nandyal', code: 'NDYL', nameEn: 'Nandyal', nameTe: 'నంద్యాల' },
+  { slug: 'srikakulam', code: 'SKLM', nameEn: 'Srikakulam', nameTe: 'శ్రీకాకుళం' },
+  { slug: 'vizianagaram', code: 'VZNR', nameEn: 'Vizianagaram', nameTe: 'విజయనగరం' },
+  { slug: 'parvathipuram-manyam', code: 'PMNM', nameEn: 'Parvathipuram Manyam', nameTe: 'పార్వతీపురం మన్యం' },
+  { slug: 'alluri-sitharama-raju', code: 'ASR', nameEn: 'Alluri Sitharama Raju', nameTe: 'అల్లూరి సీతారామరాజు' },
+  { slug: 'anakapalli', code: 'AKPL', nameEn: 'Anakapalli', nameTe: 'అనకాపల్లి' },
+  { slug: 'konaseema', code: 'KNSM', nameEn: 'Dr. B.R. Ambedkar Konaseema', nameTe: 'డా. బి.ఆర్. అంబేద్కర్ కోనసీమ' },
+];
+
 export const ALL_TELANGANA_DISTRICTS: DistrictItem[] = [
   { slug: 'hyderabad', code: 'HYDB', nameEn: 'Hyderabad', nameTe: 'హైదరాబాద్' },
   { slug: 'warangal', code: 'WRGL', nameEn: 'Warangal', nameTe: 'వరంగల్' },
@@ -46,7 +75,9 @@ export const ALL_TELANGANA_DISTRICTS: DistrictItem[] = [
   { slug: 'vikarabad', code: 'VKBD', nameEn: 'Vikarabad', nameTe: 'వికారాబాద్' },
   { slug: 'wanaparthy', code: 'WNPT', nameEn: 'Wanaparthy', nameTe: 'వనపర్తి' },
   { slug: 'yadadri-bhuvanagiri', code: 'YDBG', nameEn: 'Yadadri Bhuvanagiri', nameTe: 'యాదాద్రి భువనగిరి' },
+  ...ALL_ANDHRA_DISTRICTS,
 ];
+
 
 export const TELANGANA_MANDALS_MAP: Record<string, { slug: string; nameEn: string; nameTe: string }[]> = {
   'hyderabad': [
@@ -190,6 +221,44 @@ export const TELANGANA_MANDALS_MAP: Record<string, { slug: string; nameEn: strin
     { slug: 'devarkadra', nameEn: 'Devarkadra', nameTe: 'దేవరకద్ర' },
     { slug: 'nawabpet', nameEn: 'Nawabpet', nameTe: 'నవాబ్‌పేట' },
     { slug: 'koilkonda', nameEn: 'Koilkonda', nameTe: 'కోయిల్కొండ' },
+  ],
+  'visakhapatnam': [
+    { slug: 'gajuwaka', nameEn: 'Gajuwaka', nameTe: 'గాజువాక' },
+    { slug: 'visakhapatnam-rural', nameEn: 'Visakhapatnam Rural', nameTe: 'విశాఖపట్నం రూరల్' },
+    { slug: 'maharanipeta', nameEn: 'Maharanipeta', nameTe: 'మహారాణిపేట' },
+    { slug: 'bheemunipatnam', nameEn: 'Bheemunipatnam', nameTe: 'భీమునిపట్నం' },
+    { slug: 'pendurthi', nameEn: 'Pendurthi', nameTe: 'పెందుర్తి' },
+    { slug: 'madhurawada', nameEn: 'Madhurawada', nameTe: 'మధురవాడ' },
+  ],
+  'vijayawada-ntr': [
+    { slug: 'vijayawada-urban', nameEn: 'Vijayawada Urban', nameTe: 'విజయవాడ అర్బన్' },
+    { slug: 'vijayawada-rural', nameEn: 'Vijayawada Rural', nameTe: 'విజయవాడ రూరల్' },
+    { slug: 'gunadala', nameEn: 'Gunadala', nameTe: 'గుణదల' },
+    { slug: 'jaggaiahpet', nameEn: 'Jaggaiahpet', nameTe: 'జగ్గయ్యపేట' },
+    { slug: 'nandigama', nameEn: 'Nandigama', nameTe: 'నందిగామ' },
+    { slug: 'ibrahimpatnam-ap', nameEn: 'Ibrahimpatnam', nameTe: 'ఇబ్రహీంపట్నం' },
+  ],
+  'guntur': [
+    { slug: 'guntur-urban', nameEn: 'Guntur Urban', nameTe: 'గుంటూరు అర్బన్' },
+    { slug: 'guntur-rural', nameEn: 'Guntur Rural', nameTe: 'గుంటూరు రూరల్' },
+    { slug: 'tenali', nameEn: 'Tenali', nameTe: 'తెనాలి' },
+    { slug: 'mangalagiri', nameEn: 'Mangalagiri', nameTe: 'మంగళగిరి' },
+    { slug: 'prathipadu', nameEn: 'Prathipadu', nameTe: 'ప్రత్తిపాడు' },
+    { slug: 'tadikonda', nameEn: 'Tadikonda', nameTe: 'తాడికొండ' },
+  ],
+  'tirupati': [
+    { slug: 'tirupati-urban', nameEn: 'Tirupati Urban', nameTe: 'తిరుపతి అర్బన్' },
+    { slug: 'tirupati-rural', nameEn: 'Tirupati Rural', nameTe: 'తిరుపతి రూరల్' },
+    { slug: 'chandragiri', nameEn: 'Chandragiri', nameTe: 'చంద్రగిరి' },
+    { slug: 'srikalahasti', nameEn: 'Srikalahasti', nameTe: 'శ్రీకాళహస్తి' },
+    { slug: 'renigunta', nameEn: 'Renigunta', nameTe: 'రేణిగుంట' },
+  ],
+  'kurnool': [
+    { slug: 'kurnool-urban', nameEn: 'Kurnool Urban', nameTe: 'కర్నూలు అర్బన్' },
+    { slug: 'kurnool-rural', nameEn: 'Kurnool Rural', nameTe: 'కర్నూలు రూరల్' },
+    { slug: 'yemmiganur', nameEn: 'Yemmiganur', nameTe: 'ఎమ్మిగనూరు' },
+    { slug: 'adoni', nameEn: 'Adoni', nameTe: 'ఆదోని' },
+    { slug: 'kodumur', nameEn: 'Kodumur', nameTe: 'కోడుమూరు' },
   ],
 };
 

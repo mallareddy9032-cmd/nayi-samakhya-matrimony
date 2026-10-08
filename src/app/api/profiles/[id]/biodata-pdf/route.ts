@@ -70,38 +70,46 @@ export async function GET(
       padding: 20px 40px;
     }
     .border-container {
-      border: 3px double #d69e2e;
-      border-radius: 8px;
-      padding: 28px;
+      border: 4px double #801426;
+      border-radius: 12px;
+      padding: 32px;
       position: relative;
       z-index: 1;
-      background: rgba(255, 255, 255, 0.96);
+      background: #FFFFFF;
+      box-shadow: inset 0 0 0 2px #D4AF37;
     }
     .header {
       text-align: center;
-      border-bottom: 2px solid #ecc94b;
+      border-bottom: 2px solid #D4AF37;
       padding-bottom: 16px;
       margin-bottom: 24px;
     }
+    .invocation {
+      color: #801426;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      margin-bottom: 8px;
+    }
     .header h1 {
       margin: 4px 0;
-      color: #92400e;
-      font-size: 24px;
+      color: #801426;
+      font-size: 26px;
       letter-spacing: 0.02em;
     }
     .header h2 {
       margin: 2px 0;
-      color: #0b172d;
+      color: #1E293B;
       font-size: 16px;
       font-weight: 600;
     }
     .stamp-badge {
       display: inline-block;
       margin-top: 8px;
-      padding: 4px 12px;
-      background: #fef3c7;
-      color: #92400e;
-      border: 1px solid #d69e2e;
+      padding: 4px 14px;
+      background: #FEF9E7;
+      color: #801426;
+      border: 1.5px solid #D4AF37;
       border-radius: 999px;
       font-size: 12px;
       font-weight: 700;

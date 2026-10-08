@@ -215,17 +215,28 @@ export default async function DiscoverPage({ searchParams }: { searchParams: Sea
               <Bi en="District" te="జిల్లా" />
             </label>
             <select id="f-district" name="district" defaultValue={q.district ?? ''} style={{ width: '100%', height: '46px', padding: '0.65rem 0.8rem', borderRadius: '10px', border: '1.5px solid #CBD5E1', background: '#F8FAFC', fontSize: '0.92rem' }}>
-              <option value="">All Telangana (అన్ని జిల్లాలు)</option>
-              <option value="hyderabad">Hyderabad · హైదరాబాద్</option>
-              <option value="warangal">Warangal · వరంగల్</option>
-              <option value="karimnagar">Karimnagar · కరీంనగర్</option>
-              <option value="nalgonda">Nalgonda · నల్గొండ</option>
-              <option value="khammam">Khammam · ఖమ్మం</option>
-              <option value="nizamabad">Nizamabad · నిజామాబాద్</option>
-              <option value="rangareddy">Rangareddy · రంగారెడ్డి</option>
-              <option value="medchal-malkajgiri">Medchal-Malkajgiri · మేడ్చల్-మల్కాజ్‌గిరి</option>
-              <option value="siddipet">Siddipet · సిద్దిపేట</option>
-              <option value="mahabubnagar">Mahabubnagar · మహబూబ్‌నగర్</option>
+              <option value="">All Regions · అన్ని ప్రాంతాలు</option>
+              <optgroup label="Telangana · తెలంగాణ">
+                <option value="hyderabad">Hyderabad · హైదరాబాద్</option>
+                <option value="warangal">Warangal · వరంగల్</option>
+                <option value="karimnagar">Karimnagar · కరీంనగర్</option>
+                <option value="nalgonda">Nalgonda · నల్గొండ</option>
+                <option value="khammam">Khammam · ఖమ్మం</option>
+                <option value="nizamabad">Nizamabad · నిజామాబాద్</option>
+                <option value="rangareddy">Rangareddy · రంగారెడ్డి</option>
+                <option value="medchal-malkajgiri">Medchal-Malkajgiri · మేడ్చల్-మల్కాజ్‌గిరి</option>
+                <option value="siddipet">Siddipet · సిద్దిపేట</option>
+                <option value="mahabubnagar">Mahabubnagar · మహబూబ్‌నగర్</option>
+              </optgroup>
+              <optgroup label="Andhra Pradesh · ఆంధ్రప్రదేశ్">
+                <option value="visakhapatnam">Visakhapatnam · విశాఖపట్నం</option>
+                <option value="vijayawada-ntr">Vijayawada (NTR) · విజయవాడ</option>
+                <option value="guntur">Guntur · గుంటూరు</option>
+                <option value="tirupati">Tirupati · తిరుపతి</option>
+                <option value="kurnool">Kurnool · కర్నూలు</option>
+                <option value="kakinada">Kakinada · కాకినాడ</option>
+                <option value="sri-potti-sriramulu-nellore">Nellore · నెల్లూరు</option>
+              </optgroup>
             </select>
           </div>
 
@@ -257,11 +268,14 @@ export default async function DiscoverPage({ searchParams }: { searchParams: Sea
             </div>
           </div>
 
-          <div>
-            <button type="submit" className="btn" style={{ width: '100%', height: '46px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', fontWeight: 800 }}>
-              <span><Bi en="Apply Filters" te="ఫిల్టర్ చేయండి" /></span>
+          <div style={{ display: 'flex', gap: '0.6rem' }}>
+            <button type="submit" className="btn" style={{ flex: 1, height: '46px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', fontWeight: 800 }}>
+              <span><Bi en="Apply" te="ఫిల్టర్" /></span>
               <span>🔍</span>
             </button>
+            <Link href="/discover" className="btn secondary" style={{ height: '46px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '10px', padding: '0 0.9rem', fontSize: '0.85rem', textDecoration: 'none' }} title="Reset All Filters">
+              <Bi en="Reset" te="రీసెట్" />
+            </Link>
           </div>
         </div>
       </form>

@@ -234,7 +234,57 @@ export function Wizard({ membershipId, gothras, startStep, reviewNote }: Props) 
   const [busy, setBusy] = useState(false);
   const [serverError, setServerError] = useState<Bilingual | null>(null);
   const [result, setResult] = useState<Result | null>(null);
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const [photoCompressing, setPhotoCompressing] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const heading = useRef<HTMLHeadingElement>(null);
+
+  // Client-side image compression using HTML5 Canvas (downscales to max 800px and 0.82 JPEG quality)
+  const handlePhotoSelect = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      alert(lang === 'te' ? 'దయచేసి సరైన ఫోటో ఫైల్ (JPG, PNG) ఎంచుకోండి.' : 'Please select a valid image file (JPG, PNG).');
+      return;
+    }
+
+    setPhotoCompressing(true);
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const MAX_SIZE = 800;
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > MAX_SIZE) {
+            height = Math.round((height * MAX_SIZE) / width);
+            width = MAX_SIZE;
+          }
+        } else {
+          if (height > MAX_SIZE) {
+            width = Math.round((width * MAX_SIZE) / height);
+            height = MAX_SIZE;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.drawImage(img, 0, 0, width, height);
+          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.82);
+          setPhotoPreview(compressedDataUrl);
+        }
+        setPhotoCompressing(false);
+      };
+      img.src = event.target?.result as string;
+    };
+    reader.readAsDataURL(file);
+  };
 
   const districtsList = ALL_TELANGANA_DISTRICTS;
   const currentMandals = useMemo(() => getMandalsForDistrict(form.district || 'hyderabad'), [form.district]);
@@ -622,7 +672,7 @@ export function Wizard({ membershipId, gothras, startStep, reviewNote }: Props) 
               {/* Native Homeland: Strictly District and Dynamic Mandal (No Zone) */}
               <fieldset style={{ border: '1.5px solid var(--border-light)', borderRadius: '16px', padding: '1.5rem', background: '#FAFAF9' }}>
                 <legend style={{ fontWeight: 800, color: 'var(--maroon)', padding: '0 0.5rem' }}>
-                  <Bi en="Ancestral Homeland (Telangana)" te="పూర్వీకుల స్వస్థలం (తెలంగాణ)" />
+                  <Bi en="Ancestral Homeland (Telangana & Andhra Pradesh)" te="పూర్వీకుల స్వస్థలం (తెలుగు రాష్ట్రాలు)" />
                 </legend>
 
                 <div className="grid-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.2rem' }}>
@@ -818,6 +868,63 @@ export function Wizard({ membershipId, gothras, startStep, reviewNote }: Props) 
                 </div>
               </div>
 
+              {/* Optional Photo Upload with Instant Client-Side Compression & Portrait Preview */}
+              <fieldset style={{ border: '1.5px solid var(--border-light)', borderRadius: '16px', padding: '1.5rem', background: '#FAFAF9' }}>
+                <legend style={{ fontWeight: 800, color: 'var(--maroon)', padding: '0 0.5rem' }}>
+                  <Bi en="Candidate Photograph (Optional & Protected)" te="అభ్యర్థి ఛాయాచిత్రం (ఐచ్ఛికం & సురక్షితం)" />
+                </legend>
+
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.5rem', alignItems: 'center' }}>
+                  {/* Circular Avatar Preview */}
+                  <div style={{ position: 'relative', width: '100px', height: '100px', borderRadius: '50%', background: '#F1F5F9', border: '3px solid var(--gold-bright)', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    {photoPreview ? (
+                      <img src={photoPreview} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    ) : (
+                      <span style={{ fontSize: '2.5rem', color: '#94A3B8' }}>👤</span>
+                    )}
+                    {photoCompressing && (
+                      <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FFF', fontSize: '0.75rem' }}>
+                        ⚡ ...
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Upload Controls */}
+                  <div style={{ flex: 1, minWidth: '220px' }}>
+                    <input 
+                      type="file" 
+                      ref={fileInputRef} 
+                      accept="image/jpeg,image/png,image/webp" 
+                      style={{ display: 'none' }} 
+                      onChange={handlePhotoSelect} 
+                    />
+                    <button 
+                      type="button" 
+                      onClick={() => fileInputRef.current?.click()} 
+                      className="btn secondary" 
+                      style={{ padding: '0.55rem 1.1rem', fontSize: '0.88rem', borderRadius: '10px', marginBottom: '0.4rem' }}
+                    >
+                      📷 {photoPreview ? (lang === 'te' ? 'వేరే ఫోటో ఎంచుకోండి' : 'Change Photo') : (lang === 'te' ? 'ఫోటో అప్‌లోడ్ చేయండి' : 'Upload Portrait Photo')}
+                    </button>
+                    {photoPreview && (
+                      <button 
+                        type="button" 
+                        onClick={() => setPhotoPreview(null)} 
+                        style={{ marginLeft: '0.6rem', background: 'none', border: 'none', color: 'var(--danger)', fontSize: '0.85rem', cursor: 'pointer', textDecoration: 'underline' }}
+                      >
+                        {lang === 'te' ? 'తొలగించు' : 'Remove'}
+                      </button>
+                    )}
+                    <p style={{ margin: 0, fontSize: '0.8rem', color: '#64748B' }}>
+                      <Bi 
+                        en="Supports JPG, PNG up to 10MB. Images are automatically compressed to standard portrait size." 
+                        te="JPG, PNG ఫైల్స్ అంగీకరించబడతాయి. ఫోటోలు ఆటోమేటిక్‌గా సురక్షిత పరిమాణానికి సరిచేయబడతాయి." 
+                      />
+                    </p>
+                  </div>
+                </div>
+              </fieldset>
+
               <fieldset style={{ border: '1.5px solid var(--border-light)', borderRadius: '16px', padding: '1.5rem', background: '#FAFAF9' }}>
                 <legend style={{ fontWeight: 800, color: 'var(--maroon)', padding: '0 0.5rem' }}>
                   <Bi en="Contact Details (Encrypted Under DPDP Act)" te="సంప్రదింపు వివరాలు (గుప్తీకరించబడతాయి)" />
@@ -882,8 +989,12 @@ export function Wizard({ membershipId, gothras, startStep, reviewNote }: Props) 
 
                   {/* Candidate Patrika Header */}
                   <div className="patrika-header">
-                    <div className="patrika-avatar">
-                      {candidateInitial}
+                    <div className="patrika-avatar" style={{ overflow: 'hidden', padding: 0 }}>
+                      {photoPreview ? (
+                        <img src={photoPreview} alt="Candidate Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      ) : (
+                        candidateInitial
+                      )}
                     </div>
                     <div className="patrika-candidate-info">
                       <h3 className="patrika-name">{form.displayName || '—'}</h3>
