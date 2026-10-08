@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ADMIN_ROLES } from '../lib/matrimony.ts';
 import type { SsoClaims } from '../lib/sso.ts';
 import { Bi } from './onboarding/Wizard.tsx';
+import { LanguageToggle } from '../components/LanguageToggle.tsx';
 
 export function Nav({ claims }: { claims?: SsoClaims | null }) {
   const admin = claims?.roles.some((r) => (ADMIN_ROLES as readonly string[]).includes(r));
@@ -41,6 +42,7 @@ export function Nav({ claims }: { claims?: SsoClaims | null }) {
         {claims && <Link href="/interests" style={{ fontWeight: 600, fontSize: '0.92rem' }}><Bi en="Interests" te="ఆసక్తులు" /></Link>}
         {claims && <Link href="/settings/privacy" style={{ fontWeight: 600, fontSize: '0.92rem' }}><Bi en="Privacy" te="గోప్యత" /></Link>}
         {admin && <Link href="/nsm-admin" style={{ fontWeight: 600, fontSize: '0.92rem' }}><Bi en="Admin" te="నిర్వహణ" /></Link>}
+        <LanguageToggle />
         {!claims && (
           <Link href="/login" className="btn link-btn" style={{ padding: '0.45rem 1.2rem', fontSize: '0.88rem' }}>
             <Bi en="Member Login (OTP)" te="సభ్యుల లాగిన్" />

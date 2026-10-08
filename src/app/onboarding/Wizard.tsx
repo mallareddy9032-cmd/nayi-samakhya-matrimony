@@ -107,7 +107,8 @@ function stepErrors(step: number, payload: unknown): Record<string, string> {
 export function Bi({ en, te }: Bilingual) {
   return (
     <>
-      <span>{en}</span> <span lang="te" className="te">{te}</span>
+      <span className="lang-te" lang="te">{te}</span>
+      <span className="lang-en" lang="en">{en}</span>
     </>
   );
 }

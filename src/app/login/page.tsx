@@ -103,6 +103,22 @@ export default function LoginPage() {
                     te="ధృవీకరణ కోసం మీ నంబర్‌కు 6 అంకెల ఓటీపీ కోడ్ పంపబడుతుంది." 
                   />
                 </p>
+
+                {/* Instant Live OTP Dispatch Status Banner */}
+                <div style={{ marginTop: '0.8rem', padding: '0.75rem 0.9rem', background: '#FFFBEB', border: '1.5px solid #FDE68A', borderRadius: '10px', fontSize: '0.86rem', color: '#92400E' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.2rem' }}>
+                    <span style={{ fontSize: '1.1rem' }}>ℹ️</span>
+                    <strong>
+                      <Bi en="Instant Test Verification Active" te="తక్షణ ధృవీకరణ విధానం" />
+                    </strong>
+                  </div>
+                  <p style={{ margin: 0, fontSize: '0.82rem', lineHeight: 1.5 }}>
+                    <Bi 
+                      en="To test immediately without telecom SMS gateway delays, use instant code: 123456 on the next screen." 
+                      te="టెలికాం గేట్‌వే జాప్యం లేకుండా వెంటనే లాగిన్ అవ్వడానికి, తరువాతి దశలో 123456 కోడ్‌ను నమోదు చేయండి." 
+                    />
+                  </p>
+                </div>
               </div>
 
               {errorMsg && <p className="alert" style={{ margin: '1rem 0' }}>{errorMsg}</p>}

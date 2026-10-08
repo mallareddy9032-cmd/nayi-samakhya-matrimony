@@ -22,10 +22,14 @@ export const viewport = {
   maximumScale: 5,
 };
 
+import { LanguageProvider } from '../context/LanguageContext.tsx';
+
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={`${display.variable} ${sans.variable}`}>
-      <body>{children}</body>
+    <html lang="te" data-lang="te" className={`${display.variable} ${sans.variable}`}>
+      <body>
+        <LanguageProvider>{children}</LanguageProvider>
+      </body>
     </html>
   );
 }

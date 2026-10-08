@@ -198,51 +198,72 @@ export default async function DiscoverPage({ searchParams }: { searchParams: Sea
       <CompletenessBar completeness={completeness} freeViewsLeft={claims ? 8 : 10} />
 
       {/* Filter Bar */}
-      <form className="filters card" action="/matrimony/discover" method="get" style={{ marginBottom: '2rem' }}>
-        <div className="field">
-          <label htmlFor="f-gender"><Bi en="Looking for" te="వెతుకుతున్నది" /></label>
-          <select id="f-gender" name="gender" defaultValue={q.gender ?? 'female'}>
-            <option value="female">Bride · వధువు</option>
-            <option value="male">Groom · వరుడు</option>
-          </select>
-        </div>
+      <form className="card" action="/matrimony/discover" method="get" style={{ marginBottom: '2.5rem', padding: '1.8rem', borderRadius: '20px', background: '#FFFFFF', border: '1.5px solid var(--gold-border, #E2D9CC)', boxShadow: '0 8px 24px rgba(139, 29, 44, 0.05)' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1.2rem', alignItems: 'flex-end' }}>
+          <div>
+            <label htmlFor="f-gender" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#334155', marginBottom: '0.4rem' }}>
+              <Bi en="Looking for" te="వెతుకుతున్నది" />
+            </label>
+            <select id="f-gender" name="gender" defaultValue={q.gender ?? 'female'} style={{ width: '100%', height: '46px', padding: '0.65rem 0.8rem', borderRadius: '10px', border: '1.5px solid #CBD5E1', background: '#F8FAFC', fontSize: '0.92rem' }}>
+              <option value="female">Bride · వధువు</option>
+              <option value="male">Groom · వరుడు</option>
+            </select>
+          </div>
 
-        <div className="field">
-          <label htmlFor="f-district"><Bi en="District" te="జిల్లా" /></label>
-          <select id="f-district" name="district" defaultValue={q.district ?? ''}>
-            <option value="">All Telangana (అన్ని జిల్లాలు)</option>
-            <option value="hyderabad">Hyderabad · హైదరాబాద్</option>
-            <option value="warangal">Warangal · వరంగల్</option>
-            <option value="karimnagar">Karimnagar · కరీంనగర్</option>
-            <option value="nalgonda">Nalgonda · నల్గొండ</option>
-            <option value="khammam">Khammam · ఖమ్మం</option>
-            <option value="nizamabad">Nizamabad · నిజామాబాద్</option>
-          </select>
-        </div>
+          <div>
+            <label htmlFor="f-district" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#334155', marginBottom: '0.4rem' }}>
+              <Bi en="District" te="జిల్లా" />
+            </label>
+            <select id="f-district" name="district" defaultValue={q.district ?? ''} style={{ width: '100%', height: '46px', padding: '0.65rem 0.8rem', borderRadius: '10px', border: '1.5px solid #CBD5E1', background: '#F8FAFC', fontSize: '0.92rem' }}>
+              <option value="">All Telangana (అన్ని జిల్లాలు)</option>
+              <option value="hyderabad">Hyderabad · హైదరాబాద్</option>
+              <option value="warangal">Warangal · వరంగల్</option>
+              <option value="karimnagar">Karimnagar · కరీంనగర్</option>
+              <option value="nalgonda">Nalgonda · నల్గొండ</option>
+              <option value="khammam">Khammam · ఖమ్మం</option>
+              <option value="nizamabad">Nizamabad · నిజామాబాద్</option>
+              <option value="rangareddy">Rangareddy · రంగారెడ్డి</option>
+              <option value="medchal-malkajgiri">Medchal-Malkajgiri · మేడ్చల్-మల్కాజ్‌గిరి</option>
+              <option value="siddipet">Siddipet · సిద్దిపేట</option>
+              <option value="mahabubnagar">Mahabubnagar · మహబూబ్‌నగర్</option>
+            </select>
+          </div>
 
-        <div className="field">
-          <label htmlFor="f-vocation"><Bi en="Vocational tier" te="వృత్తి శ్రేణి" /></label>
-          <select id="f-vocation" name="vocation" defaultValue={q.vocation ?? ''}>
-            <option value="">All Streams · అన్నీ</option>
-            {Object.entries(VOCATIONS).map(([k, v]) => (
-              <option key={k} value={k}>{v.en}</option>
-            ))}
-          </select>
-        </div>
+          <div>
+            <label htmlFor="f-vocation" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#334155', marginBottom: '0.4rem' }}>
+              <Bi en="Vocational tier" te="వృత్తి శ్రేణి" />
+            </label>
+            <select id="f-vocation" name="vocation" defaultValue={q.vocation ?? ''} style={{ width: '100%', height: '46px', padding: '0.65rem 0.8rem', borderRadius: '10px', border: '1.5px solid #CBD5E1', background: '#F8FAFC', fontSize: '0.92rem' }}>
+              <option value="">All Streams · అన్నీ</option>
+              {Object.entries(VOCATIONS).map(([k, v]) => (
+                <option key={k} value={k}>{v.te} ({v.en})</option>
+              ))}
+            </select>
+          </div>
 
-        <div className="field">
-          <label htmlFor="f-ageMin"><Bi en="Age from" te="వయస్సు నుండి" /></label>
-          <input id="f-ageMin" name="ageMin" type="number" min={18} max={80} defaultValue={q.ageMin ?? 21} />
-        </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+            <div>
+              <label htmlFor="f-ageMin" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#334155', marginBottom: '0.4rem' }}>
+                <Bi en="Age from" te="వయస్సు నుండి" />
+              </label>
+              <input id="f-ageMin" name="ageMin" type="number" min={18} max={80} defaultValue={q.ageMin ?? 21} style={{ width: '100%', height: '46px', padding: '0.65rem 0.8rem', borderRadius: '10px', border: '1.5px solid #CBD5E1', background: '#F8FAFC', fontSize: '0.92rem' }} />
+            </div>
 
-        <div className="field">
-          <label htmlFor="f-ageMax"><Bi en="to" te="వరకు" /></label>
-          <input id="f-ageMax" name="ageMax" type="number" min={18} max={80} defaultValue={q.ageMax ?? 32} />
-        </div>
+            <div>
+              <label htmlFor="f-ageMax" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#334155', marginBottom: '0.4rem' }}>
+                <Bi en="to" te="వరకు" />
+              </label>
+              <input id="f-ageMax" name="ageMax" type="number" min={18} max={80} defaultValue={q.ageMax ?? 32} style={{ width: '100%', height: '46px', padding: '0.65rem 0.8rem', borderRadius: '10px', border: '1.5px solid #CBD5E1', background: '#F8FAFC', fontSize: '0.92rem' }} />
+            </div>
+          </div>
 
-        <button type="submit" className="btn" style={{ height: '46px', marginBottom: '1rem' }}>
-          <Bi en="Apply Filters" te="ఫిల్టర్ చేయండి" />
-        </button>
+          <div>
+            <button type="submit" className="btn" style={{ width: '100%', height: '46px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', fontWeight: 800 }}>
+              <span><Bi en="Apply Filters" te="ఫిల్టర్ చేయండి" /></span>
+              <span>🔍</span>
+            </button>
+          </div>
+        </div>
       </form>
 
       {/* Candidate Grid */}
