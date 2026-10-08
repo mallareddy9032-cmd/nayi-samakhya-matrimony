@@ -129,7 +129,256 @@ a:hover {
   .lamp-glow { animation: none; }
 }
 
-/* Steps (Wizard) */
+/* Golden Journey Stepper (Wizard) */
+.journey-nav {
+  margin-bottom: 2rem;
+  width: 100%;
+}
+.journey-stepper {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: relative;
+}
+.journey-stepper::before {
+  content: '';
+  position: absolute;
+  top: 18px;
+  left: 28px;
+  right: 28px;
+  height: 2px;
+  background: var(--gold-border, #E2D9CC);
+  z-index: 1;
+}
+.journey-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  text-align: center;
+  cursor: default;
+}
+.journey-step.done {
+  cursor: pointer;
+}
+.journey-node {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.88rem;
+  font-weight: 800;
+  background: #FFFFFF;
+  border: 2px solid var(--gold-border, #CBD5E1);
+  color: #64748B;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+.journey-step.done .journey-node {
+  background: linear-gradient(135deg, #F59E0B, #D4AF37);
+  border-color: #B45309;
+  color: #FFFFFF;
+  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
+}
+.journey-step.current .journey-node {
+  background: var(--maroon, #801426);
+  border-color: #D4AF37;
+  color: #FFFFFF;
+  box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.25), 0 4px 12px rgba(128, 20, 38, 0.3);
+  transform: scale(1.1);
+}
+.journey-label {
+  margin-top: 0.5rem;
+  font-size: 0.76rem;
+  color: #64748B;
+  font-weight: 600;
+  max-width: 105px;
+  line-height: 1.3;
+  transition: color 0.2s ease;
+}
+.journey-step.done .journey-label {
+  color: var(--maroon, #801426);
+  font-weight: 700;
+}
+.journey-step.current .journey-label {
+  color: var(--maroon, #801426);
+  font-weight: 800;
+}
+
+@media (max-width: 768px) {
+  .journey-stepper::before {
+    left: 18px;
+    right: 18px;
+  }
+  .journey-node {
+    width: 32px;
+    height: 32px;
+    font-size: 0.8rem;
+  }
+  .journey-label {
+    font-size: 0.7rem;
+    max-width: 65px;
+  }
+}
+
+/* Auspicious Kalyana Patrika (Review & Registration Card) */
+.patrika-card {
+  background: linear-gradient(180deg, #FFFCF5 0%, #FDF8ED 100%);
+  border: 2px solid #D4AF37;
+  border-radius: 20px;
+  padding: 1.8rem;
+  margin-bottom: 1.8rem;
+  box-shadow: 0 10px 30px rgba(128, 20, 38, 0.07), inset 0 0 20px rgba(212, 175, 55, 0.05);
+  position: relative;
+}
+.patrika-card::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  right: 6px;
+  bottom: 6px;
+  border: 1px dashed rgba(212, 175, 55, 0.45);
+  border-radius: 15px;
+  pointer-events: none;
+}
+.patrika-invocation {
+  text-align: center;
+  color: #B45309;
+  font-size: 0.88rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  margin-bottom: 1.2rem;
+  text-transform: uppercase;
+}
+.patrika-header {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  padding-bottom: 1.3rem;
+  margin-bottom: 1.3rem;
+  border-bottom: 1.5px solid rgba(212, 175, 55, 0.25);
+  flex-wrap: wrap;
+}
+.patrika-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #801426, #4C0B16);
+  border: 2.5px solid #D4AF37;
+  color: #FEEBC8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.7rem;
+  font-weight: 800;
+  box-shadow: 0 4px 12px rgba(128, 20, 38, 0.22);
+}
+.patrika-candidate-info {
+  flex: 1;
+}
+.patrika-name {
+  margin: 0 0 0.3rem;
+  color: var(--maroon, #801426);
+  font-size: 1.45rem;
+  font-weight: 900;
+}
+.patrika-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+.patrika-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.75rem;
+  background: #FFFBEB;
+  border: 1px solid #FDE68A;
+  border-radius: 999px;
+  color: #92400E;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+.patrika-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.2rem;
+}
+.patrika-section {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1.5px solid #EAE0D0;
+  border-radius: 14px;
+  padding: 1.1rem 1.3rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+}
+.patrika-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.45rem;
+  border-bottom: 1px solid #F1E5D5;
+}
+.patrika-section-title {
+  margin: 0;
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: var(--maroon, #801426);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.patrika-edit-btn {
+  background: none;
+  border: 1px solid #D4AF37;
+  color: #B45309;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  transition: all 0.2s ease;
+}
+.patrika-edit-btn:hover {
+  background: #FEF3C7;
+  border-color: #B45309;
+}
+.patrika-details-list {
+  display: grid;
+  gap: 0.55rem;
+  margin: 0;
+}
+.patrika-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.8rem;
+  font-size: 0.86rem;
+}
+.patrika-item-label {
+  color: #64748B;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+.patrika-item-val {
+  color: #1E293B;
+  font-weight: 700;
+  text-align: right;
+}
+
+/* Legacy Steps (Fallback) */
 .steps {
   display: flex;
   flex-wrap: wrap;

@@ -8,11 +8,17 @@ export type Bilingual = { en: string; te: string };
 const keysOf = <T extends Record<string, Bilingual>>(o: T) => Object.keys(o) as [keyof T & string, ...(keyof T & string)[]];
 
 export const VOCATIONS = {
-  nadopasana: { en: 'Nadopasana Custodian — Classical / Temple Musician', te: 'నాదోపాసన సంరక్షకులు — శాస్త్రీయ / ఆలయ సంగీత విద్వాంసులు' },
-  wellness_artisan: { en: 'Soundarya & Wellness Artisan — Salon Founder / Stylist', te: 'సౌందర్య & ఆరోగ్య కళాకారులు — సెలూన్ వ్యవస్థాపకులు / స్టైలిస్ట్' },
-  corporate_tech_civil: { en: 'Corporate, Technology & Civil Services', te: 'కార్పొరేట్, సాంకేతిక & పౌర సేవలు' },
-  healthcare_traditional_medicine: { en: 'Healthcare & Traditional Medicine', te: 'ఆరోగ్య సంరక్షణ & సాంప్రదాయ వైద్యం' },
-  scholarly_academic: { en: 'Scholarly & Academic', te: 'పాండిత్య & విద్యా రంగం' },
+  corporate_tech_civil: { en: 'Corporate, Software, Technology & IT', te: 'కార్పొరేట్, సాఫ్ట్‌వేర్, ఐటీ & సాంకేతిక రంగాలు' },
+  business_entrepreneur: { en: 'Business, Trade & Entrepreneurship', te: 'వ్యాపారం, వాణిజ్యం & పరిశ్రమలు' },
+  banking_finance: { en: 'Banking, Finance & Insurance', te: 'బ్యాంకింగ్, ఫైనాన్స్ & బీమా రంగాలు' },
+  government_public_services: { en: 'Government, Civil Services & PSU', te: 'ప్రభుత్వ ఉద్యోగాలు, సివిల్ సర్వీసెస్ & ప్రభుత్వ రంగాలు' },
+  healthcare_traditional_medicine: { en: 'Healthcare, Doctors, Pharma & Traditional Medicine', te: 'వైద్యం, డాక్టర్లు, ఫార్మా & ఆరోగ్య రంగాలు' },
+  scholarly_academic: { en: 'Lecturers, Teachers, Academics & Research', te: 'ఉపాధ్యాయులు, అధ్యాపకులు, విద్య & పరిశోధన' },
+  nadopasana: { en: 'Nadopasana Custodians — Classical / Temple Musicians', te: 'నాదోపాసన సంరక్షకులు — శాస్త్రీయ / ఆలయ సంగీత విద్వాంసులు' },
+  wellness_artisan: { en: 'Soundarya & Wellness Artisans — Salon Founders / Stylists', te: 'సౌందర్య & ఆరోగ్య కళాకారులు — సెలూన్ వ్యవస్థాపకులు / స్టైలిస్ట్' },
+  agriculture_farming: { en: 'Agriculture, Agri-Business & Farming', te: 'వ్యవసాయం, అగ్రి-బిజినెస్ & అనుబంధ రంగాలు' },
+  law_judiciary: { en: 'Legal, Judiciary & Advisory Services', te: 'న్యాయవాదం, న్యాయవ్యవస్థ & సలహా రంగాలు' },
+  other: { en: 'Other Professional / Self-Employed Sector', te: 'ఇతర వృత్తి / స్వయం ఉపాధి రంగాలు' },
 } satisfies Record<string, Bilingual>;
 
 export const INCOME_BRACKETS = {

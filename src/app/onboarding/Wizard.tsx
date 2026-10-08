@@ -62,7 +62,7 @@ const GENERIC: Bilingual = { en: 'Please enter required information here.', te: 
 const EMPTY = {
   displayName: '', gender: '', dateOfBirth: '', gothraId: '', proposedEn: '', proposedTe: '', maternalLineage: '',
   vocation: 'corporate_tech_civil', district: 'hyderabad', mandal: 'ameerpet', educationDegree: '', occupation: '', incomeBracket: '6l_12l', enterprise: false,
-  salonHubSlug: '', birthTime: '', birthPlace: '', nakshatra: '', photoVisibility: 'on_request', phone: '', email: '',
+  salonHubSlug: '', birthTime: '', birthPlace: '', nakshatra: '', photoVisibility: 'public_verified', phone: '', email: '',
   whatsapp: '', doorAddress: '', pledge: true, masking: true, dpdp: true, coordinator: true,
 };
 type Form = typeof EMPTY;
@@ -312,33 +312,30 @@ export function Wizard({ membershipId, gothras, startStep, reviewNote }: Props) 
 
   return (
     <div style={{ maxWidth: '820px', margin: '1.5rem auto' }}>
-      {/* Modern Horizontal Stepper */}
-      <nav aria-label="Onboarding progress" style={{ marginBottom: '2rem' }}>
-        <ol className="steps" style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', padding: 0, listStyle: 'none' }}>
-          {STEPS.map((s, i) => (
-            <li 
-              key={s.en} 
-              aria-current={i + 1 === step ? 'step' : undefined} 
-              className={i + 1 < step ? 'done' : undefined}
-              style={{
-                cursor: i + 1 < step ? 'pointer' : 'default',
-                fontSize: '0.85rem',
-                padding: '0.45rem 0.9rem',
-                borderRadius: '999px',
-                border: '1.5px solid var(--border-light)',
-                background: i + 1 === step ? 'var(--maroon)' : i + 1 < step ? 'var(--gold-surface)' : '#FFF',
-                color: i + 1 === step ? '#FFF' : i + 1 < step ? 'var(--maroon)' : '#64748B',
-                fontWeight: i + 1 === step ? 700 : 500,
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.35rem'
-              }}
-              onClick={() => { if (i + 1 < step) setStep(i + 1); }}
-            >
-              <span>{i + 1}.</span>
-              <Bi en={s.en} te={s.te} />
-            </li>
-          ))}
+      {/* Royal Temple Journey Stepper */}
+      <nav aria-label="Onboarding progress" className="journey-nav">
+        <ol className="journey-stepper">
+          {STEPS.map((s, i) => {
+            const stepNum = i + 1;
+            const isDone = stepNum < step;
+            const isCurrent = stepNum === step;
+            return (
+              <li 
+                key={s.en} 
+                aria-current={isCurrent ? 'step' : undefined} 
+                className={`journey-step ${isDone ? 'done' : ''} ${isCurrent ? 'current' : ''}`}
+                onClick={() => { if (isDone) setStep(stepNum); }}
+                title={`${s.en} / ${s.te}`}
+              >
+                <div className="journey-node">
+                  {isDone ? '✓' : stepNum}
+                </div>
+                <div className="journey-label">
+                  <Bi en={s.en} te={s.te} />
+                </div>
+              </li>
+            );
+          })}
         </ol>
       </nav>
 
@@ -677,6 +674,14 @@ export function Wizard({ membershipId, gothras, startStep, reviewNote }: Props) 
                       </option>
                     ))}
                   </select>
+                  {form.vocation === 'other' && (
+                    <div style={{ marginTop: '0.65rem', padding: '0.65rem 0.9rem', background: '#FFFBEB', border: '1px solid #FDE68A', borderRadius: '10px', fontSize: '0.85rem', color: '#92400E' }}>
+                      💡 <Bi 
+                        en="You may specify your exact industry or profession in the 'Job Title / Profession' field above." 
+                        te="దయచేసి మీ నిర్దిష్ట వృత్తి లేదా రంగం వివరాలను పైన ఉన్న 'ఉద్యోగం / హోదా' ఫీల్డ్‌లో పేర్కొనండి." 
+                      />
+                    </div>
+                  )}
                 </div>
               </fieldset>
 
@@ -722,26 +727,31 @@ export function Wizard({ membershipId, gothras, startStep, reviewNote }: Props) 
           {/* STEP 5: Privacy & Contact Security */}
           {step === 5 && (
             <div style={{ display: 'grid', gap: '1.8rem' }}>
-              <fieldset style={{ border: '1.5px solid var(--border-light)', borderRadius: '16px', padding: '1.5rem', background: '#FAFAF9' }}>
-                <legend style={{ fontWeight: 800, color: 'var(--maroon)', padding: '0 0.5rem' }}>
-                  <Bi en="Photo Privacy Preferences" te="ఫోటో గోప్యతా ప్రాధాన్యతలు" />
-                </legend>
-                <div style={{ display: 'grid', gap: '0.8rem' }}>
-                  {Object.entries(PHOTO_VISIBILITY).map(([value, label]) => (
-                    <label key={value} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', padding: '0.6rem 0.8rem', background: '#FFF', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
-                      <input 
-                        type="radio" 
-                        name="photoVisibility" 
-                        value={value} 
-                        checked={form.photoVisibility === value} 
-                        onChange={setText('photoVisibility')} 
-                        style={{ accentColor: 'var(--maroon)' }}
-                      />
-                      <span style={{ fontWeight: 600, color: '#1E293B' }}><Bi {...label} /></span>
-                    </label>
-                  ))}
+              <div 
+                style={{ 
+                  padding: '1.2rem 1.4rem', 
+                  background: 'linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%)', 
+                  border: '1.5px solid #86EFAC', 
+                  borderRadius: '16px', 
+                  display: 'flex', 
+                  gap: '1rem', 
+                  alignItems: 'center',
+                  boxShadow: '0 2px 8px rgba(22, 101, 52, 0.05)'
+                }}
+              >
+                <span style={{ fontSize: '2rem' }}>🛡️</span>
+                <div>
+                  <strong style={{ display: 'block', color: '#166534', fontSize: '1rem', fontWeight: 800, marginBottom: '0.25rem' }}>
+                    <Bi en="Verified Community Photo Protection" te="సమాజ ధృవీకరించబడిన ఫోటో రక్షణ" />
+                  </strong>
+                  <p style={{ margin: 0, fontSize: '0.88rem', color: '#15803D', lineHeight: 1.5 }}>
+                    <Bi 
+                      en="Photos are visible exclusively to verified Nayi Brahmin families within the matrimony portal. External web crawlers and unverified guests can never view candidate photographs." 
+                      te="ఫోటోలు నాయీ సమాఖ్యలో ధృవీకరించబడిన సభ్య కుటుంబాలకు మాత్రమే కనిపిస్తాయి. బాహ్య వ్యక్తులకు లేదా ఇంటర్నెట్‌లో ఎవరికీ బహిర్గతం కావు." 
+                    />
+                  </p>
                 </div>
-              </fieldset>
+              </div>
 
               <fieldset style={{ border: '1.5px solid var(--border-light)', borderRadius: '16px', padding: '1.5rem', background: '#FAFAF9' }}>
                 <legend style={{ fontWeight: 800, color: 'var(--maroon)', padding: '0 0.5rem' }}>
@@ -787,64 +797,226 @@ export function Wizard({ membershipId, gothras, startStep, reviewNote }: Props) 
             </div>
           )}
 
-          {/* STEP 6: Final Review & One-Click Submission */}
-          {step === 6 && (
-            <div>
-              <div style={{ background: '#F8FAFC', border: '1.5px solid #E2E8F0', borderRadius: '16px', padding: '1.8rem', marginBottom: '1.8rem' }}>
-                <h3 style={{ margin: '0 0 1.2rem', color: 'var(--maroon)', fontSize: '1.3rem', fontWeight: 800 }}>
-                  <Bi en="Profile Summary for Submission" te="నమోదు సమీక్ష వివరాలు" />
-                </h3>
-                <dl style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem 1.5rem', margin: 0 }}>
-                  <div>
-                    <dt style={{ fontSize: '0.82rem', color: '#64748B', fontWeight: 600 }}><Bi en="Candidate Name" te="అభ్యర్థి పేరు" /></dt>
-                    <dd style={{ margin: '0.2rem 0 0', fontWeight: 700, fontSize: '1.05rem', color: '#1E293B' }}>{form.displayName || '—'}</dd>
-                  </div>
-                  <div>
-                    <dt style={{ fontSize: '0.82rem', color: '#64748B', fontWeight: 600 }}><Bi en="Match For" te="లింగం" /></dt>
-                    <dd style={{ margin: '0.2rem 0 0', fontWeight: 700, fontSize: '1.05rem', color: '#1E293B' }}>
-                      {form.gender === 'male' ? 'Groom · వరుడు' : form.gender === 'female' ? 'Bride · వధువు' : '—'}
-                    </dd>
-                  </div>
-                  <div>
-                    <dt style={{ fontSize: '0.82rem', color: '#64748B', fontWeight: 600 }}><Bi en="Native Homeland" te="స్వస్థలం" /></dt>
-                    <dd style={{ margin: '0.2rem 0 0', fontWeight: 700, fontSize: '1.05rem', color: '#1E293B' }}>
-                      {form.mandal ? `${form.mandal}, ` : ''}{form.district || '—'}
-                    </dd>
-                  </div>
-                  <div>
-                    <dt style={{ fontSize: '0.82rem', color: '#64748B', fontWeight: 600 }}><Bi en="Gothra" te="గోత్రం" /></dt>
-                    <dd style={{ margin: '0.2rem 0 0', fontWeight: 700, fontSize: '1.05rem', color: '#1E293B' }}>
-                      {form.gothraId === PROPOSE ? (form.proposedEn || 'Custom') : (gothras.find(g => g.id === form.gothraId)?.nameEn ?? '—')}
-                    </dd>
-                  </div>
-                  <div>
-                    <dt style={{ fontSize: '0.82rem', color: '#64748B', fontWeight: 600 }}><Bi en="Education" te="విద్యార్హత" /></dt>
-                    <dd style={{ margin: '0.2rem 0 0', fontWeight: 700, fontSize: '1.05rem', color: '#1E293B' }}>{form.educationDegree || '—'}</dd>
-                  </div>
-                  <div>
-                    <dt style={{ fontSize: '0.82rem', color: '#64748B', fontWeight: 600 }}><Bi en="Profession" te="ఉద్యోగం" /></dt>
-                    <dd style={{ margin: '0.2rem 0 0', fontWeight: 700, fontSize: '1.05rem', color: '#1E293B' }}>{form.occupation || '—'}</dd>
-                  </div>
-                </dl>
-              </div>
+          {/* STEP 6: Auspicious Kalyana Patrika Review & One-Click Submission */}
+          {step === 6 && (() => {
+            const selectedDistrict = districtsList.find(d => d.slug === form.district);
+            const selectedMandal = currentMandals.find(m => m.slug === form.mandal);
+            const selectedGothra = form.gothraId === PROPOSE ? null : gothras.find(g => g.id === form.gothraId);
+            const selectedVocation = VOCATIONS[form.vocation as keyof typeof VOCATIONS];
+            const selectedIncome = INCOME_BRACKETS[form.incomeBracket as keyof typeof INCOME_BRACKETS];
+            const selectedNakshatra = form.nakshatra ? NAKSHATRAS[form.nakshatra as keyof typeof NAKSHATRAS] : null;
+            const candidateInitial = ((form.displayName.trim() || 'న').charAt(0) || 'న').toUpperCase();
 
-              <div style={{ padding: '1.2rem', background: '#F0FDF4', border: '1.5px solid #BBF7D0', borderRadius: '16px', marginBottom: '1.5rem', color: '#166534' }}>
-                <p style={{ margin: 0, fontSize: '0.92rem', lineHeight: 1.6 }}>
-                  <strong>✓ <Bi en="Continuous Submission Active:" te="నిరంతర నమోదు విధానం:" /></strong>{' '}
-                  <Bi 
-                    en="You are ready to submit! Upon tapping Submit below, your registration will be logged immediately and submitted for swift 24-hour coordinator verification." 
-                    te="మీరు సమర్పించడానికి సిద్ధంగా ఉన్నారు! కింద ఉన్న బటన్‌ను నొక్కగానే మీ దరఖాస్తు వెంటనే నమోదై 24 గంటల్లో సమన్వయకర్త ఆమోదానికి వెళుతుంది." 
-                  />
-                </p>
-              </div>
+            return (
+              <div>
+                <div className="patrika-card">
+                  {/* Traditional Invocation */}
+                  <div className="patrika-invocation">
+                    ॥ శ్రీరస్తు · శుభమస్తు · కల్యాణమస్తు ॥
+                  </div>
 
-              {serverError && (
-                <p className="alert" role="alert" style={{ marginBottom: '1.5rem' }}>
-                  <Bi {...serverError} />
-                </p>
-              )}
-            </div>
-          )}
+                  {/* Candidate Patrika Header */}
+                  <div className="patrika-header">
+                    <div className="patrika-avatar">
+                      {candidateInitial}
+                    </div>
+                    <div className="patrika-candidate-info">
+                      <h3 className="patrika-name">{form.displayName || '—'}</h3>
+                      <div className="patrika-badge-row">
+                        <span className="patrika-tag" style={{ background: '#FEF3C7', borderColor: '#F59E0B', color: '#92400E' }}>
+                          🛡️ <Bi en="Verified Nayi Family" te="ధృవీకరించబడిన నాయీ కుటుంబం" />
+                        </span>
+                        <span className="patrika-tag">
+                          👑 {form.gender === 'male' ? <Bi en="Groom" te="వరుడు" /> : form.gender === 'female' ? <Bi en="Bride" te="వధువు" /> : '—'}
+                        </span>
+                        <span className="patrika-tag" style={{ color: '#475569', borderColor: '#CBD5E1', background: '#F8FAFC' }}>
+                          🆔 NSM-TG-{(form.district || 'HYD').slice(0, 4).toUpperCase()}-DRAFT
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 4 Thematic Patrika Sections */}
+                  <div className="patrika-grid">
+                    {/* Section 1: Heritage & Lineage */}
+                    <div className="patrika-section">
+                      <div className="patrika-section-header">
+                        <h4 className="patrika-section-title">
+                          <span>🪔</span>
+                          <Bi en="Heritage & Lineage" te="కుటుంబం & వంశ వివరాలు" />
+                        </h4>
+                        <button type="button" className="patrika-edit-btn" onClick={() => setStep(3)}>
+                          ✎ <Bi en="Edit" te="మార్చు" />
+                        </button>
+                      </div>
+                      <dl className="patrika-details-list">
+                        <div className="patrika-item">
+                          <dt className="patrika-item-label"><Bi en="Gothra" te="గోత్రం" />:</dt>
+                          <dd className="patrika-item-val">
+                            {form.gothraId === PROPOSE 
+                              ? (form.proposedEn || 'Custom') 
+                              : selectedGothra 
+                                ? (lang === 'te' ? selectedGothra.nameTe : selectedGothra.nameEn) 
+                                : '—'}
+                          </dd>
+                        </div>
+                        <div className="patrika-item">
+                          <dt className="patrika-item-label"><Bi en="Maternal Lineage" te="తల్లి వంశం" />:</dt>
+                          <dd className="patrika-item-val">{form.maternalLineage || '—'}</dd>
+                        </div>
+                        <div className="patrika-item">
+                          <dt className="patrika-item-label"><Bi en="Gender" te="లింగం" />:</dt>
+                          <dd className="patrika-item-val">
+                            {form.gender === 'male' ? <Bi en="Male (Groom)" te="పురుషుడు (వరుడు)" /> : form.gender === 'female' ? <Bi en="Female (Bride)" te="స్త్రీ (వధువు)" /> : '—'}
+                          </dd>
+                        </div>
+                        <div className="patrika-item">
+                          <dt className="patrika-item-label"><Bi en="Date of Birth" te="పుట్టిన తేదీ" />:</dt>
+                          <dd className="patrika-item-val">{form.dateOfBirth || '—'}</dd>
+                        </div>
+                      </dl>
+                    </div>
+
+                    {/* Section 2: Ancestral Homeland */}
+                    <div className="patrika-section">
+                      <div className="patrika-section-header">
+                        <h4 className="patrika-section-title">
+                          <span>🏛️</span>
+                          <Bi en="Ancestral Homeland" te="స్వస్థలం & మూలాలు" />
+                        </h4>
+                        <button type="button" className="patrika-edit-btn" onClick={() => setStep(3)}>
+                          ✎ <Bi en="Edit" te="మార్చు" />
+                        </button>
+                      </div>
+                      <dl className="patrika-details-list">
+                        <div className="patrika-item">
+                          <dt className="patrika-item-label"><Bi en="District" te="జిల్లా" />:</dt>
+                          <dd className="patrika-item-val">
+                            {selectedDistrict ? (lang === 'te' ? selectedDistrict.nameTe : selectedDistrict.nameEn) : form.district || '—'}
+                          </dd>
+                        </div>
+                        <div className="patrika-item">
+                          <dt className="patrika-item-label"><Bi en="Mandal" te="మండలం" />:</dt>
+                          <dd className="patrika-item-val">
+                            {selectedMandal ? (lang === 'te' ? (selectedMandal.nameTe || selectedMandal.nameEn) : selectedMandal.nameEn) : form.mandal || '—'}
+                          </dd>
+                        </div>
+                        <div className="patrika-item">
+                          <dt className="patrika-item-label"><Bi en="State" te="రాష్ట్రం" />:</dt>
+                          <dd className="patrika-item-val"><Bi en="Telangana (33 Districts)" te="తెలంగాణ (33 జిల్లాలు)" /></dd>
+                        </div>
+                        <div className="patrika-item">
+                          <dt className="patrika-item-label"><Bi en="Verification" te="ధృవీకరణ" />:</dt>
+                          <dd className="patrika-item-val" style={{ color: '#059669' }}>
+                            <Bi en="Mandal Coordinator Assigned" te="మండల సమన్వయకర్త కేటాయింపు" />
+                          </dd>
+                        </div>
+                      </dl>
+                    </div>
+
+                    {/* Section 3: Education & Career */}
+                    <div className="patrika-section">
+                      <div className="patrika-section-header">
+                        <h4 className="patrika-section-title">
+                          <span>🎓</span>
+                          <Bi en="Education & Profession" te="విద్య & ఉద్యోగం" />
+                        </h4>
+                        <button type="button" className="patrika-edit-btn" onClick={() => setStep(4)}>
+                          ✎ <Bi en="Edit" te="మార్చు" />
+                        </button>
+                      </div>
+                      <dl className="patrika-details-list">
+                        <div className="patrika-item">
+                          <dt className="patrika-item-label"><Bi en="Qualification" te="విద్యార్హత" />:</dt>
+                          <dd className="patrika-item-val">{form.educationDegree || '—'}</dd>
+                        </div>
+                        <div className="patrika-item">
+                          <dt className="patrika-item-label"><Bi en="Occupation" te="ఉద్యోగం / హోదా" />:</dt>
+                          <dd className="patrika-item-val">{form.occupation || '—'}</dd>
+                        </div>
+                        <div className="patrika-item">
+                          <dt className="patrika-item-label"><Bi en="Vocation Stream" te="వృత్తి రంగం" />:</dt>
+                          <dd className="patrika-item-val" style={{ maxWidth: '170px' }}>
+                            {selectedVocation ? (lang === 'te' ? selectedVocation.te : selectedVocation.en) : form.vocation}
+                          </dd>
+                        </div>
+                        <div className="patrika-item">
+                          <dt className="patrika-item-label"><Bi en="Annual Income" te="వార్షిక ఆదాయం" />:</dt>
+                          <dd className="patrika-item-val">
+                            {selectedIncome ? (lang === 'te' ? selectedIncome.te : selectedIncome.en) : '—'}
+                          </dd>
+                        </div>
+                        {selectedNakshatra && (
+                          <div className="patrika-item">
+                            <dt className="patrika-item-label"><Bi en="Birth Star" te="జన్మ నక్షత్రం" />:</dt>
+                            <dd className="patrika-item-val">
+                              {lang === 'te' ? selectedNakshatra.te : selectedNakshatra.en}
+                            </dd>
+                          </div>
+                        )}
+                      </dl>
+                    </div>
+
+                    {/* Section 4: Privacy & Safeguards */}
+                    <div className="patrika-section">
+                      <div className="patrika-section-header">
+                        <h4 className="patrika-section-title">
+                          <span>🔒</span>
+                          <Bi en="Privacy & Safeguards" te="గోప్యతా రక్షణ" />
+                        </h4>
+                        <button type="button" className="patrika-edit-btn" onClick={() => setStep(5)}>
+                          ✎ <Bi en="Edit" te="మార్చు" />
+                        </button>
+                      </div>
+                      <dl className="patrika-details-list">
+                        <div className="patrika-item">
+                          <dt className="patrika-item-label"><Bi en="Mobile & WhatsApp" te="ఫోన్ & వాట్సాప్" />:</dt>
+                          <dd className="patrika-item-val" style={{ color: '#059669' }}>
+                            <Bi en="Masked (Mutual Consent Only)" te="రక్షితం (పరస్పర సమ్మతితోనే)" />
+                          </dd>
+                        </div>
+                        <div className="patrika-item">
+                          <dt className="patrika-item-label"><Bi en="Photo Access" te="ఫోటో వీక్షణ" />:</dt>
+                          <dd className="patrika-item-val">
+                            <Bi en="Verified Community Only" te="ధృవీకరించబడిన సభ్యులకు మాత్రమే" />
+                          </dd>
+                        </div>
+                        <div className="patrika-item">
+                          <dt className="patrika-item-label"><Bi en="Data Protection" te="డేటా రక్షణ" />:</dt>
+                          <dd className="patrika-item-val">
+                            <Bi en="DPDP Act 2023 Compliant" te="DPDP చట్టం 2023 అనుగుణంగా" />
+                          </dd>
+                        </div>
+                        <div className="patrika-item">
+                          <dt className="patrika-item-label"><Bi en="Pledge Status" te="సమాజ ప్రతిజ్ఞ" />:</dt>
+                          <dd className="patrika-item-val" style={{ color: '#059669' }}>
+                            ✓ <Bi en="Accepted" te="స్వీకరించబడింది" />
+                          </dd>
+                        </div>
+                      </dl>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Auspicious Submission Guarantee */}
+                <div style={{ padding: '1.2rem 1.4rem', background: '#F0FDF4', border: '1.5px solid #BBF7D0', borderRadius: '16px', marginBottom: '1.5rem', color: '#166534', boxShadow: '0 2px 8px rgba(22, 101, 52, 0.04)' }}>
+                  <p style={{ margin: 0, fontSize: '0.94rem', lineHeight: 1.6 }}>
+                    <strong>✓ <Bi en="Continuous Submission Active:" te="నిరంతర నమోదు విధానం:" /></strong>{' '}
+                    <Bi 
+                      en="All details are verified and ready. Tapping Submit below will log your auspicious profile and route it for 24-hour mandal coordinator verification." 
+                      te="మీ వివరాలన్నీ సిద్ధంగా ఉన్నాయి. కింద 'ప్రొఫైల్ సమర్పించండి' బటన్‌పై నొక్కగానే మీ దరఖాస్తు నమోదై 24 గంటల్లో సమన్వయకర్త ఆమోదానికి వెళుతుంది." 
+                    />
+                  </p>
+                </div>
+
+                {serverError && (
+                  <p className="alert" role="alert" style={{ marginBottom: '1.5rem' }}>
+                    <Bi {...serverError} />
+                  </p>
+                )}
+              </div>
+            );
+          })()}
 
           {/* Stepper Navigation Buttons */}
           {Object.keys(errors).length > 0 && (

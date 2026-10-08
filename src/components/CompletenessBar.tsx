@@ -23,7 +23,7 @@ export function CompletenessBar({ completeness, freeViewsLeft = 10 }: { complete
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.2rem', flexWrap: 'wrap', gap: '0.8rem' }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.2rem' }}>
-            <span style={{ fontSize: '1.3rem' }}>⭐</span>
+            <span style={{ fontSize: '1.3rem' }}>🪔</span>
             <strong style={{ fontSize: '1.15rem', color: '#1E293B', fontWeight: 800 }}>
               <Bi en="Candidate Profile Strength" te="మీ ప్రొఫైల్ సంపూర్ణత స్థాయి" />:
             </strong>
@@ -49,50 +49,86 @@ export function CompletenessBar({ completeness, freeViewsLeft = 10 }: { complete
         </div>
       </div>
 
-      {/* 4-Stage Milestone Stepper */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.5rem', marginBottom: '1rem', textAlign: 'center' }}>
-        {/* Step 1: 0-25% Bronze */}
-        <div style={{ padding: '0.5rem 0.2rem', borderRadius: '10px', background: percentage >= 25 ? '#FFFBEB' : '#F8FAFC', border: percentage >= 25 ? '1.5px solid #FDE68A' : '1px solid #E2E8F0' }}>
-          <span style={{ fontSize: '1.2rem', display: 'block' }}>🥉</span>
-          <span style={{ fontSize: '0.75rem', fontWeight: 700, color: percentage >= 25 ? '#92400E' : '#94A3B8' }}>25% Bronze</span>
+      {/* 4-Stage Kalyana Milestone Stepper */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.65rem', marginBottom: '1.25rem', textAlign: 'center' }}>
+        {/* Stage 1: 25% Prarambha */}
+        <div style={{ 
+          padding: '0.65rem 0.4rem', 
+          borderRadius: '12px', 
+          background: percentage >= 25 ? '#FEF9E7' : '#F8FAFC', 
+          border: percentage >= 25 ? '1.5px solid #F59E0B' : '1px solid #E2E8F0',
+          boxShadow: percentage >= 25 ? '0 2px 8px rgba(180, 83, 9, 0.08)' : 'none'
+        }}>
+          <span style={{ fontSize: '1.25rem', display: 'block', marginBottom: '0.2rem' }}>🪔</span>
+          <span style={{ fontSize: '0.78rem', fontWeight: 800, color: percentage >= 25 ? '#92400E' : '#94A3B8', display: 'block' }}>25%</span>
+          <span style={{ fontSize: '0.72rem', fontWeight: 600, color: percentage >= 25 ? '#B45309' : '#94A3B8', display: 'block' }}>
+            <Bi en="Prarambha" te="ప్రారంభం" />
+          </span>
         </div>
 
-        {/* Step 2: 50% Silver (Access Unlock) */}
-        <div style={{ padding: '0.5rem 0.2rem', borderRadius: '10px', background: percentage >= 50 ? '#ECFDF5' : '#FEF2F2', border: percentage >= 50 ? '2px solid #059669' : '1.5px dashed #EF4444', position: 'relative' }}>
-          <span style={{ fontSize: '1.2rem', display: 'block' }}>{percentage >= 50 ? '🔓' : '🔒'}</span>
-          <span style={{ fontSize: '0.75rem', fontWeight: 800, color: percentage >= 50 ? '#065F46' : '#DC2626' }}>50% Unlocked</span>
+        {/* Stage 2: 50% Sambandham Unlocked */}
+        <div style={{ 
+          padding: '0.65rem 0.4rem', 
+          borderRadius: '12px', 
+          background: percentage >= 50 ? '#ECFDF5' : '#FEF2F2', 
+          border: percentage >= 50 ? '2px solid #059669' : '1.5px dashed #DC2626',
+          boxShadow: percentage >= 50 ? '0 2px 8px rgba(5, 150, 105, 0.12)' : 'none'
+        }}>
+          <span style={{ fontSize: '1.25rem', display: 'block', marginBottom: '0.2rem' }}>{percentage >= 50 ? '🔓' : '🔒'}</span>
+          <span style={{ fontSize: '0.78rem', fontWeight: 800, color: percentage >= 50 ? '#065F46' : '#DC2626', display: 'block' }}>50%</span>
+          <span style={{ fontSize: '0.72rem', fontWeight: 700, color: percentage >= 50 ? '#059669' : '#DC2626', display: 'block' }}>
+            <Bi en="Matches Open" te="సంబంధాల వీక్షణ" />
+          </span>
         </div>
 
-        {/* Step 3: 75% Gold */}
-        <div style={{ padding: '0.5rem 0.2rem', borderRadius: '10px', background: percentage >= 75 ? '#FEF3C7' : '#F8FAFC', border: percentage >= 75 ? '1.5px solid #F59E0B' : '1px solid #E2E8F0' }}>
-          <span style={{ fontSize: '1.2rem', display: 'block' }}>🥇</span>
-          <span style={{ fontSize: '0.75rem', fontWeight: 700, color: percentage >= 75 ? '#B45309' : '#94A3B8' }}>75% Gold</span>
+        {/* Stage 3: 75% Sampurna Details */}
+        <div style={{ 
+          padding: '0.65rem 0.4rem', 
+          borderRadius: '12px', 
+          background: percentage >= 75 ? '#FEF9E7' : '#F8FAFC', 
+          border: percentage >= 75 ? '1.5px solid #D4AF37' : '1px solid #E2E8F0',
+          boxShadow: percentage >= 75 ? '0 2px 8px rgba(212, 175, 55, 0.15)' : 'none'
+        }}>
+          <span style={{ fontSize: '1.25rem', display: 'block', marginBottom: '0.2rem' }}>📜</span>
+          <span style={{ fontSize: '0.78rem', fontWeight: 800, color: percentage >= 75 ? '#92400E' : '#94A3B8', display: 'block' }}>75%</span>
+          <span style={{ fontSize: '0.72rem', fontWeight: 600, color: percentage >= 75 ? '#B45309' : '#94A3B8', display: 'block' }}>
+            <Bi en="Full Biodata" te="సంపూర్ణ వివరాలు" />
+          </span>
         </div>
 
-        {/* Step 4: 100% Platinum Star */}
-        <div style={{ padding: '0.5rem 0.2rem', borderRadius: '10px', background: percentage >= 100 ? '#EFF6FF' : '#F8FAFC', border: percentage >= 100 ? '2px solid #2563EB' : '1px solid #E2E8F0' }}>
-          <span style={{ fontSize: '1.2rem', display: 'block' }}>💎</span>
-          <span style={{ fontSize: '0.75rem', fontWeight: 800, color: percentage >= 100 ? '#1D4ED8' : '#94A3B8' }}>100% Star</span>
+        {/* Stage 4: 100% Kalyana Ready */}
+        <div style={{ 
+          padding: '0.65rem 0.4rem', 
+          borderRadius: '12px', 
+          background: percentage >= 100 ? '#FFFBEB' : '#F8FAFC', 
+          border: percentage >= 100 ? '2px solid #801426' : '1px solid #E2E8F0',
+          boxShadow: percentage >= 100 ? '0 2px 10px rgba(128, 20, 38, 0.18)' : 'none'
+        }}>
+          <span style={{ fontSize: '1.25rem', display: 'block', marginBottom: '0.2rem' }}>👑</span>
+          <span style={{ fontSize: '0.78rem', fontWeight: 800, color: percentage >= 100 ? '#801426' : '#94A3B8', display: 'block' }}>100%</span>
+          <span style={{ fontSize: '0.72rem', fontWeight: 700, color: percentage >= 100 ? '#801426' : '#94A3B8', display: 'block' }}>
+            <Bi en="Kalyana Ready" te="కల్యాణ యోగ్యం" />
+          </span>
         </div>
       </div>
 
-      {/* Progress Track */}
-      <div style={{ width: '100%', height: '14px', background: '#F1E9DF', borderRadius: '999px', overflow: 'hidden', border: '1px solid var(--border-light)', position: 'relative', marginBottom: '1rem' }}>
+      {/* Progress Track with Auspicious Gradient */}
+      <div style={{ width: '100%', height: '14px', background: '#F1E9DF', borderRadius: '999px', overflow: 'hidden', border: '1.5px solid var(--border-light)', position: 'relative', marginBottom: '1rem' }}>
         <div 
           style={{ 
             width: `${percentage}%`, 
             height: '100%', 
             background: percentage >= 90 
-              ? 'linear-gradient(90deg, #D4AF37, #8B1D2C)' 
+              ? 'linear-gradient(90deg, #D4AF37, #801426)' 
               : percentage >= 50 
                 ? 'linear-gradient(90deg, #10B981, #059669)' 
-                : 'linear-gradient(90deg, #EF4444, #F97316)',
+                : 'linear-gradient(90deg, #EF4444, #F59E0B)',
             transition: 'width 0.6s ease',
             borderRadius: '999px'
           }} 
         />
         {/* 50% Threshold Marker */}
-        <div style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, width: '2px', background: 'rgba(0,0,0,0.3)' }} title="50% Unlock Threshold" />
+        <div style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, width: '2px', background: '#801426', opacity: 0.5 }} title="50% Unlock Threshold" />
       </div>
 
       {/* Interactive Quick Action Chips */}
