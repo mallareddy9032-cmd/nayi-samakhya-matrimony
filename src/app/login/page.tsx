@@ -131,6 +131,9 @@ export default function LoginPage() {
                   required
                   style={{ textAlign: 'center', fontSize: '1.5rem', letterSpacing: '0.3em', fontWeight: 700, color: 'var(--maroon)' }}
                 />
+                <div style={{ marginTop: '0.6rem', padding: '0.6rem 0.8rem', background: '#FEF3C7', border: '1px solid #F59E0B', borderRadius: '8px', fontSize: '0.85rem', color: '#92400E', textAlign: 'center' }}>
+                  <strong>Demo / Testing OTP Code:</strong> <span style={{ fontFamily: 'monospace', fontWeight: 800, fontSize: '1.1rem', color: '#B45309' }}>123456</span>
+                </div>
               </div>
 
               {errorMsg && <p className="alert" style={{ margin: '1rem 0' }}>{errorMsg}</p>}
