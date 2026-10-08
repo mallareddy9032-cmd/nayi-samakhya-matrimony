@@ -211,18 +211,31 @@ legend {
   font-size: 0.92rem;
 }
 /* Language Preference Display Rules (Default: Telugu) */
-html:not([data-lang='en']) .lang-en {
+html:not([data-lang='en']) .lang-en,
+html:not([data-lang='en']) [data-lang-only='en'] {
   display: none !important;
 }
-html:not([data-lang='en']) .lang-te {
+html:not([data-lang='en']) .lang-te,
+html:not([data-lang='en']) [data-lang-only='te'] {
   display: inline;
 }
 
-html[data-lang='en'] .lang-te {
+html[data-lang='en'] .lang-te,
+html[data-lang='en'] [data-lang-only='te'] {
   display: none !important;
 }
-html[data-lang='en'] .lang-en {
+html[data-lang='en'] .lang-en,
+html[data-lang='en'] [data-lang-only='en'] {
   display: inline;
+}
+
+/* Secondary telugu span helper */
+html[data-lang='en'] .card h2 .te,
+html[data-lang='en'] .commencement .te {
+  display: none !important;
+}
+html:not([data-lang='en']) .card h2 .te {
+  display: block;
 }
 
 .te {
