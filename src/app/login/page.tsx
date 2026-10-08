@@ -125,8 +125,15 @@ export default function LoginPage() {
         // Continue even if local session fetch fails
       }
 
+      // Determine target redirect url safely
+      const searchParams = new URLSearchParams(window.location.search);
+      const rawReturnTo = searchParams.get('return_to');
+      const targetUrl = (rawReturnTo && rawReturnTo.startsWith('/matrimony') && !rawReturnTo.startsWith('//'))
+        ? rawReturnTo
+        : '/matrimony/onboarding';
+
       setIsSubmitting(false);
-      window.location.href = '/matrimony/onboarding';
+      window.location.href = targetUrl;
     } catch (err: unknown) {
       console.error('OTP verification error:', err);
       // Fallback for demo test number 123456
@@ -140,8 +147,14 @@ export default function LoginPage() {
         } catch {
           // ignore
         }
+        const searchParams = new URLSearchParams(window.location.search);
+        const rawReturnTo = searchParams.get('return_to');
+        const targetUrl = (rawReturnTo && rawReturnTo.startsWith('/matrimony') && !rawReturnTo.startsWith('//'))
+          ? rawReturnTo
+          : '/matrimony/onboarding';
+
         setIsSubmitting(false);
-        window.location.href = '/matrimony/onboarding';
+        window.location.href = targetUrl;
         return;
       }
       setIsSubmitting(false);

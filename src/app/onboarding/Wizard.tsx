@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState, type ChangeEvent } from 'react';
+import { useEffect, useMemo, useRef, useState, type ChangeEvent } from 'react';
 import { z } from 'zod';
 import {
   CONTACT_MASKING,
@@ -73,8 +73,8 @@ const orNull = (s: string): string | null => (s.trim() === '' ? null : s);
 
 function toPayload(f: Form, lang: Lang) {
   // Normalize district & mandal slugs
-  const distSlug = f.district ? slugify(f.district) : 'hyderabad';
-  const mandSlug = f.mandal ? slugify(f.mandal) : 'ameerpet';
+  const distSlug = f.district ? slugify(f.district) : '';
+  const mandSlug = f.mandal ? slugify(f.mandal) : '';
 
   return {
     lang,
@@ -84,12 +84,12 @@ function toPayload(f: Form, lang: Lang) {
       gender: f.gender,
       dateOfBirth: f.dateOfBirth,
       gothra: f.gothraId === PROPOSE
-        ? { kind: 'proposed', nameEn: f.proposedEn || 'Custom', nameTe: orNull(f.proposedTe) }
-        : { kind: 'listed', id: f.gothraId || '11111111-1111-4111-a111-111111111111' },
+        ? { kind: 'proposed' as const, nameEn: f.proposedEn || '', nameTe: orNull(f.proposedTe) }
+        : { kind: 'listed' as const, id: f.gothraId || '' },
       maternalLineage: orNull(f.maternalLineage),
       vocation: f.vocation || 'corporate_tech_civil',
-      ancestralNativeDistrict: distSlug || 'hyderabad',
-      ancestralNativeMandal: mandSlug || 'ameerpet',
+      ancestralNativeDistrict: distSlug,
+      ancestralNativeMandal: mandSlug,
     },
     career: {
       educationDegree: f.educationDegree,
@@ -101,14 +101,19 @@ function toPayload(f: Form, lang: Lang) {
       nakshatra: orNull(f.nakshatra),
     },
     privacy: {
-      photoVisibility: f.photoVisibility,
+      photoVisibility: f.photoVisibility || 'public_verified',
       contactMaskingAcknowledged: f.masking,
       profileProcessingConsent: f.dpdp,
       coordinatorVerificationConsent: f.coordinator,
       profileNoticeVersion: NOTICES.profileProcessing.version,
       coordinatorNoticeVersion: NOTICES.coordinatorVerification.version,
     },
-    contact: { phone: f.phone || '9848012345', email: orNull(f.email), whatsapp: orNull(f.whatsapp), doorAddress: f.doorAddress || 'Telangana, India' },
+    contact: { 
+      phone: f.phone || '', 
+      email: orNull(f.email), 
+      whatsapp: orNull(f.whatsapp), 
+      doorAddress: f.doorAddress || (f.mandal ? `${f.mandal}, ${f.district}, Telangana` : 'Telangana, India') 
+    },
   };
 }
 
@@ -122,15 +127,20 @@ function stepErrors(step: number, payload: unknown): Record<string, string> {
     const key = issue.path.join('.');
     let code = issue.message;
     if (issue.code === 'invalid_value') {
-      if (issue.values[0] === true) code = 'consent_required';
+      if (issue.values && issue.values[0] === true) code = 'consent_required';
       else if (key === 'heritage.gender') code = 'gender_required';
     } else if (issue.code === 'invalid_format') {
       if (key === 'heritage.dateOfBirth') code = 'dob_required';
-      else if (key === 'heritage.gothra.id') code = 'gothra_required';
+      else if (key === 'heritage.gothra.id' || key === 'heritage.gothra') code = 'gothra_required';
+      else if (key === 'heritage.ancestralNativeDistrict') code = 'district_required';
+      else if (key === 'heritage.ancestralNativeMandal') code = 'mandal_required';
+      else if (key === 'contact.phone') code = 'phone_required';
     } else if (issue.code === 'too_small') {
       if (key === 'heritage.displayName') code = 'name_required';
       else if (key === 'career.educationDegree') code = 'degree_required';
       else if (key === 'career.occupation') code = 'occupation_required';
+      else if (key === 'heritage.gothra.nameEn') code = 'gothra_required';
+      else if (key === 'contact.phone') code = 'phone_required';
     }
     if (sections.includes(String(issue.path[0])) && !(key in errors)) errors[key] = code;
   }
@@ -197,6 +207,22 @@ type Props = {
   reviewNote: string | null;
 };
 
+const FIELD_ERROR_MAP: Record<string, string[]> = {
+  district: ['heritage.ancestralNativeDistrict'],
+  mandal: ['heritage.ancestralNativeMandal'],
+  gothraId: ['heritage.gothra', 'heritage.gothra.id'],
+  proposedEn: ['heritage.gothra.nameEn', 'heritage.gothra'],
+  proposedTe: ['heritage.gothra.nameTe'],
+  displayName: ['heritage.displayName'],
+  gender: ['heritage.gender'],
+  dateOfBirth: ['heritage.dateOfBirth'],
+  educationDegree: ['career.educationDegree'],
+  occupation: ['career.occupation'],
+  incomeBracket: ['career.incomeBracket'],
+  phone: ['contact.phone'],
+  doorAddress: ['contact.doorAddress'],
+};
+
 export function Wizard({ membershipId, gothras, startStep, reviewNote }: Props) {
   const [step, setStep] = useState(startStep);
   const { lang } = useLanguage();
@@ -211,7 +237,7 @@ export function Wizard({ membershipId, gothras, startStep, reviewNote }: Props) 
   const heading = useRef<HTMLHeadingElement>(null);
 
   const districtsList = ALL_TELANGANA_DISTRICTS;
-  const currentMandals = getMandalsForDistrict(form.district || 'hyderabad');
+  const currentMandals = useMemo(() => getMandalsForDistrict(form.district || 'hyderabad'), [form.district]);
 
   useEffect(() => {
     // When district changes, default mandal to first available
@@ -220,14 +246,52 @@ export function Wizard({ membershipId, gothras, startStep, reviewNote }: Props) 
     }
   }, [form.district, currentMandals]);
 
+  const onDistrictChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const newDistrict = e.target.value;
+    const newMandals = getMandalsForDistrict(newDistrict);
+    setForm((f) => ({
+      ...f,
+      district: newDistrict,
+      mandal: newMandals[0]?.slug ?? '',
+    }));
+    setErrors((prev) => {
+      const next = { ...prev };
+      delete next['heritage.ancestralNativeDistrict'];
+      delete next['heritage.ancestralNativeMandal'];
+      return next;
+    });
+  };
+
+  const onMandalChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const newMandal = e.target.value;
+    setForm((f) => ({ ...f, mandal: newMandal }));
+    setErrors((prev) => {
+      const next = { ...prev };
+      delete next['heritage.ancestralNativeMandal'];
+      return next;
+    });
+  };
+
+  const onGothraChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const newGothra = e.target.value;
+    setForm((f) => ({ ...f, gothraId: newGothra }));
+    setErrors((prev) => {
+      const next = { ...prev };
+      delete next['heritage.gothra'];
+      delete next['heritage.gothra.id'];
+      return next;
+    });
+  };
+
   const setText = (key: TextKey) => (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const val = e.target.value;
     setForm((f) => ({ ...f, [key]: val }));
     // Clear field-specific error as user types/selects
     setErrors((prev) => {
       const next = { ...prev };
+      const toClear = FIELD_ERROR_MAP[key] ?? [];
       for (const k of Object.keys(next)) {
-        if (k.endsWith(key) || k === key) delete next[k];
+        if (k.endsWith(key) || k === key || toClear.includes(k)) delete next[k];
       }
       return next;
     });
@@ -472,7 +536,7 @@ export function Wizard({ membershipId, gothras, startStep, reviewNote }: Props) 
                   </label>
                   <input 
                     type="text" 
-                    placeholder="e.g. S. Sai Krishna / పి. లలిత"
+                    placeholder={lang === 'te' ? 'ఉదా. పి. లలిత / ఎస్. సాయి కృష్ణ' : 'e.g. S. Sai Krishna / P. Lalitha'}
                     maxLength={80} 
                     value={form.displayName} 
                     onChange={setText('displayName')} 
@@ -488,9 +552,9 @@ export function Wizard({ membershipId, gothras, startStep, reviewNote }: Props) 
                       <Bi en="Looking Match For" te="లింగం (సంబంధం)" />
                     </label>
                     <select value={form.gender} onChange={setText('gender')} {...a11y('heritage.gender')} required>
-                      <option value="">— <Bi en="Select" te="ఎంచుకోండి" /> —</option>
-                      <option value="male">Groom · వరుడు (పురుషుడు)</option>
-                      <option value="female">Bride · వధువు (స్త్రీ)</option>
+                      <option value="">{lang === 'te' ? '— ఎంచుకోండి —' : '— Select —'}</option>
+                      <option value="male">{lang === 'te' ? 'వరుడు · పురుషుడు' : 'Groom · Male'}</option>
+                      <option value="female">{lang === 'te' ? 'వధువు · స్త్రీ' : 'Bride · Female'}</option>
                     </select>
                     {err('heritage.gender')}
                   </div>
@@ -515,14 +579,14 @@ export function Wizard({ membershipId, gothras, startStep, reviewNote }: Props) 
                   <label htmlFor="heritage-gothra" style={{ display: 'block', fontWeight: 700, marginBottom: '0.4rem', color: '#334155' }}>
                     <Bi en="Family Gothra" te="కుటుంబ గోత్రం" />
                   </label>
-                  <select value={form.gothraId} onChange={setText('gothraId')} {...a11y('heritage.gothra')} required>
-                    <option value="">— <Bi en="Select Gothra" te="గోత్రం ఎంచుకోండి" /> —</option>
+                  <select value={form.gothraId} onChange={onGothraChange} {...a11y('heritage.gothra')} required>
+                    <option value="">{lang === 'te' ? '— గోత్రం ఎంచుకోండి —' : '— Select Gothra —'}</option>
                     {gothras.map((g) => (
                       <option key={g.id} value={g.id}>
                         {lang === 'te' ? `${g.nameTe} (${g.nameEn})` : `${g.nameEn} (${g.nameTe})`}
                       </option>
                     ))}
-                    <option value={PROPOSE}>+ <Bi en="Other / Enter Custom Gothra" te="ఇతర గోత్రం నమోదు చేయండి" /></option>
+                    <option value={PROPOSE}>{lang === 'te' ? '+ ఇతర గోత్రం నమోదు చేయండి' : '+ Other / Enter Custom Gothra'}</option>
                   </select>
                   {err('heritage.gothra')}
                 </div>
@@ -547,7 +611,7 @@ export function Wizard({ membershipId, gothras, startStep, reviewNote }: Props) 
                   </label>
                   <input 
                     type="text" 
-                    placeholder="e.g. Kashyapa / గౌతమ" 
+                    placeholder={lang === 'te' ? 'ఉదా. గౌతమ / కాశ్యప' : 'e.g. Kashyapa / Gautama'} 
                     maxLength={80} 
                     value={form.maternalLineage} 
                     onChange={setText('maternalLineage')} 
@@ -568,11 +632,11 @@ export function Wizard({ membershipId, gothras, startStep, reviewNote }: Props) 
                     </label>
                     <select 
                       value={form.district} 
-                      onChange={(e) => setForm((f) => ({ ...f, district: e.target.value }))} 
+                      onChange={onDistrictChange} 
                       {...a11y('heritage.ancestralNativeDistrict')}
                       required
                     >
-                      <option value="">— <Bi en="Select District" te="జిల్లా ఎంచుకోండి" /> —</option>
+                      <option value="">{lang === 'te' ? '— స్వస్థల జిల్లా ఎంచుకోండి —' : '— Select District —'}</option>
                       {districtsList.map((d) => (
                         <option key={d.slug} value={d.slug}>
                           {lang === 'te' ? `${d.nameTe} (${d.nameEn})` : `${d.nameEn} (${d.nameTe})`}
@@ -588,11 +652,12 @@ export function Wizard({ membershipId, gothras, startStep, reviewNote }: Props) 
                     </label>
                     <select 
                       value={form.mandal} 
-                      onChange={setText('mandal')} 
+                      onChange={onMandalChange} 
                       disabled={!form.district}
                       {...a11y('heritage.ancestralNativeMandal')}
                       required
                     >
+                      <option value="">{lang === 'te' ? '— స్వస్థల మండలం ఎంచుకోండి —' : '— Select Mandal —'}</option>
                       {currentMandals.map((m) => (
                         <option key={m.slug} value={m.slug}>
                           {lang === 'te' ? `${m.nameTe || m.nameEn}` : m.nameEn}
@@ -621,7 +686,7 @@ export function Wizard({ membershipId, gothras, startStep, reviewNote }: Props) 
                     </label>
                     <input 
                       type="text" 
-                      placeholder="e.g. B.Tech (CSE), MBA, MBBS, CA" 
+                      placeholder={lang === 'te' ? 'ఉదా. బి.టెక్, ఎంబీఏ, డిగ్రీ, పీజీ' : 'e.g. B.Tech (CSE), MBA, MBBS, CA'} 
                       maxLength={120} 
                       value={form.educationDegree} 
                       onChange={setText('educationDegree')} 
@@ -637,7 +702,7 @@ export function Wizard({ membershipId, gothras, startStep, reviewNote }: Props) 
                     </label>
                     <input 
                       type="text" 
-                      placeholder="e.g. Senior Software Engineer, Bank PO, Business Owner" 
+                      placeholder={lang === 'te' ? 'ఉదా. సీనియర్ సాఫ్ట్‌వేర్ ఇంజనీర్, బ్యాంక్ ఆఫీసర్, వ్యాపారం' : 'e.g. Senior Software Engineer, Bank PO, Business Owner'} 
                       maxLength={120} 
                       value={form.occupation} 
                       onChange={setText('occupation')} 
@@ -703,7 +768,7 @@ export function Wizard({ membershipId, gothras, startStep, reviewNote }: Props) 
                     <label htmlFor="career-birthPlace" style={{ display: 'block', fontWeight: 700, marginBottom: '0.4rem', color: '#334155' }}>
                       <Bi en="Place of Birth" te="పుట్టిన స్థలం" />
                     </label>
-                    <input type="text" placeholder="e.g. Hyderabad / వరంగల్" maxLength={80} value={form.birthPlace} onChange={setText('birthPlace')} />
+                    <input type="text" placeholder={lang === 'te' ? 'ఉదా. హైదరాబాద్ / వరంగల్' : 'e.g. Hyderabad / Warangal'} maxLength={80} value={form.birthPlace} onChange={setText('birthPlace')} />
                   </div>
                 </div>
 
@@ -712,7 +777,7 @@ export function Wizard({ membershipId, gothras, startStep, reviewNote }: Props) 
                     <Bi en="Birth Star / Nakshatram" te="జన్మ నక్షత్రం" />
                   </label>
                   <select value={form.nakshatra} onChange={setText('nakshatra')}>
-                    <option value="">— <Bi en="Select Nakshatram" te="నక్షత్రం ఎంచుకోండి" /> —</option>
+                    <option value="">{lang === 'te' ? '— జన్మ నక్షత్రం ఎంచుకోండి —' : '— Select Nakshatram —'}</option>
                     {Object.entries(NAKSHATRAS).map(([value, l]) => (
                       <option key={value} value={value}>
                         {lang === 'te' ? `${l.te} (${l.en})` : `${l.en} (${l.te})`}
