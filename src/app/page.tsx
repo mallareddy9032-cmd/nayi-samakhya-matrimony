@@ -169,12 +169,10 @@ const TELANGANA_DISTRICTS = [
   'Hanamkonda', 'Yadadri Bhuvanagiri'
 ];
 
-export default async function Home() {
-  const session = await getOptionalSession();
-
+export default function Home() {
   return (
     <main className="shell wide">
-      <Nav claims={session} />
+      <Nav />
       
       {/* Concept 1: Split Hero Section (Responsive Grid) */}
       <section className="hero-grid" style={{ maxWidth: '1200px', margin: '1.5rem auto 3rem', display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '2.5rem', alignItems: 'center' }}>
