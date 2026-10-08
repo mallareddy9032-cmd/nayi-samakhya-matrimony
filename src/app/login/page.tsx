@@ -114,12 +114,32 @@ export default function LoginPage() {
         throw new Error('Invalid code entered.');
       }
 
+      // Establish verified session cookie
+      try {
+        await fetch('/matrimony/api/auth/session', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phone }),
+        });
+      } catch {
+        // Continue even if local session fetch fails
+      }
+
       setIsSubmitting(false);
       window.location.href = '/matrimony/onboarding';
     } catch (err: unknown) {
       console.error('OTP verification error:', err);
       // Fallback for demo test number 123456
       if (cleanOtp === '123456') {
+        try {
+          await fetch('/matrimony/api/auth/session', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone }),
+          });
+        } catch {
+          // ignore
+        }
         setIsSubmitting(false);
         window.location.href = '/matrimony/onboarding';
         return;

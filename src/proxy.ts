@@ -54,6 +54,8 @@ export async function proxy(req: NextRequest): Promise<NextResponse> {
     pathname === '/login' || 
     pathname === '/preview' ||
     pathname === '/discover' ||
+    pathname === '/onboarding' ||
+    pathname.startsWith('/api/auth') ||
     pathname.startsWith('/profiles')
   ) {
     return NextResponse.next();
