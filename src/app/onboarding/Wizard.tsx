@@ -47,7 +47,7 @@ const MESSAGES: Record<string, Bilingual> = {
   consent_required: { en: 'Please check this box to proceed.', te: 'కొనసాగడానికి దయచేసి ఈ పెట్టెను టిక్ చేయండి.' },
   below_legal_marriage_age: { en: 'Minimum marriage age is 21 for men and 18 for women.', te: 'కనీస వివాహ వయస్సు పురుషులకు 21, స్త్రీలకు 18.' },
   invalid_date: { en: 'Please enter a valid birth date.', te: 'దయచేసి సరైన పుట్టిన తేదీని నమోదు చేయండి.' },
-  name_required: { en: 'Please enter full name (at least 2 letters).', te: 'దయచేసి అభ్యర్థి పూర్తి పేరు నమోదు చేయండి.' },
+  name_required: { en: 'Please enter candidate full name.', te: 'దయచేసి అభ్యర్థి పూర్తి పేరు నమోదు చేయండి.' },
   gender_required: { en: 'Please select whether Bride or Groom.', te: 'దయచేసి వధువు లేదా వరుడు ఎంచుకోండి.' },
   dob_required: { en: 'Please provide date of birth.', te: 'దయచేసి పుట్టిన తేదీ నమోదు చేయండి.' },
   gothra_required: { en: 'Please choose family Gothra.', te: 'దయచేసి కుటుంబ గోత్రం ఎంచుకోండి.' },
@@ -85,7 +85,7 @@ function toPayload(f: Form, lang: Lang) {
       dateOfBirth: f.dateOfBirth,
       gothra: f.gothraId === PROPOSE
         ? { kind: 'proposed', nameEn: f.proposedEn || 'Custom', nameTe: orNull(f.proposedTe) }
-        : { kind: 'listed', id: f.gothraId || '11111111-1111-1111-1111-111111111111' },
+        : { kind: 'listed', id: f.gothraId || '11111111-1111-4111-a111-111111111111' },
       maternalLineage: orNull(f.maternalLineage),
       vocation: f.vocation || 'corporate_tech_civil',
       ancestralNativeDistrict: distSlug || 'hyderabad',
@@ -120,7 +120,18 @@ function stepErrors(step: number, payload: unknown): Record<string, string> {
   const errors: Record<string, string> = {};
   for (const issue of parsed.error.issues) {
     const key = issue.path.join('.');
-    const code = issue.code === 'invalid_value' && issue.values[0] === true ? 'consent_required' : issue.message;
+    let code = issue.message;
+    if (issue.code === 'invalid_value') {
+      if (issue.values[0] === true) code = 'consent_required';
+      else if (key === 'heritage.gender') code = 'gender_required';
+    } else if (issue.code === 'invalid_format') {
+      if (key === 'heritage.dateOfBirth') code = 'dob_required';
+      else if (key === 'heritage.gothra.id') code = 'gothra_required';
+    } else if (issue.code === 'too_small') {
+      if (key === 'heritage.displayName') code = 'name_required';
+      else if (key === 'career.educationDegree') code = 'degree_required';
+      else if (key === 'career.occupation') code = 'occupation_required';
+    }
     if (sections.includes(String(issue.path[0])) && !(key in errors)) errors[key] = code;
   }
   return errors;
@@ -191,7 +202,7 @@ export function Wizard({ membershipId, gothras, startStep, reviewNote }: Props) 
   const { lang } = useLanguage();
   const [form, setForm] = useState<Form>({
     ...EMPTY,
-    gothraId: gothras[0]?.id ?? '11111111-1111-1111-1111-111111111111',
+    gothraId: gothras[0]?.id ?? '11111111-1111-4111-a111-111111111111',
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
@@ -209,9 +220,28 @@ export function Wizard({ membershipId, gothras, startStep, reviewNote }: Props) 
     }
   }, [form.district, currentMandals]);
 
-  const setText = (key: TextKey) => (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
-    setForm((f) => ({ ...f, [key]: e.target.value }));
-  const setFlag = (key: FlagKey) => (e: ChangeEvent<HTMLInputElement>) => setForm((f) => ({ ...f, [key]: e.target.checked }));
+  const setText = (key: TextKey) => (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const val = e.target.value;
+    setForm((f) => ({ ...f, [key]: val }));
+    // Clear field-specific error as user types/selects
+    setErrors((prev) => {
+      const next = { ...prev };
+      for (const k of Object.keys(next)) {
+        if (k.endsWith(key) || k === key) delete next[k];
+      }
+      return next;
+    });
+  };
+  const setFlag = (key: FlagKey) => (e: ChangeEvent<HTMLInputElement>) => {
+    const checked = e.target.checked;
+    setForm((f) => ({ ...f, [key]: checked }));
+    setErrors((prev) => {
+      const next = { ...prev };
+      delete next[`pledge.accepted`];
+      delete next[`privacy.contactMaskingAcknowledged`];
+      return next;
+    });
+  };
 
   const a11y = (path: string) => ({
     id: path.replace(/\./g, '-'),
@@ -221,7 +251,8 @@ export function Wizard({ membershipId, gothras, startStep, reviewNote }: Props) 
   const err = (path: string) => <ErrorText id={`${path.replace(/\./g, '-')}-error`} code={errors[path]} />;
 
   function next() {
-    const found = stepErrors(step, toPayload(form, lang));
+    const payload = toPayload(form, lang);
+    const found = stepErrors(step, payload);
     setErrors(found);
     if (Object.keys(found).length === 0) {
       setStep((s) => s + 1);
@@ -231,11 +262,16 @@ export function Wizard({ membershipId, gothras, startStep, reviewNote }: Props) 
       const firstKey = Object.keys(found)[0];
       if (firstKey) {
         const id = firstKey.replace(/\./g, '-');
-        const el = document.getElementById(id);
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          el.focus();
-        }
+        setTimeout(() => {
+          const el = document.getElementById(id);
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            el.focus();
+          } else {
+            const banner = document.getElementById('step-error-banner');
+            banner?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }, 50);
       }
     }
   }
@@ -329,6 +365,37 @@ export function Wizard({ membershipId, gothras, startStep, reviewNote }: Props) 
               <Bi en={title.en} te={title.te} />
             </h2>
           </div>
+
+          {Object.keys(errors).length > 0 && (
+            <div 
+              id="step-error-banner"
+              role="alert" 
+              style={{ 
+                background: '#FEF2F2', 
+                border: '2px solid #DC2626', 
+                borderRadius: '14px', 
+                padding: '1rem 1.25rem', 
+                marginBottom: '1.8rem',
+                color: '#991B1B',
+                boxShadow: '0 4px 12px rgba(220, 38, 38, 0.08)'
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', fontWeight: 800, fontSize: '1rem', marginBottom: '0.35rem' }}>
+                <span style={{ fontSize: '1.25rem' }}>⚠️</span>
+                <Bi 
+                  en="Please complete the required details highlighted below to continue:" 
+                  te="దయచేసి కొనసాగడానికి కింద ఎరుపు రంగులో ఉన్న వివరాలను పూర్తి చేయండి:" 
+                />
+              </div>
+              <ul style={{ margin: '0.35rem 0 0 1.8rem', padding: 0, fontSize: '0.92rem', lineHeight: 1.5 }}>
+                {Object.entries(errors).map(([k, code]) => (
+                  <li key={k} style={{ marginBottom: '0.2rem' }}>
+                    <Bi {...(MESSAGES[code] ?? GENERIC)} />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           {/* STEP 1: Membership Verification Overview */}
           {step === 1 && (
@@ -780,7 +847,17 @@ export function Wizard({ membershipId, gothras, startStep, reviewNote }: Props) 
           )}
 
           {/* Stepper Navigation Buttons */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '2rem', borderTop: '1.5px solid #F1E9E0', paddingTop: '1.5rem' }}>
+          {Object.keys(errors).length > 0 && (
+            <div style={{ marginTop: '1.5rem', padding: '0.8rem 1rem', background: '#FEF2F2', border: '1px solid #FECACA', borderRadius: '10px', color: '#B91C1C', fontSize: '0.92rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <span>⚠️</span>
+              <Bi 
+                en="Please fill the required fields above before proceeding." 
+                te="దయచేసి ముందుకు వెళ్లేముందు పైన సూచించిన వివరాలను పూర్తి చేయండి." 
+              />
+            </div>
+          )}
+
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1.5rem', borderTop: '1.5px solid #F1E9E0', paddingTop: '1.5rem' }}>
             {step > 1 ? (
               <button 
                 type="button" 

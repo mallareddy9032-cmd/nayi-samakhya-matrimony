@@ -6,12 +6,12 @@ import { Nav } from '../Nav.tsx';
 
 // Fallback gothra list for demo/onboarding before DB seed
 const FALLBACK_GOTHRAS = [
-  { id: '11111111-1111-1111-1111-111111111111', slug: 'kashyapa', nameEn: 'Kashyapa', nameTe: 'కాశ్యప' },
-  { id: '22222222-2222-2222-2222-222222222222', slug: 'bharadwaja', nameEn: 'Bharadwaja', nameTe: 'భరద్వాజ' },
-  { id: '33333333-3333-3333-3333-333333333333', slug: 'gautama', nameEn: 'Gautama', nameTe: 'గౌతమ' },
-  { id: '44444444-4444-4444-4444-444444444444', slug: 'vashishta', nameEn: 'Vashishta', nameTe: 'వశిష్ట' },
-  { id: '55555555-5555-5555-5555-555555555555', slug: 'sandilya', nameEn: 'Sandilya', nameTe: 'శాండిల్య' },
-  { id: '66666666-6666-6666-6666-666666666666', slug: 'agastya', nameEn: 'Agastya', nameTe: 'అగస్త్య' },
+  { id: '11111111-1111-4111-a111-111111111111', slug: 'kashyapa', nameEn: 'Kashyapa', nameTe: 'కాశ్యప' },
+  { id: '22222222-2222-4222-a222-222222222222', slug: 'bharadwaja', nameEn: 'Bharadwaja', nameTe: 'భరద్వాజ' },
+  { id: '33333333-3333-4333-a333-333333333333', slug: 'gautama', nameEn: 'Gautama', nameTe: 'గౌతమ' },
+  { id: '44444444-4444-4444-a444-444444444444', slug: 'vashishta', nameEn: 'Vashishta', nameTe: 'వశిష్ట' },
+  { id: '55555555-5555-4555-a555-555555555555', slug: 'sandilya', nameEn: 'Sandilya', nameTe: 'శాండిల్య' },
+  { id: '66666666-6666-4666-a666-666666666666', slug: 'agastya', nameEn: 'Agastya', nameTe: 'అగస్త్య' },
 ];
 
 const FALLBACK_DISTRICTS = [
