@@ -714,3 +714,22 @@ button {
     font-size: 1.8rem !important;
   }
 }
+
+/* Micro-motions & Interactive Transitions */
+.card {
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 32px rgba(139, 29, 44, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.profile-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.profile-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 28px rgba(139, 29, 44, 0.1);
+}

@@ -370,50 +370,119 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
             </div>
           </div>
 
-          {/* Core Info */}
-          <div style={{ flex: 1, minWidth: '280px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', flexWrap: 'wrap', gap: '0.5rem' }}>
-              <h1 style={{ margin: 0, fontSize: '2rem', color: 'var(--maroon)' }}>
+          {/* Core Info & 3 Visual Infographic Pods */}
+          <div style={{ flex: 1, minWidth: '300px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.4rem' }}>
+              <h1 style={{ margin: 0, fontSize: '2.1rem', color: 'var(--maroon)' }}>
                 {p.displayName}, {p.age}
               </h1>
-              <span className="badge" style={{ padding: '0.3rem 0.8rem' }}>
+              <span className="badge" style={{ padding: '0.35rem 0.9rem', fontSize: '0.85rem' }}>
                 ✓ Community Verified
               </span>
             </div>
 
-            <p style={{ margin: '0.5rem 0 1.2rem', color: 'var(--maroon)', fontSize: '1.05rem', fontWeight: 700 }}>
+            <p style={{ margin: '0 0 1.5rem', color: 'var(--maroon)', fontSize: '1.05rem', fontWeight: 700 }}>
               📍 {p.mandal}, <Bi {...p.district} />
             </p>
 
-            {/* Structured Table */}
-            <dl className="summary" style={{ gridTemplateColumns: '150px 1fr', gap: '0.6rem 1rem' }}>
-              <dt><Bi en="Paternal Gothra" te="గోత్రం" /></dt>
-              <dd><strong>{p.gothra}</strong></dd>
+            {/* POD 1: Horoscope & Sacred Lineage (జాతకం & గోత్ర వివరాలు) */}
+            <div style={{ background: '#FFFDF9', borderRadius: '16px', padding: '1.4rem', border: '1.5px solid #EADDC7', marginBottom: '1.25rem', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem', borderBottom: '1px dashed #E2D0B5', paddingBottom: '0.6rem' }}>
+                <span style={{ fontSize: '1.3rem' }}>🪔</span>
+                <h3 style={{ margin: 0, fontSize: '1.1rem', color: 'var(--maroon)', fontWeight: 800 }}>
+                  <Bi en="Horoscope & Sacred Lineage" te="జాతకం & గోత్ర వివరాలు" />
+                </h3>
+              </div>
 
-              <dt><Bi en="Janma Nakshatra" te="నక్షత్రం" /></dt>
-              <dd><strong>{p.nakshatra}</strong> ({p.rasi})</dd>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+                <div>
+                  <span style={{ display: 'block', fontSize: '0.78rem', color: '#64748B', fontWeight: 600 }}>పితృస్వామ్య గోత్రం (Gotra):</span>
+                  <span style={{ display: 'inline-block', marginTop: '0.2rem', padding: '0.25rem 0.7rem', background: '#FFF1F2', color: '#8B1D2C', borderRadius: '6px', fontWeight: 800, fontSize: '0.95rem', border: '1px solid #FECDD3' }}>
+                    {p.gothra}
+                  </span>
+                </div>
 
-              <dt><Bi en="Time & Place of Birth" te="జనన సమయం & స్థలం" /></dt>
-              <dd>{p.birthTime} · {p.birthPlace}</dd>
+                <div>
+                  <span style={{ display: 'block', fontSize: '0.78rem', color: '#64748B', fontWeight: 600 }}>జన్మ నక్షత్రం & రాశి (Star & Rasi):</span>
+                  <span style={{ display: 'inline-block', marginTop: '0.2rem', padding: '0.25rem 0.7rem', background: '#FEF3C7', color: '#92400E', borderRadius: '6px', fontWeight: 800, fontSize: '0.95rem', border: '1px solid #FDE68A' }}>
+                    {p.nakshatra} ({p.rasi})
+                  </span>
+                </div>
 
-              <dt><Bi en="Education" te="విద్యార్హత" /></dt>
-              <dd>{p.educationDegree}</dd>
+                <div>
+                  <span style={{ display: 'block', fontSize: '0.78rem', color: '#64748B', fontWeight: 600 }}>జనన సమయం & ప్రదేశం (Birth Time & Place):</span>
+                  <strong style={{ display: 'block', marginTop: '0.2rem', color: '#1E293B', fontSize: '0.95rem' }}>
+                    {p.birthTime} · {p.birthPlace}
+                  </strong>
+                </div>
+              </div>
+            </div>
 
-              <dt><Bi en="Profession" te="ఉద్యోగం / వృత్తి" /></dt>
-              <dd>{p.occupation}</dd>
+            {/* POD 2: Education, Profession & Income (విద్య, ఉద్యోగం & ఆదాయం) */}
+            <div style={{ background: '#F8FAFC', borderRadius: '16px', padding: '1.4rem', border: '1.5px solid #E2E8F0', marginBottom: '1.25rem', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem', borderBottom: '1px dashed #CBD5E1', paddingBottom: '0.6rem' }}>
+                <span style={{ fontSize: '1.3rem' }}>🎓</span>
+                <h3 style={{ margin: 0, fontSize: '1.1rem', color: '#0F172A', fontWeight: 800 }}>
+                  <Bi en="Education & Economic Standing" te="విద్య, ఉద్యోగం & ఆర్థిక వివరాలు" />
+                </h3>
+              </div>
 
-              <dt><Bi en="Annual Income" te="వార్షిక ఆదాయం" /></dt>
-              <dd>{INCOME_BRACKETS[p.incomeBracket as keyof typeof INCOME_BRACKETS]?.en ?? 'Confidential'}</dd>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+                <div>
+                  <span style={{ display: 'block', fontSize: '0.78rem', color: '#64748B', fontWeight: 600 }}>విద్యార్హత (Education):</span>
+                  <strong style={{ display: 'block', marginTop: '0.2rem', color: '#0F172A', fontSize: '0.95rem' }}>
+                    {p.educationDegree}
+                  </strong>
+                </div>
 
-              <dt><Bi en="Father's Details" te="తండ్రి వివరాలు" /></dt>
-              <dd>{p.fatherName}</dd>
+                <div>
+                  <span style={{ display: 'block', fontSize: '0.78rem', color: '#64748B', fontWeight: 600 }}>ఉద్యోగం / వృత్తి (Profession):</span>
+                  <strong style={{ display: 'block', marginTop: '0.2rem', color: 'var(--maroon)', fontSize: '0.95rem' }}>
+                    {p.occupation}
+                  </strong>
+                </div>
 
-              <dt><Bi en="Mother's Details" te="తల్లి వివరాలు" /></dt>
-              <dd>{p.motherName}</dd>
+                <div>
+                  <span style={{ display: 'block', fontSize: '0.78rem', color: '#64748B', fontWeight: 600 }}>వార్షిక ఆదాయం (Annual Income):</span>
+                  <span style={{ display: 'inline-block', marginTop: '0.2rem', padding: '0.25rem 0.65rem', background: '#ECFDF5', color: '#065F46', borderRadius: '6px', fontWeight: 800, fontSize: '0.92rem', border: '1px solid #A7F3D0' }}>
+                    {INCOME_BRACKETS[p.incomeBracket as keyof typeof INCOME_BRACKETS]?.en ?? 'Confidential'}
+                  </span>
+                </div>
+              </div>
+            </div>
 
-              <dt><Bi en="Siblings" te="తోబుట్టువులు" /></dt>
-              <dd>{p.siblings}</dd>
-            </dl>
+            {/* POD 3: Family Lineage & Background (కుటుంబ నేపథ్యం) */}
+            <div style={{ background: '#FFFFFF', borderRadius: '16px', padding: '1.4rem', border: '1.5px solid #E2E8F0', marginBottom: '1.25rem', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem', borderBottom: '1px dashed #CBD5E1', paddingBottom: '0.6rem' }}>
+                <span style={{ fontSize: '1.3rem' }}>👨‍👩‍👧</span>
+                <h3 style={{ margin: 0, fontSize: '1.1rem', color: '#0F172A', fontWeight: 800 }}>
+                  <Bi en="Family Heritage & Lineage Roots" te="కుటుంబ నేపథ్యం & బాంధవ్యాలు" />
+                </h3>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+                <div>
+                  <span style={{ display: 'block', fontSize: '0.78rem', color: '#64748B', fontWeight: 600 }}>తండ్రి వివరాలు (Father's Details):</span>
+                  <strong style={{ display: 'block', marginTop: '0.2rem', color: '#1E293B', fontSize: '0.95rem' }}>
+                    {p.fatherName}
+                  </strong>
+                </div>
+
+                <div>
+                  <span style={{ display: 'block', fontSize: '0.78rem', color: '#64748B', fontWeight: 600 }}>తల్లి వివరాలు (Mother's Details):</span>
+                  <strong style={{ display: 'block', marginTop: '0.2rem', color: '#1E293B', fontSize: '0.95rem' }}>
+                    {p.motherName}
+                  </strong>
+                </div>
+
+                <div>
+                  <span style={{ display: 'block', fontSize: '0.78rem', color: '#64748B', fontWeight: 600 }}>తోబుట్టువులు (Siblings):</span>
+                  <strong style={{ display: 'block', marginTop: '0.2rem', color: '#1E293B', fontSize: '0.95rem' }}>
+                    {p.siblings}
+                  </strong>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 

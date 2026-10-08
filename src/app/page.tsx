@@ -3,6 +3,7 @@ import { getOptionalSession } from '../lib/session.ts';
 import { Nav } from './Nav.tsx';
 import { Bi } from './onboarding/Wizard.tsx';
 import { AuspiciousHeader } from './onboarding/AuspiciousHeader.tsx';
+import { QuickSearch } from '../components/QuickSearch.tsx';
 
 // 10 Sample candidates representing community matches across Telangana with real photos
 const FEATURED_PROFILES = [
@@ -226,68 +227,7 @@ export default async function Home() {
         </div>
 
         {/* Quick Search Card */}
-        <div style={{ background: '#FFFFFF', borderRadius: '20px', padding: '2rem', boxShadow: '0 15px 35px rgba(0,0,0,0.06)', border: '1px solid #E2E8F0' }}>
-          <div style={{ borderBottom: '2px solid #FAF5FF', paddingBottom: '0.8rem', marginBottom: '1.2rem' }}>
-            <h3 style={{ margin: 0, color: '#8B1D2C', fontSize: '1.3rem', fontWeight: 800 }}>
-              సంబంధాల శోధన (Quick Search)
-            </h3>
-            <p style={{ margin: '0.2rem 0 0', fontSize: '0.88rem', color: '#718096' }}>
-              వెంటనే సరైన సంబంధాలను కనుగొనండి
-            </p>
-          </div>
-
-          <form action="/matrimony/discover" method="get" style={{ display: 'grid', gap: '1rem' }}>
-            <div>
-              <label style={{ display: 'block', fontSize: '0.88rem', fontWeight: 700, color: '#4A5568', marginBottom: '0.4rem' }}>నేను వెతుకుతున్నది:</label>
-              <div style={{ display: 'flex', gap: '0.8rem' }}>
-                <label style={{ flex: 1, padding: '0.65rem', borderRadius: '8px', border: '2px solid #8B1D2C', background: '#FFF1F2', color: '#8B1D2C', fontWeight: 700, textAlign: 'center', cursor: 'pointer' }}>
-                  <input type="radio" name="gender" value="female" defaultChecked style={{ display: 'none' }} />
-                  వధువు (Bride)
-                </label>
-                <label style={{ flex: 1, padding: '0.65rem', borderRadius: '8px', border: '1px solid #CBD5E0', background: '#FFF', color: '#4A5568', fontWeight: 600, textAlign: 'center', cursor: 'pointer' }}>
-                  <input type="radio" name="gender" value="male" style={{ display: 'none' }} />
-                  వరుడు (Groom)
-                </label>
-              </div>
-            </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '0.8rem' }}>
-              <div>
-                <label htmlFor="quick-age" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#4A5568', marginBottom: '0.3rem' }}>వయస్సు:</label>
-                <select id="quick-age" name="ageMax" style={{ width: '100%', padding: '0.65rem', borderRadius: '8px', border: '1px solid #CBD5E0', background: '#F8FAFC' }}>
-                  <option value="25">18 - 25 సంవత్సరాలు</option>
-                  <option value="30">26 - 30 సంవత్సరాలు</option>
-                  <option value="35">31 - 35 సంవత్సరాలు</option>
-                </select>
-              </div>
-              <div>
-                <label htmlFor="quick-district" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#4A5568', marginBottom: '0.3rem' }}>స్వస్థల జిల్లా:</label>
-                <select id="quick-district" name="district" style={{ width: '100%', padding: '0.65rem', borderRadius: '8px', border: '1px solid #CBD5E0', background: '#F8FAFC' }}>
-                  <option value="">అన్ని జిల్లాలు (All)</option>
-                  {TELANGANA_DISTRICTS.map((d) => (
-                    <option key={d} value={d.toLowerCase().replace(/\s+/g, '-')}>{d}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="quick-vocation" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#4A5568', marginBottom: '0.3rem' }}>వృత్తి / ఉద్యోగం:</label>
-              <select id="quick-vocation" name="vocation" style={{ width: '100%', padding: '0.65rem', borderRadius: '8px', border: '1px solid #CBD5E0', background: '#F8FAFC' }}>
-                <option value="">అన్ని రంగాలు (All Occupations)</option>
-                <option value="corporate_tech_civil">సాఫ్ట్‌వేర్ & ఐటీ (Software & IT)</option>
-                <option value="government">ప్రభుత్వ రంగం (Government Sector)</option>
-                <option value="wellness_artisan">సెలూన్ వ్యవస్థాపకులు (Salon Founders)</option>
-                <option value="healthcare">వైద్య రంగం (Healthcare)</option>
-                <option value="nadopasana">నాదోపాసన (Classical & Tradition)</option>
-              </select>
-            </div>
-
-            <button type="submit" style={{ background: '#D4AF37', color: '#1A202C', padding: '0.85rem', borderRadius: '10px', border: 'none', fontWeight: 800, fontSize: '1rem', cursor: 'pointer', marginTop: '0.5rem', boxShadow: '0 4px 14px rgba(212, 175, 55, 0.35)' }}>
-              సంబంధాలు శోధించండి 🔍
-            </button>
-          </form>
-        </div>
+        <QuickSearch districts={TELANGANA_DISTRICTS} />
       </section>
 
       {/* Featured Candidate Showcase (10 Sample Profiles with Real Photos) */}
@@ -390,57 +330,152 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* 4. Pillars of Cultural & Legal Integrity */}
-      <section style={{ margin: '4rem 0 2rem' }}>
-        <h2 style={{ textAlign: 'center', fontSize: '2rem', marginBottom: '2rem' }}>
-          <Bi en="Why Nayi Samakhya Matrimony?" te="ఈ కల్యాణ వేదిక విశిష్టతలు" />
-        </h2>
+      {/* 4. Pillars of Cultural & Legal Integrity (Infographic Cards) */}
+      <section style={{ margin: '4.5rem 0 2rem' }}>
+        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+          <span className="badge" style={{ marginBottom: '0.6rem', padding: '0.35rem 1rem', fontSize: '0.9rem' }}>
+            <Bi en="Sacred Pillars of Trust" te="విశ్వసనీయతకు 4 మూలస్తంభాలు" />
+          </span>
+          <h2 style={{ fontSize: '2.2rem', margin: '0.3rem 0 0.5rem', color: '#1A202C' }}>
+            <Bi en="Why Nayi Samakhya Matrimony?" te="ఈ కల్యాణ వేదిక విశిష్టతలు" />
+          </h2>
+          <p style={{ maxWidth: '680px', margin: '0 auto', color: '#64748B', fontSize: '1rem', lineHeight: 1.6 }}>
+            <Bi 
+              en="Telangana's exclusive, lineage-guarded matrimonial network ensuring sacred traditions, zero commercial exploitation, and verified family alliances." 
+              te="మన సమాజ సంస్కృతి, సగోత్ర సంప్రదాయాల రక్షణ మరియు చట్టబద్ధమైన గోప్యతతో నడిచే అధికారిక కల్యాణ వేదిక." 
+            />
+          </p>
+        </div>
 
-        <div className="grid-2" style={{ gap: '1.5rem' }}>
-          <article className="card" style={{ borderLeft: '4px solid var(--gold)' }}>
-            <h3 style={{ fontSize: '1.4rem', margin: '0 0 0.5rem' }}>
-              <Bi en="Strict Sagothra Exclusion & Lineage Honour" te="సగోత్ర రక్షణ & వంశ గౌరవం" />
-            </h3>
-            <p className="lead" style={{ fontSize: '0.95rem', lineHeight: '1.7' }}>
+        <div className="grid-2" style={{ gap: '1.8rem' }}>
+          {/* Card 1: Sacred Sagothra */}
+          <article 
+            className="card" 
+            style={{ 
+              borderRadius: '20px', 
+              padding: '2rem', 
+              background: '#FFFFFF', 
+              border: '1.5px solid var(--gold-border, #E2D9CC)', 
+              boxShadow: '0 10px 25px rgba(0,0,0,0.04)',
+              transition: 'transform 0.25s ease, box-shadow 0.25s ease',
+              position: 'relative',
+              overflow: 'hidden'
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+              <div style={{ width: '52px', height: '52px', borderRadius: '14px', background: '#FFF1F2', color: '#8B1D2C', display: 'grid', placeItems: 'center', fontSize: '1.8rem', border: '1px solid #FECDD3' }}>
+                🛡️
+              </div>
+              <div>
+                <span style={{ fontSize: '0.8rem', fontWeight: 800, color: '#D4AF37', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Pillar 1</span>
+                <h3 style={{ fontSize: '1.3rem', margin: 0, color: '#8B1D2C', fontWeight: 800 }}>
+                  <Bi en="Strict Sagothra Exclusion" te="సగోత్ర రక్షణ & వంశ గౌరవం" />
+                </h3>
+              </div>
+            </div>
+            <p style={{ fontSize: '0.95rem', lineHeight: '1.7', color: '#475569', margin: 0 }}>
               <Bi 
-                en="Same-gothra alliances are strictly prohibited at the database schema level. Matches sharing your paternal Gothra will never be shown, preserving our ancient sacred gotra lineages across generations."
+                en="Same-gothra alliances are strictly prohibited at the database schema level. Matches sharing your paternal Gothra will never be shown, preserving our sacred gotra lineages across generations."
                 te="డేటాబేస్ స్థాయిలో సగోత్ర సంబంధాల సంపూర్ణ నిషేధం. మీ పితృస్వామ్య గోత్రానికి చెందిన ప్రొఫైల్స్ ఏవీ మీకు చూపించబడవు; మన వంశ పవిత్రత మరియు సంప్రదాయం సంపూర్ణంగా రక్షించబడుతుంది."
               />
             </p>
           </article>
 
-          <article className="card" style={{ borderLeft: '4px solid var(--gold)' }}>
-            <h3 style={{ fontSize: '1.4rem', margin: '0 0 0.5rem' }}>
-              <Bi en="DPDP Act 2023 Compliant · Encrypted Contacts" te="చట్టబద్ధమైన గోప్యత & ఫోన్ నంబర్ రక్షణ" />
-            </h3>
-            <p className="lead" style={{ fontSize: '0.95rem', lineHeight: '1.7' }}>
+          {/* Card 2: DPDP Privacy */}
+          <article 
+            className="card" 
+            style={{ 
+              borderRadius: '20px', 
+              padding: '2rem', 
+              background: '#FFFFFF', 
+              border: '1.5px solid var(--gold-border, #E2D9CC)', 
+              boxShadow: '0 10px 25px rgba(0,0,0,0.04)',
+              transition: 'transform 0.25s ease, box-shadow 0.25s ease',
+              position: 'relative',
+              overflow: 'hidden'
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+              <div style={{ width: '52px', height: '52px', borderRadius: '14px', background: '#ECFDF5', color: '#059669', display: 'grid', placeItems: 'center', fontSize: '1.8rem', border: '1px solid #A7F3D0' }}>
+                🔐
+              </div>
+              <div>
+                <span style={{ fontSize: '0.8rem', fontWeight: 800, color: '#D4AF37', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Pillar 2</span>
+                <h3 style={{ fontSize: '1.3rem', margin: 0, color: '#8B1D2C', fontWeight: 800 }}>
+                  <Bi en="DPDP Act 2023 Shield" te="చట్టబద్ధమైన గోప్యత & నంబర్ రక్షణ" />
+                </h3>
+              </div>
+            </div>
+            <p style={{ fontSize: '0.95rem', lineHeight: '1.7', color: '#475569', margin: 0 }}>
               <Bi 
-                en="Candidate mobile numbers, WhatsApp, and residential addresses are AES-256 encrypted. Contact details remain completely invisible and unlock ONLY when both families mutually accept."
+                en="Candidate mobile numbers and residential addresses are AES-256 encrypted. Contact details remain completely masked and unlock ONLY when both families mutually accept."
                 te="అభ్యర్థుల ఫోన్, వాట్సాప్ మరియు ఇంటి చిరునామాలు సైబర్ ఎన్‌క్రిప్షన్‌తో భద్రంగా ఉంటాయి. ఇరు కుటుంబాలు పరస్పరం ఆసక్తి వ్యక్తం చేసి సమ్మతించిన తర్వాతే నంబర్లు విడుదలవుతాయి."
               />
             </p>
           </article>
 
-          <article className="card" style={{ borderLeft: '4px solid var(--gold)' }}>
-            <h3 style={{ fontSize: '1.4rem', margin: '0 0 0.5rem' }}>
-              <Bi en="589 Mandal Lineage Coordinators" te="589 మండల సమన్వయకర్తల నెట్‌వర్క్" />
-            </h3>
-            <p className="lead" style={{ fontSize: '0.95rem', lineHeight: '1.7' }}>
+          {/* Card 3: 589 Mandal Lineage Coordinators */}
+          <article 
+            className="card" 
+            style={{ 
+              borderRadius: '20px', 
+              padding: '2rem', 
+              background: '#FFFFFF', 
+              border: '1.5px solid var(--gold-border, #E2D9CC)', 
+              boxShadow: '0 10px 25px rgba(0,0,0,0.04)',
+              transition: 'transform 0.25s ease, box-shadow 0.25s ease',
+              position: 'relative',
+              overflow: 'hidden'
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+              <div style={{ width: '52px', height: '52px', borderRadius: '14px', background: '#EFF6FF', color: '#2563EB', display: 'grid', placeItems: 'center', fontSize: '1.8rem', border: '1px solid #BFDBFE' }}>
+                🏛️
+              </div>
+              <div>
+                <span style={{ fontSize: '0.8rem', fontWeight: 800, color: '#D4AF37', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Pillar 3</span>
+                <h3 style={{ fontSize: '1.3rem', margin: 0, color: '#8B1D2C', fontWeight: 800 }}>
+                  <Bi en="589 Mandal Coordinators" te="589 మండల సమన్వయకర్తల నెట్‌వర్క్" />
+                </h3>
+              </div>
+            </div>
+            <p style={{ fontSize: '0.95rem', lineHeight: '1.7', color: '#475569', margin: 0 }}>
               <Bi 
-                en="Real grassroots verification in every mandal across all 33 Telangana districts. Our local community coordinators cross-verify identity, family background, and lineage."
+                en="Real grassroots verification in every mandal across all 33 Telangana districts. Our local community coordinators cross-verify identity, family background, and lineage authenticity."
                 te="తెలంగాణలోని మొత్తం 33 జిల్లాల 589 మండలాల్లో నియమించబడిన స్థానిక నాయీ సమాఖ్య సమన్వయకర్తల ద్వారా అభ్యర్థుల కుటుంబ నేపథ్యం మరియు గుర్తింపు ప్రత్యక్షంగా ధృవీకరించబడుతుంది."
               />
             </p>
           </article>
 
-          <article className="card" style={{ borderLeft: '4px solid var(--gold)' }}>
-            <h3 style={{ fontSize: '1.4rem', margin: '0 0 0.5rem' }}>
-              <Bi en="Zero Commercial Brokerage · No Dowry" te="ఉచిత వేదిక · కట్నకానుకల రహిత సమాజం" />
-            </h3>
-            <p className="lead" style={{ fontSize: '0.95rem', lineHeight: '1.7' }}>
+          {/* Card 4: Tiered Curated Trust (10 Free Profiles + Premium Matchmaking) */}
+          <article 
+            className="card" 
+            style={{ 
+              borderRadius: '20px', 
+              padding: '2rem', 
+              background: '#FFFFFF', 
+              border: '1.5px solid var(--gold-border, #E2D9CC)', 
+              boxShadow: '0 10px 25px rgba(0,0,0,0.04)',
+              transition: 'transform 0.25s ease, box-shadow 0.25s ease',
+              position: 'relative',
+              overflow: 'hidden'
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+              <div style={{ width: '52px', height: '52px', borderRadius: '14px', background: '#FEF3C7', color: '#B45309', display: 'grid', placeItems: 'center', fontSize: '1.8rem', border: '1px solid #FDE68A' }}>
+                💎
+              </div>
+              <div>
+                <span style={{ fontSize: '0.8rem', fontWeight: 800, color: '#D4AF37', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Pillar 4</span>
+                <h3 style={{ fontSize: '1.3rem', margin: 0, color: '#8B1D2C', fontWeight: 800 }}>
+                  <Bi en="10 Free Views + Premium Matchmaking" te="10 ఉచిత ప్రొఫైల్స్ & ప్రీమియం సేవలు" />
+                </h3>
+              </div>
+            </div>
+            <p style={{ fontSize: '0.95rem', lineHeight: '1.7', color: '#475569', margin: 0 }}>
               <Bi 
-                en="Organized under the nonprofit welfare trust of Nayi Samakhya. No private brokers, no commission agents, and a strict community pledge against dowry."
-                te="నాయీ సమాఖ్య ప్రజా సంక్షేమ ధ్యేయంతో నడిచే వేదిక. ఎటువంటి ప్రైవేట్ దళారులు, కమీషన్ ఏజెంట్లు ఉండరు. కట్నరహిత, ఆత్మగౌరవ వివాహాలను ప్రోత్సహించడం మన ముఖ్య ఉద్దేశం."
+                en="Every verified member gets 10 curated profile views completely free. Transparent, affordable premium membership unlocks unlimited matching without private brokers or high commission fees."
+                te="ప్రతి ధృవీకరించబడిన సభ్యునికి 10 సంబంధాల ఉచిత వీక్షణలు లభిస్తాయి. ఎటువంటి ప్రైవేట్ దళారులు లేకుండా, పారదర్శక ప్రీమియం సేవలతో మరిన్ని సంబంధాలను నేరుగా సంప్రదించవచ్చు."
               />
             </p>
           </article>
