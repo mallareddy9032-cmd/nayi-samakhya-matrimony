@@ -26,11 +26,12 @@ function contentSecurityPolicy(nonce: string, https: boolean): string {
   const dev = process.env.NODE_ENV === 'development';
   return [
     "default-src 'self'",
-    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'${dev ? " 'unsafe-eval'" : ''}`,
-    `style-src 'self' 'nonce-${nonce}'`,
-    "img-src 'self' blob: data:",
+    `script-src 'self' 'nonce-${nonce}' https://apis.google.com https://www.google.com https://www.gstatic.com 'strict-dynamic'${dev ? " 'unsafe-eval'" : ''}`,
+    `style-src 'self' 'nonce-${nonce}' 'unsafe-inline'`,
+    "img-src 'self' blob: data: https://www.google.com https://www.gstatic.com",
     "font-src 'self'",
-    "connect-src 'self'",
+    "connect-src 'self' https://*.firebaseio.com https://*.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com",
+    "frame-src 'self' https://*.firebaseapp.com https://www.google.com",
     "object-src 'none'",
     "base-uri 'none'",
     "form-action 'self'",
