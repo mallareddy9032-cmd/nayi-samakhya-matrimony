@@ -7,9 +7,9 @@ const EnvSchema = z.object({
   SSO_ISSUER: httpUrl.default('https://nayisamakhya.org'),
   SSO_AUDIENCE: z.string().min(1).default('nayisamakhya-matrimony'),
   SSO_JWKS_URL: httpUrl.default('https://nayisamakhya.org/.well-known/jwks.json'),
-  SSO_PUBLIC_KEY: z.string().min(1).optional(),
-  JWT_PUBLIC_KEY: z.string().min(1).optional(),
-  SSO_LOGIN_URL: httpUrl.default('https://nayisamakhya.org/admin/login'),
+  SSO_PUBLIC_KEY: z.string().transform((s) => s.trim() || undefined).optional(),
+  JWT_PUBLIC_KEY: z.string().transform((s) => s.trim() || undefined).optional(),
+  SSO_LOGIN_URL: httpUrl.default('https://nayisamakhya.org/matrimony/login'),
   APP_ORIGIN: httpUrl.default('https://nayisamakhya.org'),
 });
 

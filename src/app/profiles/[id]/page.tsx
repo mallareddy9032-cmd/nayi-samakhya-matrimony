@@ -151,12 +151,12 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
 
       {/* Gating check: If candidate is not registered with 50% completeness */}
       {!completeness.canAccessProfiles && (
-        <div className="card" style={{ padding: '2rem', textAlign: 'center', marginBottom: '2rem', borderTop: '4px solid var(--gold-bright)' }}>
+        <div className="card" style={{ padding: '2.4rem', textAlign: 'center', marginBottom: '2rem', borderTop: '4px solid var(--maroon)', background: '#FFFFFF', boxShadow: 'var(--shadow-md)' }}>
           <span style={{ fontSize: '2.5rem' }}>🔒</span>
-          <h2 style={{ color: 'var(--gold-bright)', margin: '0.8rem 0 0.4rem' }}>
+          <h2 style={{ color: 'var(--maroon)', margin: '0.8rem 0 0.4rem' }}>
             <Bi en="Register Your Profile to Access Full Candidate Details" te="సంబంధాల వివరాలు చూడటానికి మీ ప్రొఫైల్ నమోదు చేసుకోండి" />
           </h2>
-          <p className="lead" style={{ maxWidth: '640px', margin: '0 auto 1.5rem' }}>
+          <p className="lead" style={{ maxWidth: '640px', margin: '0 auto 1.5rem', color: 'var(--text-muted)' }}>
             <Bi 
               en="To protect family privacy and ensure mutual trust, members must complete at least 50% of their own profile (including 2 photos) before accessing biodatas and horoscopes." 
               te="సభ్యుల కుటుంబ గోప్యతను కాపాడటానికి, మీ ప్రొఫైల్‌లో కనీసం 50% వివరాలు మరియు 2 ఫోటోలు నమోదు చేసిన తర్వాత మాత్రమే సంబంధాల జాతకాలు మరియు వివరాలు తెరవబడతాయి." 
@@ -175,7 +175,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
       )}
 
       {/* Detailed Candidate Card */}
-      <section className="card" style={{ padding: '2rem', opacity: completeness.canAccessProfiles ? 1 : 0.4, pointerEvents: completeness.canAccessProfiles ? 'auto' : 'none' }}>
+      <section className="card" style={{ padding: '2.2rem', background: '#FFFFFF', opacity: completeness.canAccessProfiles ? 1 : 0.4, pointerEvents: completeness.canAccessProfiles ? 'auto' : 'none' }}>
         <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', alignItems: 'flex-start' }}>
           {/* Photos Frame */}
           <div style={{ width: '220px', flexShrink: 0 }}>
@@ -183,28 +183,40 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
               style={{ 
                 aspectRatio: '1', 
                 borderRadius: '14px', 
-                background: p.photoGradient, 
+                background: 'linear-gradient(135deg, #FFE4E6, #FEF3C7)', 
                 display: 'flex', 
                 alignItems: 'center', 
                 justifyContent: 'center', 
                 position: 'relative',
-                border: '1px solid var(--navy-line)',
-                boxShadow: '0 10px 30px rgba(0,0,0,0.5)'
+                border: '1px solid var(--border-light)',
+                boxShadow: 'var(--shadow-sm)'
               }}
             >
-              <span style={{ fontSize: '3.5rem', fontWeight: 700, color: 'var(--gold-bright)' }}>
+              <div style={{
+                width: '88px',
+                height: '88px',
+                borderRadius: '50%',
+                background: 'var(--maroon)',
+                color: '#FFFFFF',
+                display: 'grid',
+                placeItems: 'center',
+                fontSize: '2rem',
+                fontWeight: 800,
+                border: '3px solid #FFFFFF',
+                boxShadow: '0 4px 14px rgba(0,0,0,0.1)'
+              }}>
                 {p.photoInitials}
-              </span>
-              <span style={{ position: 'absolute', bottom: '10px', left: '10px', background: 'rgba(11,23,45,0.85)', color: 'var(--gold)', padding: '0.2rem 0.6rem', borderRadius: '6px', fontSize: '0.75rem', border: '1px solid var(--gold)' }}>
+              </div>
+              <span style={{ position: 'absolute', bottom: '10px', left: '10px', background: 'rgba(255,255,255,0.95)', color: 'var(--maroon)', padding: '0.2rem 0.6rem', borderRadius: '6px', fontSize: '0.72rem', fontWeight: 700, border: '1px solid var(--maroon-border)' }}>
                 📷 2 Photos Attached
               </span>
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', marginTop: '0.6rem' }}>
-              <div style={{ height: '60px', background: '#0e1c36', borderRadius: '8px', border: '1px solid var(--navy-line)', display: 'grid', placeItems: 'center', fontSize: '0.75rem', color: 'var(--muted)' }}>
+              <div style={{ height: '60px', background: 'var(--bg-surface)', borderRadius: '8px', border: '1px solid var(--border-light)', display: 'grid', placeItems: 'center', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                 Photo 1 (Portrait)
               </div>
-              <div style={{ height: '60px', background: '#0e1c36', borderRadius: '8px', border: '1px solid var(--navy-line)', display: 'grid', placeItems: 'center', fontSize: '0.75rem', color: 'var(--muted)' }}>
+              <div style={{ height: '60px', background: 'var(--bg-surface)', borderRadius: '8px', border: '1px solid var(--border-light)', display: 'grid', placeItems: 'center', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                 Photo 2 (Full)
               </div>
             </div>
@@ -213,7 +225,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
           {/* Core Info */}
           <div style={{ flex: 1, minWidth: '280px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', flexWrap: 'wrap', gap: '0.5rem' }}>
-              <h1 style={{ margin: 0, fontSize: '2rem', color: 'var(--gold-bright)' }}>
+              <h1 style={{ margin: 0, fontSize: '2rem', color: 'var(--maroon)' }}>
                 {p.displayName}, {p.age}
               </h1>
               <span className="badge" style={{ padding: '0.3rem 0.8rem' }}>
@@ -221,7 +233,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
               </span>
             </div>
 
-            <p style={{ margin: '0.5rem 0 1.2rem', color: 'var(--amber)', fontSize: '1.05rem', fontWeight: 600 }}>
+            <p style={{ margin: '0.5rem 0 1.2rem', color: 'var(--maroon)', fontSize: '1.05rem', fontWeight: 700 }}>
               📍 {p.mandal}, <Bi {...p.district} />
             </p>
 
@@ -258,9 +270,9 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
         </div>
 
         {/* Bilateral Interest Action */}
-        <div style={{ marginTop: '2.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--navy-line)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+        <div style={{ marginTop: '2.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--border-light)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
           <div>
-            <h3 style={{ margin: 0, fontSize: '1.2rem' }}>
+            <h3 style={{ margin: 0, fontSize: '1.2rem', color: 'var(--maroon)' }}>
               <Bi en="Express Sincere Matrimonial Interest" te="నిజాయితీగల వివాహ ఆసక్తిని తెలపండి" />
             </h3>
             <p className="hint" style={{ margin: '0.3rem 0 0' }}>
@@ -271,9 +283,9 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
             </p>
           </div>
 
-          <button type="button" className="btn" style={{ padding: '0.75rem 2rem', fontSize: '1rem' }}>
-            <Bi en="Send Interest Request 💌" te="ఆసక్తిని తెలియజేయండి 💌" />
-          </button>
+          <Link href="/onboarding" className="btn link-btn" style={{ fontSize: '1rem', padding: '0.75rem 1.8rem' }}>
+            <Bi en="Send Express Interest (ఉచితం) →" te="ఆసక్తిని పంపండి (ఉచితం) →" />
+          </Link>
         </div>
       </section>
     </main>

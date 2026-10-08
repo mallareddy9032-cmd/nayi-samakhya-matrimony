@@ -53,12 +53,12 @@ export default function LoginPage() {
     <main className="shell">
       <Nav />
       <div style={{ maxWidth: '480px', margin: '2.5rem auto' }}>
-        <div className="card" style={{ padding: '2.2rem', borderTop: '4px solid var(--gold-bright)' }}>
+        <div className="card" style={{ padding: '2.2rem', borderTop: '4px solid var(--maroon)', background: '#FFFFFF', boxShadow: 'var(--shadow-md)' }}>
           <div style={{ textAlign: 'center', marginBottom: '1.8rem' }}>
             <span className="badge" style={{ marginBottom: '0.6rem', padding: '0.3rem 0.8rem' }}>
               <Bi en="Candidate & Parent Sign In" te="అభ్యర్థులు & కుటుంబాల లాగిన్" />
             </span>
-            <h1 style={{ fontSize: '1.8rem', margin: '0.3rem 0 0.5rem' }}>
+            <h1 style={{ fontSize: '1.8rem', margin: '0.3rem 0 0.5rem', color: 'var(--maroon)' }}>
               <Bi en="Mobile OTP Verification" te="మొబైల్ ఓటీపీ ధృవీకరణ" />
             </h1>
             <p className="hint" style={{ fontSize: '0.9rem' }}>
@@ -78,11 +78,11 @@ export default function LoginPage() {
                 <div style={{ display: 'flex', gap: '0.5rem' }}>
                   <span style={{ 
                     padding: '0.65rem 0.8rem', 
-                    background: '#0e1c36', 
-                    border: '1px solid var(--navy-line)', 
+                    background: 'var(--bg-surface)', 
+                    border: '1.5px solid var(--border-light)', 
                     borderRadius: '10px',
-                    color: 'var(--gold-bright)',
-                    fontWeight: 600
+                    color: 'var(--maroon)',
+                    fontWeight: 700
                   }}>
                     +91
                   </span>
@@ -129,7 +129,7 @@ export default function LoginPage() {
                   maxLength={6}
                   onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
                   required
-                  style={{ textAlign: 'center', fontSize: '1.5rem', letterSpacing: '0.3em', fontWeight: 700 }}
+                  style={{ textAlign: 'center', fontSize: '1.5rem', letterSpacing: '0.3em', fontWeight: 700, color: 'var(--maroon)' }}
                 />
               </div>
 
@@ -145,7 +145,7 @@ export default function LoginPage() {
                 <button 
                   type="button" 
                   className="btn-ghost" 
-                  style={{ border: 'none', color: 'var(--muted)', fontSize: '0.85rem' }}
+                  style={{ border: 'none', color: 'var(--text-muted)', fontSize: '0.85rem' }}
                   onClick={() => { setStep('phone'); setOtp(''); setErrorMsg(null); }}
                 >
                   ← Change Mobile Number / మళ్లీ నంబర్ మార్చండి
@@ -154,10 +154,10 @@ export default function LoginPage() {
             </form>
           )}
 
-          <div style={{ textAlign: 'center', marginTop: '2rem', borderTop: '1px solid var(--navy-line)', paddingTop: '1.2rem' }}>
-            <p style={{ margin: 0, fontSize: '0.9rem', color: 'var(--muted)' }}>
+          <div style={{ textAlign: 'center', marginTop: '2rem', borderTop: '1px solid var(--border-light)', paddingTop: '1.2rem' }}>
+            <p style={{ margin: 0, fontSize: '0.9rem', color: 'var(--text-muted)' }}>
               <Bi en="Looking to register a new candidate?" te="కొత్తగా సంబంధం నమోదు చేసుకోబోతున్నారా?" />{' '}
-              <Link href="/onboarding" style={{ color: 'var(--gold-bright)', fontWeight: 600 }}>
+              <Link href="/onboarding" style={{ color: 'var(--maroon)', fontWeight: 700 }}>
                 <Bi en="Start 7-Step Profile" te="ఇక్కడ ప్రారంభించండి" />
               </Link>
             </p>

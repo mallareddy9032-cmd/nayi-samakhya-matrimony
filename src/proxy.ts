@@ -45,7 +45,18 @@ function log(event: string, fields: Record<string, string>): void {
 
 export async function proxy(req: NextRequest): Promise<NextResponse> {
   const { pathname, search, basePath } = req.nextUrl;
-  if (pathname === '/healthz' || pathname === '/api/healthz' || pathname === '/api/health' || pathname === '/' || pathname === '/login' || pathname === '/preview') return NextResponse.next();
+  if (
+    pathname === '/healthz' || 
+    pathname === '/api/healthz' || 
+    pathname === '/api/health' || 
+    pathname === '/' || 
+    pathname === '/login' || 
+    pathname === '/preview' ||
+    pathname === '/discover' ||
+    pathname.startsWith('/profiles')
+  ) {
+    return NextResponse.next();
+  }
 
   const sso = getSsoConfig();
   const requestId = req.headers.get('x-request-id') ?? '-';
@@ -56,7 +67,8 @@ export async function proxy(req: NextRequest): Promise<NextResponse> {
   }
 
   const returnTo = basePath + (pathname === '/' ? '' : pathname) + search;
-  const toLogin = (): NextResponse => NextResponse.redirect(loginRedirectUrl(sso.loginUrl, sso.appOrigin, returnTo), 302);
+  // Redirect unauthenticated members to Matrimony mobile OTP login rather than civic admin
+  const toLogin = (): NextResponse => NextResponse.redirect(new URL(`${basePath}/login?return_to=${encodeURIComponent(returnTo)}`, req.url), 302);
 
   const token = extractToken(req.cookies.get(SESSION_COOKIE)?.value, req.headers.get('authorization'));
   if (!token) return toLogin();

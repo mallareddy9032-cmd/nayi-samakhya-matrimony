@@ -8,42 +8,42 @@ export function CompletenessBar({ completeness, freeViewsLeft = 10 }: { complete
   const { percentage, tierLabel, missingItems, canAccessProfiles } = completeness;
 
   return (
-    <div className="card" style={{ padding: '1.2rem', marginBottom: '1.5rem', borderLeft: `4px solid ${percentage >= 50 ? 'var(--gold-bright)' : 'var(--danger)'}` }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.6rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+    <div className="card" style={{ padding: '1.4rem', marginBottom: '1.8rem', borderLeft: `5px solid ${percentage >= 50 ? 'var(--maroon)' : 'var(--danger)'}`, background: '#FFFFFF' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem', flexWrap: 'wrap', gap: '0.5rem' }}>
         <div>
-          <strong style={{ fontSize: '1.05rem', color: 'var(--ivory)' }}>
+          <strong style={{ fontSize: '1.05rem', color: 'var(--text-heading)' }}>
             <Bi en="Profile Completeness Status" te="ప్రొఫైల్ సంపూర్ణత స్థాయి" />:
           </strong>{' '}
-          <span style={{ color: 'var(--gold-bright)', fontWeight: 700, fontSize: '1.1rem' }}>
+          <span style={{ color: 'var(--maroon)', fontWeight: 800, fontSize: '1.2rem' }}>
             {percentage}%
           </span>{' '}
-          <span className="badge" style={{ marginLeft: '0.5rem', fontSize: '0.8rem' }}>
+          <span className="badge" style={{ marginLeft: '0.5rem', fontSize: '0.82rem' }}>
             <Bi {...tierLabel} />
           </span>
         </div>
 
-        <div style={{ fontSize: '0.9rem', color: 'var(--amber)' }}>
+        <div style={{ fontSize: '0.92rem', color: 'var(--maroon)', fontWeight: 700, background: 'var(--maroon-light)', padding: '0.3rem 0.8rem', borderRadius: '999px', border: '1px solid var(--maroon-border)' }}>
           🎟️ <strong><Bi en="Free Profile Views:" te="ఉచిత వీక్షణలు:" /> {freeViewsLeft} / 10</strong>
         </div>
       </div>
 
       {/* Progress Track */}
-      <div style={{ width: '100%', height: '12px', background: '#0e1c36', borderRadius: '999px', overflow: 'hidden', border: '1px solid var(--navy-line)', position: 'relative' }}>
+      <div style={{ width: '100%', height: '14px', background: '#F1E9DF', borderRadius: '999px', overflow: 'hidden', border: '1px solid var(--border-light)', position: 'relative' }}>
         <div 
           style={{ 
             width: `${percentage}%`, 
             height: '100%', 
             background: percentage >= 90 
-              ? 'linear-gradient(90deg, #ecc94b, #f6ad55)' 
+              ? 'linear-gradient(90deg, #D4AF37, #8B1D2C)' 
               : percentage >= 50 
-                ? 'linear-gradient(90deg, #d69e2e, #ecc94b)' 
-                : 'linear-gradient(90deg, #e53e3e, #dd6b20)',
+                ? 'linear-gradient(90deg, #D4AF37, #B8860B)' 
+                : 'linear-gradient(90deg, #DC2626, #EA580C)',
             transition: 'width 0.6s ease',
             borderRadius: '999px'
           }} 
         />
         {/* 50% Threshold Marker */}
-        <div style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, width: '2px', background: 'rgba(255,255,255,0.4)' }} title="50% Unlock Threshold" />
+        <div style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, width: '2px', background: 'rgba(0,0,0,0.25)' }} title="50% Unlock Threshold" />
       </div>
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.8rem', flexWrap: 'wrap', gap: '0.5rem' }}>

@@ -202,25 +202,37 @@ export default async function DiscoverPage({ searchParams }: { searchParams: Sea
       {/* Candidate Grid */}
       <div className="cards" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.5rem' }}>
         {displayCards.map((c: any) => (
-          <article key={c.id} className="profile-card" style={{ display: 'flex', flexDirection: 'column' }}>
+          <article key={c.id} className="profile-card" style={{ display: 'flex', flexDirection: 'column', background: '#FFFFFF' }}>
             {c.photoInitials ? (
               <div 
                 style={{ 
                   aspectRatio: '1', 
                   borderRadius: '12px', 
-                  background: c.photoGradient, 
+                  background: 'linear-gradient(135deg, #FFE4E6, #FEF3C7)', 
                   display: 'flex', 
                   alignItems: 'center', 
                   justifyContent: 'center', 
                   position: 'relative',
-                  border: '1px solid var(--navy-line)',
-                  boxShadow: 'inset 0 0 25px rgba(0,0,0,0.5)'
+                  border: '1px solid var(--border-light)',
+                  boxShadow: 'var(--shadow-sm)'
                 }}
               >
-                <span style={{ fontSize: '3rem', fontWeight: 700, color: 'var(--gold-bright)' }}>
+                <div style={{
+                  width: '80px',
+                  height: '80px',
+                  borderRadius: '50%',
+                  background: 'var(--maroon)',
+                  color: '#FFFFFF',
+                  display: 'grid',
+                  placeItems: 'center',
+                  fontSize: '1.8rem',
+                  fontWeight: 800,
+                  border: '3px solid #FFFFFF',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                }}>
                   {c.photoInitials}
-                </span>
-                <span style={{ position: 'absolute', top: '10px', right: '10px', background: 'rgba(11, 23, 45, 0.85)', color: 'var(--gold)', padding: '0.2rem 0.6rem', borderRadius: '999px', fontSize: '0.75rem', border: '1px solid var(--gold)' }}>
+                </div>
+                <span style={{ position: 'absolute', top: '10px', right: '10px', background: 'rgba(255, 255, 255, 0.95)', color: 'var(--maroon)', padding: '0.2rem 0.6rem', borderRadius: '999px', fontSize: '0.72rem', fontWeight: 700, border: '1px solid var(--maroon-border)' }}>
                   🔒 2+ Photos Verified
                 </span>
               </div>
@@ -229,44 +241,44 @@ export default async function DiscoverPage({ searchParams }: { searchParams: Sea
             )}
 
             <div style={{ marginTop: '1rem', flex: 1 }}>
-              <h2 style={{ fontSize: '1.4rem', margin: '0 0 0.3rem' }}>
-                <Link href={`/profiles/${c.id}`} style={{ textDecoration: 'none', color: 'var(--gold-bright)' }}>
+              <h2 style={{ fontSize: '1.3rem', margin: '0 0 0.3rem' }}>
+                <Link href={`/profiles/${c.id}`} style={{ textDecoration: 'none', color: 'var(--text-heading)' }}>
                   {c.firstName}, {c.age}
                 </Link>
               </h2>
 
-              <p style={{ margin: '0.2rem 0 0.4rem', color: 'var(--amber)', fontSize: '0.9rem', fontWeight: 600 }}>
+              <p style={{ margin: '0.2rem 0 0.4rem', color: 'var(--maroon)', fontSize: '0.9rem', fontWeight: 700 }}>
                 📍 <Bi {...c.district} />
               </p>
 
-              {c.gothra && (
-                <p style={{ margin: '0.2rem 0', fontSize: '0.88rem', color: 'var(--muted)' }}>
-                  <strong>Gothra:</strong> {c.gothra}
+              <div style={{ background: 'var(--bg-card-subtle)', padding: '0.65rem 0.8rem', borderRadius: '8px', fontSize: '0.85rem', border: '1px solid var(--border-light)', margin: '0.6rem 0' }}>
+                {c.gothra && (
+                  <p style={{ margin: '0 0 0.25rem', color: 'var(--text-main)' }}>
+                    <strong>గోత్రం:</strong> {c.gothra}
+                  </p>
+                )}
+                {c.nakshatra && (
+                  <p style={{ margin: '0 0 0.25rem', color: 'var(--text-main)' }}>
+                    <strong>నక్షత్రం:</strong> {c.nakshatra}
+                  </p>
+                )}
+                <p style={{ margin: 0, color: 'var(--text-main)' }}>
+                  🎓 {c.education ?? (VOCATIONS[c.vocation as keyof typeof VOCATIONS]?.en ?? '')}
                 </p>
-              )}
-
-              {c.nakshatra && (
-                <p style={{ margin: '0.2rem 0', fontSize: '0.88rem', color: 'var(--muted)' }}>
-                  <strong>Nakshatra:</strong> {c.nakshatra}
-                </p>
-              )}
-
-              <p style={{ margin: '0.4rem 0', fontSize: '0.88rem', color: 'var(--ivory)' }}>
-                {c.education ?? (VOCATIONS[c.vocation as keyof typeof VOCATIONS]?.en ?? '')}
-              </p>
+              </div>
 
               <div style={{ marginTop: '0.6rem' }}>
-                <span className="badge" style={{ fontSize: '0.8rem' }}>
+                <span className="badge" style={{ fontSize: '0.76rem' }}>
                   ✓ {c.badge ?? 'NS-ID Verified'}
                 </span>
               </div>
             </div>
 
-            <div style={{ marginTop: '1.2rem', paddingTop: '0.8rem', borderTop: '1px solid var(--navy-line)' }}>
+            <div style={{ marginTop: '1.1rem', paddingTop: '0.75rem', borderTop: '1px solid var(--border-light)' }}>
               <Link 
                 href={`/profiles/${c.id}`} 
                 className="btn link-btn" 
-                style={{ width: '100%', textAlign: 'center', padding: '0.6rem', display: 'block', fontSize: '0.92rem' }}
+                style={{ width: '100%', textAlign: 'center', padding: '0.55rem', display: 'block', fontSize: '0.88rem' }}
               >
                 <Bi en="View Full Profile & Horoscope →" te="పూర్తి వివరాలు & జాతకం చూడండి →" />
               </Link>

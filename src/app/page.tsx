@@ -193,49 +193,64 @@ export default async function Home() {
 
         <div className="cards" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '1.5rem' }}>
           {FEATURED_PROFILES.map((p) => (
-            <article key={p.id} className="profile-card" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+            <article key={p.id} className="profile-card" style={{ display: 'flex', flexDirection: 'column', height: '100%', background: '#FFFFFF' }}>
               {/* Photo Avatar / Frame */}
               <div 
                 style={{ 
                   aspectRatio: '1', 
                   borderRadius: '12px', 
-                  background: p.photoGradient, 
+                  background: p.gender.includes('Bride') ? 'linear-gradient(135deg, #FFE4E6, #FECDD3)' : 'linear-gradient(135deg, #FEF3C7, #FDE68A)', 
                   display: 'flex', 
                   alignItems: 'center', 
                   justifyContent: 'center', 
                   position: 'relative',
-                  border: '1px solid var(--navy-line)',
-                  boxShadow: 'inset 0 0 30px rgba(0,0,0,0.5)'
+                  border: '1px solid var(--border-light)',
+                  boxShadow: 'var(--shadow-sm)'
                 }}
               >
-                <span style={{ fontSize: '2.8rem', fontWeight: 700, color: 'var(--gold-bright)', letterSpacing: '0.05em' }}>
+                <div style={{
+                  width: '74px',
+                  height: '74px',
+                  borderRadius: '50%',
+                  background: p.gender.includes('Bride') ? 'var(--maroon)' : '#92400E',
+                  color: '#FFFFFF',
+                  display: 'grid',
+                  placeItems: 'center',
+                  fontSize: '1.7rem',
+                  fontWeight: 800,
+                  border: '3px solid #FFFFFF',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                }}>
                   {p.photoInitials}
-                </span>
+                </div>
                 <span 
                   style={{ 
                     position: 'absolute', 
                     top: '10px', 
                     right: '10px', 
-                    background: 'rgba(11, 23, 45, 0.85)', 
-                    color: 'var(--gold)', 
+                    background: 'rgba(255, 255, 255, 0.95)', 
+                    color: 'var(--maroon)', 
                     padding: '0.2rem 0.6rem', 
                     borderRadius: '999px', 
-                    fontSize: '0.75rem', 
-                    border: '1px solid var(--gold)' 
+                    fontSize: '0.72rem', 
+                    fontWeight: 700,
+                    border: '1px solid var(--maroon-border)' 
                   }}
                 >
-                  🔒 Photo Protected
+                  🔒 2 Photos Verified
                 </span>
                 <span 
                   style={{ 
                     position: 'absolute', 
                     bottom: '10px', 
                     left: '10px', 
-                    background: 'rgba(11, 23, 45, 0.85)', 
-                    color: 'var(--ivory)', 
+                    background: 'rgba(255, 255, 255, 0.95)', 
+                    color: 'var(--text-heading)', 
                     padding: '0.2rem 0.6rem', 
                     borderRadius: '6px', 
-                    fontSize: '0.75rem' 
+                    fontSize: '0.75rem',
+                    fontWeight: 600,
+                    border: '1px solid var(--border-light)'
                   }}
                 >
                   {p.gender}
@@ -245,36 +260,38 @@ export default async function Home() {
               {/* Profile Details */}
               <div style={{ marginTop: '1rem', flex: 1 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-                  <h3 style={{ fontSize: '1.3rem', margin: 0, color: 'var(--ivory)' }}>
+                  <h3 style={{ fontSize: '1.25rem', margin: 0, color: 'var(--text-heading)' }}>
                     {p.name}, {p.age}
                   </h3>
                 </div>
 
-                <p style={{ margin: '0.4rem 0', color: 'var(--amber)', fontSize: '0.9rem', fontWeight: 600 }}>
+                <p style={{ margin: '0.35rem 0', color: 'var(--maroon)', fontSize: '0.88rem', fontWeight: 700 }}>
                   📍 {p.district} ({p.districtTe})
                 </p>
 
-                <p style={{ margin: '0.3rem 0', fontSize: '0.88rem', color: 'var(--muted)' }}>
-                  <strong>Gothra:</strong> {p.gothra}
-                </p>
-                <p style={{ margin: '0.3rem 0', fontSize: '0.88rem', color: 'var(--muted)' }}>
-                  <strong>Nakshatra:</strong> {p.nakshatra}
-                </p>
-                <p style={{ margin: '0.3rem 0', fontSize: '0.88rem', color: 'var(--ivory)' }}>
-                  🎓 {p.education}
-                </p>
+                <div style={{ background: 'var(--bg-card-subtle)', padding: '0.65rem 0.8rem', borderRadius: '8px', fontSize: '0.85rem', border: '1px solid var(--border-light)', margin: '0.6rem 0' }}>
+                  <p style={{ margin: '0 0 0.25rem', color: 'var(--text-main)' }}>
+                    <strong>గోత్రం:</strong> {p.gothra}
+                  </p>
+                  <p style={{ margin: '0 0 0.25rem', color: 'var(--text-main)' }}>
+                    <strong>నక్షత్రం:</strong> {p.nakshatra}
+                  </p>
+                  <p style={{ margin: 0, color: 'var(--text-main)' }}>
+                    🎓 {p.education}
+                  </p>
+                </div>
 
-                <div style={{ marginTop: '0.8rem' }}>
-                  <span className="badge" style={{ fontSize: '0.78rem' }}>
+                <div style={{ marginTop: '0.6rem' }}>
+                  <span className="badge" style={{ fontSize: '0.76rem' }}>
                     ✓ {p.badge}
                   </span>
                 </div>
               </div>
 
               {/* Action Button */}
-              <div style={{ marginTop: '1.2rem', paddingTop: '0.8rem', borderTop: '1px solid var(--navy-line)' }}>
-                <Link href="/onboarding" className="btn link-btn" style={{ width: '100%', textAlign: 'center', padding: '0.55rem', fontSize: '0.9rem', display: 'block' }}>
-                  <Bi en="Express Interest · సంప్రదించండి" te="ఆసక్తిని తెలపండి" />
+              <div style={{ marginTop: '1.1rem', paddingTop: '0.75rem', borderTop: '1px solid var(--border-light)' }}>
+                <Link href={`/profiles/${p.id}`} className="btn link-btn" style={{ width: '100%', textAlign: 'center', padding: '0.55rem', fontSize: '0.88rem', display: 'block' }}>
+                  <Bi en="View Full Profile & Horoscope →" te="పూర్తి జాతకం & వివరాలు →" />
                 </Link>
               </div>
             </article>
