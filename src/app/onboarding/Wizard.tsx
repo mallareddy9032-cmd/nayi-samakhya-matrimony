@@ -148,11 +148,21 @@ function stepErrors(step: number, payload: unknown): Record<string, string> {
 }
 
 export function Bi({ en, te }: Bilingual) {
-  return (
-    <>
-      <span className="lang-te" lang="te">{te}</span>
-      <span className="lang-en" lang="en">{en}</span>
-    </>
+  const { lang } = useLanguage();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return <span className="lang-te" lang="te">{te}</span>;
+  }
+
+  return lang === 'en' ? (
+    <span className="lang-en" lang="en">{en}</span>
+  ) : (
+    <span className="lang-te" lang="te">{te}</span>
   );
 }
 

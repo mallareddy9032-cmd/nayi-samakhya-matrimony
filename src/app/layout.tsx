@@ -67,6 +67,9 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
+  other: {
+    google: 'notranslate',
+  },
 };
 
 export const viewport = {
@@ -79,8 +82,11 @@ import { LanguageProvider } from '../context/LanguageContext.tsx';
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="te" data-lang="te" className={`${display.variable} ${sans.variable}`}>
-      <body>
+    <html lang="te" translate="no" data-lang="te" className={`notranslate ${display.variable} ${sans.variable}`}>
+      <head>
+        <meta name="google" content="notranslate" />
+      </head>
+      <body className="notranslate">
         <LanguageProvider>{children}</LanguageProvider>
       </body>
     </html>
