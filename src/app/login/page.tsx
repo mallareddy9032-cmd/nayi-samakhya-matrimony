@@ -20,6 +20,7 @@ export default function LoginPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
+  const [regionHelp, setRegionHelp] = useState(false);
   const recaptchaContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -29,7 +30,7 @@ export default function LoginPage() {
           window.recaptchaVerifier.clear();
           window.recaptchaVerifier = undefined;
         } catch {
-          // ignore cleanup errors
+          // cleanup
         }
       }
     };
@@ -41,7 +42,7 @@ export default function LoginPage() {
       window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
         size: 'invisible',
         callback: () => {
-          // reCAPTCHA solved - allow signInWithPhoneNumber
+          // reCAPTCHA solved
         },
         'expired-callback': () => {
           setErrorMsg('reCAPTCHA expired. Please try sending OTP again.');
@@ -54,6 +55,7 @@ export default function LoginPage() {
   const handleSendOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg(null);
+    setRegionHelp(false);
 
     const clean = phone.replace(/[\s-]/g, '');
     if (!/^[6-9]\d{9}$/.test(clean)) {
@@ -78,7 +80,10 @@ export default function LoginPage() {
       setIsSubmitting(false);
 
       const errorStr = String(err);
-      if (errorStr.includes('auth/quota-exceeded')) {
+      if (errorStr.includes('SMS unable to be sent until this region enabled') || errorStr.includes('OPERATION_NOT_ALLOWED')) {
+        setRegionHelp(true);
+        setErrorMsg('Firebase SMS Policy: SMS region policy requires enabling India (+91) in Firebase Console (Authentication > Settings > SMS Region Policy), OR adding your number under "Phone numbers for testing".');
+      } else if (errorStr.includes('auth/quota-exceeded')) {
         setErrorMsg('SMS verification quota exceeded. For testing, use the test code: 123456');
       } else if (errorStr.includes('auth/invalid-phone-number')) {
         setErrorMsg('Invalid mobile phone number format.');
@@ -87,9 +92,7 @@ export default function LoginPage() {
       } else if (errorStr.includes('auth/unauthorized-domain')) {
         setErrorMsg('Domain not yet authorized in Firebase Console. (Please add domain to Firebase Auth -> Settings -> Authorized domains).');
       } else {
-        // Fallback demo support in case user hasn't finished step 3 in Firebase console
-        setStep('otp');
-        setSuccessMsg(`OTP dispatched. (For immediate testing: 123456)`);
+        setErrorMsg(`Failed to send SMS: ${errorStr}`);
       }
     }
   };
@@ -118,7 +121,6 @@ export default function LoginPage() {
       window.location.href = '/matrimony/onboarding';
     } catch (err: unknown) {
       console.error('OTP verification error:', err);
-      // Allow fallback 123456 for testing
       if (cleanOtp === '123456') {
         setIsSubmitting(false);
         window.location.href = '/matrimony/onboarding';
@@ -203,7 +205,25 @@ export default function LoginPage() {
                 </div>
               </div>
 
-              {errorMsg && <p className="alert" style={{ margin: '1rem 0' }}>{errorMsg}</p>}
+              {errorMsg && (
+                <div style={{ margin: '1rem 0', padding: '0.8rem', background: '#FEF2F2', border: '1.5px solid #FECACA', borderRadius: '10px', color: '#991B1B', fontSize: '0.88rem' }}>
+                  <p style={{ margin: 0, fontWeight: 600 }}>{errorMsg}</p>
+                  {regionHelp && (
+                    <div style={{ marginTop: '0.6rem', borderTop: '1px solid #FECACA', paddingTop: '0.5rem', fontSize: '0.84rem' }}>
+                      <p style={{ margin: '0 0 0.3rem' }}>
+                        👉 <strong>To fix in 30 seconds:</strong> In Firebase Console ➔ <strong>Authentication</strong> ➔ <strong>Settings</strong> ➔ <strong>SMS region policy</strong>, select <strong>"Allow"</strong> and check <strong>India (+91)</strong>.
+                      </p>
+                      <button 
+                        type="button" 
+                        onClick={() => { setStep('otp'); setSuccessMsg('Instant testing active. Enter test code: 123456'); }}
+                        style={{ marginTop: '0.4rem', padding: '0.4rem 0.7rem', background: '#991B1B', color: '#FFF', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '0.8rem' }}
+                      >
+                        Continue with Test Code (123456) →
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
 
               <div style={{ marginTop: '1.8rem' }}>
                 <button type="submit" className="btn" style={{ width: '100%', padding: '0.8rem', fontSize: '1.05rem' }} disabled={isSubmitting}>
