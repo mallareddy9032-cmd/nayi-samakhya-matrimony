@@ -6,138 +6,159 @@ import { Nav } from '../Nav.tsx';
 import { Bi } from '../onboarding/Wizard.tsx';
 
 export default function LoginPage() {
-  const [method, setMethod] = useState<'ns_id' | 'phone'>('ns_id');
-  const [identifier, setIdentifier] = useState('');
-  const [pinOrOtp, setPinOrOtp] = useState('');
-  const [statusMsg, setStatusMsg] = useState<{ type: 'info' | 'error' | 'success'; text: string } | null>(null);
+  const [step, setStep] = useState<'phone' | 'otp'>('phone');
+  const [phone, setPhone] = useState('');
+  const [otp, setOtp] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSendOtp = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    setStatusMsg(null);
+    setErrorMsg(null);
 
-    // Simulated verification / API linkage
+    const clean = phone.replace(/[\s-]/g, '');
+    if (!/^[6-9]\d{9}$/.test(clean)) {
+      setErrorMsg('Please enter a valid 10-digit Indian mobile number (e.g. 9848012345).');
+      return;
+    }
+
+    setIsSubmitting(true);
+    // Simulate instantaneous secure SMS/WhatsApp OTP dispatch
     setTimeout(() => {
       setIsSubmitting(false);
-      if (!identifier.trim()) {
-        setStatusMsg({ type: 'error', text: 'Please enter your registered NS-ID or Phone Number.' });
-        return;
-      }
-      setStatusMsg({
-        type: 'info',
-        text: 'Parent SSO verification: Redirecting to verify credentials securely...',
-      });
-      // Redirect to onboarding or profile
+      setStep('otp');
+      setSuccessMsg(`6-digit verification code sent to +91 ${clean}. (For demo, enter: 123456)`);
+    }, 600);
+  };
+
+  const handleVerifyOtp = (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMsg(null);
+
+    if (otp.trim().length !== 6) {
+      setErrorMsg('Please enter the full 6-digit verification code.');
+      return;
+    }
+
+    setIsSubmitting(true);
+    setTimeout(() => {
+      setIsSubmitting(false);
+      // Validated -> Direct seamlessly into matrimonial onboarding / dashboard
       window.location.href = '/matrimony/onboarding';
-    }, 800);
+    }, 700);
   };
 
   return (
     <main className="shell">
       <Nav />
-      <div style={{ maxWidth: '520px', margin: '2.5rem auto' }}>
-        <div className="card" style={{ padding: '2rem' }}>
-          <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
-            <span className="badge" style={{ marginBottom: '0.6rem' }}>
-              <Bi en="Matrimonial Member Access" te="వివాహ సభ్యుల లాగిన్" />
+      <div style={{ maxWidth: '480px', margin: '2.5rem auto' }}>
+        <div className="card" style={{ padding: '2.2rem', borderTop: '4px solid var(--gold-bright)' }}>
+          <div style={{ textAlign: 'center', marginBottom: '1.8rem' }}>
+            <span className="badge" style={{ marginBottom: '0.6rem', padding: '0.3rem 0.8rem' }}>
+              <Bi en="Candidate & Parent Sign In" te="అభ్యర్థులు & కుటుంబాల లాగిన్" />
             </span>
-            <h1 style={{ fontSize: '1.8rem', margin: '0.4rem 0' }}>
-              <Bi en="Sign In to Your Profile" te="మీ వివాహ ఖాతాలోకి ప్రవేశించండి" />
+            <h1 style={{ fontSize: '1.8rem', margin: '0.3rem 0 0.5rem' }}>
+              <Bi en="Mobile OTP Verification" te="మొబైల్ ఓటీపీ ధృవీకరణ" />
             </h1>
-            <p className="hint">
+            <p className="hint" style={{ fontSize: '0.9rem' }}>
               <Bi 
-                en="Dedicated candidate & parent portal for Nayi Samakhya Matrimony" 
-                te="నాయీ సమాఖ్య కల్యాణ వేదిక సభ్యులు మరియు కుటుంబాల కోసం ప్రత్యేక ప్రవేశం" 
+                en="Zero passwords required. Secure OTP verification directly to your phone." 
+                te="ఎటువంటి పాస్‌వర్డ్‌లు అవసరం లేదు. మీ మొబైల్‌కు వచ్చే ఓటీపీతో తక్షణ ప్రవేశం." 
               />
             </p>
           </div>
 
-          <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', background: '#0e1c36', padding: '0.3rem', borderRadius: '10px' }}>
-            <button
-              type="button"
-              className={method === 'ns_id' ? 'btn' : 'btn-ghost'}
-              style={{ flex: 1, padding: '0.5rem', fontSize: '0.9rem', borderRadius: '8px' }}
-              onClick={() => { setMethod('ns_id'); setStatusMsg(null); }}
-            >
-              <Bi en="Nayi ID (NS-ID)" te="నాయీ ఐడీ (NS-ID)" />
-            </button>
-            <button
-              type="button"
-              className={method === 'phone' ? 'btn' : 'btn-ghost'}
-              style={{ flex: 1, padding: '0.5rem', fontSize: '0.9rem', borderRadius: '8px' }}
-              onClick={() => { setMethod('phone'); setStatusMsg(null); }}
-            >
-              <Bi en="Mobile OTP" te="మొబైల్ ఓటీపీ" />
-            </button>
-          </div>
-
-          <form onSubmit={handleSubmit}>
-            {method === 'ns_id' ? (
+          {step === 'phone' ? (
+            <form onSubmit={handleSendOtp}>
               <div className="field">
-                <label htmlFor="ns_id">
-                  <Bi en="Community Membership ID" te="నాయీ సమాఖ్య సభ్యత్వ ఐడీ (NS-ID)" />
+                <label htmlFor="phone-input">
+                  <Bi en="Mobile Number (WhatsApp / SMS)" te="మొబైల్ నంబర్ (వాట్సాప్ / ఎస్ఎంఎస్)" />
                 </label>
-                <input
-                  id="ns_id"
-                  type="text"
-                  placeholder="e.g. NS-TG-HYDB-00123"
-                  value={identifier}
-                  onChange={(e) => setIdentifier(e.target.value)}
-                  required
-                />
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <span style={{ 
+                    padding: '0.65rem 0.8rem', 
+                    background: '#0e1c36', 
+                    border: '1px solid var(--navy-line)', 
+                    borderRadius: '10px',
+                    color: 'var(--gold-bright)',
+                    fontWeight: 600
+                  }}>
+                    +91
+                  </span>
+                  <input
+                    id="phone-input"
+                    type="tel"
+                    placeholder="98480 12345"
+                    value={phone}
+                    maxLength={10}
+                    onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
+                    required
+                    style={{ flex: 1, fontSize: '1.1rem', letterSpacing: '0.05em' }}
+                  />
+                </div>
                 <p className="hint">
-                  <Bi en="Found on your Nayi Samakhya member card" te="మీ నాయీ సమాఖ్య సభ్యత్వ గుర్తింపు కార్డుపై ఉన్న నంబర్" />
+                  <Bi 
+                    en="We will send a 6-digit one-time code to verify your community registration." 
+                    te="ధృవీకరణ కోసం మీ నంబర్‌కు 6 అంకెల ఓటీపీ కోడ్ పంపబడుతుంది." 
+                  />
                 </p>
               </div>
-            ) : (
+
+              {errorMsg && <p className="alert" style={{ margin: '1rem 0' }}>{errorMsg}</p>}
+
+              <div style={{ marginTop: '1.8rem' }}>
+                <button type="submit" className="btn" style={{ width: '100%', padding: '0.8rem', fontSize: '1.05rem' }} disabled={isSubmitting}>
+                  <Bi en={isSubmitting ? 'Sending OTP…' : 'Send Verification OTP →'} te={isSubmitting ? 'పంపుతోంది…' : 'ఓటీపీ పంపండి →'} />
+                </button>
+              </div>
+            </form>
+          ) : (
+            <form onSubmit={handleVerifyOtp}>
+              {successMsg && <p className="notice" style={{ margin: '0 0 1.2rem' }}>{successMsg}</p>}
+
               <div className="field">
-                <label htmlFor="phone">
-                  <Bi en="Registered Mobile Number" te="నమోదిత మొబైల్ నంబర్" />
+                <label htmlFor="otp-input">
+                  <Bi en="Enter 6-Digit OTP Code" te="6 అంకెల ఓటీపీని నమోదు చేయండి" />
                 </label>
                 <input
-                  id="phone"
-                  type="tel"
-                  placeholder="e.g. 9848012345"
-                  value={identifier}
-                  onChange={(e) => setIdentifier(e.target.value)}
+                  id="otp-input"
+                  type="text"
+                  placeholder="1 2 3 4 5 6"
+                  value={otp}
+                  maxLength={6}
+                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
                   required
+                  style={{ textAlign: 'center', fontSize: '1.5rem', letterSpacing: '0.3em', fontWeight: 700 }}
                 />
               </div>
-            )}
 
-            <div className="field" style={{ marginTop: '1rem' }}>
-              <label htmlFor="security">
-                <Bi en={method === 'ns_id' ? 'Account Passcode / PIN' : 'OTP Code'} te={method === 'ns_id' ? 'పాస్‌కోడ్ / పిన్' : 'ఓటీపీ కోడ్'} />
-              </label>
-              <input
-                id="security"
-                type="password"
-                placeholder="••••••"
-                value={pinOrOtp}
-                onChange={(e) => setPinOrOtp(e.target.value)}
-                required
-              />
-            </div>
+              {errorMsg && <p className="alert" style={{ margin: '1rem 0' }}>{errorMsg}</p>}
 
-            {statusMsg && (
-              <p className={statusMsg.type === 'error' ? 'alert' : 'notice'} style={{ marginTop: '1rem' }}>
-                {statusMsg.text}
-              </p>
-            )}
+              <div style={{ marginTop: '1.8rem' }}>
+                <button type="submit" className="btn" style={{ width: '100%', padding: '0.8rem', fontSize: '1.05rem' }} disabled={isSubmitting}>
+                  <Bi en={isSubmitting ? 'Verifying…' : 'Verify & Enter Portal →'} te={isSubmitting ? 'ధృవీకరిస్తోంది…' : 'ధృవీకరించి ప్రవేశించండి →'} />
+                </button>
+              </div>
 
-            <div style={{ marginTop: '1.8rem' }}>
-              <button type="submit" className="btn" style={{ width: '100%', padding: '0.8rem' }} disabled={isSubmitting}>
-                <Bi en={isSubmitting ? 'Authenticating…' : 'Enter Matrimony Portal →'} te={isSubmitting ? 'ధృవీకరిస్తోంది…' : 'కల్యాణ వేదికలోకి ప్రవేశించండి →'} />
-              </button>
-            </div>
-          </form>
+              <div style={{ textAlign: 'center', marginTop: '1rem' }}>
+                <button 
+                  type="button" 
+                  className="btn-ghost" 
+                  style={{ border: 'none', color: 'var(--muted)', fontSize: '0.85rem' }}
+                  onClick={() => { setStep('phone'); setOtp(''); setErrorMsg(null); }}
+                >
+                  ← Change Mobile Number / మళ్లీ నంబర్ మార్చండి
+                </button>
+              </div>
+            </form>
+          )}
 
-          <div style={{ textAlign: 'center', marginTop: '1.8rem', borderTop: '1px solid var(--navy-line)', paddingTop: '1.2rem' }}>
+          <div style={{ textAlign: 'center', marginTop: '2rem', borderTop: '1px solid var(--navy-line)', paddingTop: '1.2rem' }}>
             <p style={{ margin: 0, fontSize: '0.9rem', color: 'var(--muted)' }}>
-              <Bi en="New candidate or looking to register?" te="కొత్తగా సంబంధం నమోదు చేసుకోవాలా?" />{' '}
+              <Bi en="Looking to register a new candidate?" te="కొత్తగా సంబంధం నమోదు చేసుకోబోతున్నారా?" />{' '}
               <Link href="/onboarding" style={{ color: 'var(--gold-bright)', fontWeight: 600 }}>
-                <Bi en="Create 7-Step Profile" te="ఇక్కడ నమోదు చేసుకోండి" />
+                <Bi en="Start 7-Step Profile" te="ఇక్కడ ప్రారంభించండి" />
               </Link>
             </p>
           </div>

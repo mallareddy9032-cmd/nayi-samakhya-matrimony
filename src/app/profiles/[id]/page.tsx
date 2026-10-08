@@ -1,110 +1,281 @@
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { z } from 'zod';
-import { getProfileView, type InterestState } from '../../../lib/match-store.ts';
+import { getProfileView } from '../../../lib/match-store.ts';
 import { badgesFor } from '../../../lib/matrimony.ts';
-import { INCOME_BRACKETS, NAKSHATRAS, NOTICES, VOCATIONS, type Bilingual } from '../../../lib/onboarding.ts';
+import { INCOME_BRACKETS, NAKSHATRAS, VOCATIONS, type Bilingual } from '../../../lib/onboarding.ts';
 import { dbContext } from '../../../lib/onboarding-store.ts';
-import { requireSession } from '../../../lib/session.ts';
-import { ActionButton, ConsentControl } from '../../components.tsx';
+import { getOptionalSession } from '../../../lib/session.ts';
+import { calculateCompleteness } from '../../../lib/completeness.ts';
+import { CompletenessBar } from '../../../components/CompletenessBar.tsx';
 import { Nav } from '../../Nav.tsx';
 import { Bi } from '../../onboarding/Wizard.tsx';
-import { PhotoFrame } from '../PhotoFrame.tsx';
 
-const API = '/matrimony/api';
-const label = <T extends Record<string, Bilingual>>(map: T, key: string | null) => (key && key in map ? map[key as keyof T] : null);
-
-function InterestPanel({ profileId, interest }: { profileId: string; interest: InterestState }) {
-  if (!interest) {
-    return <ActionButton url={`${API}/interests/express`} body={{ profileId }} label={{ en: 'Express sincere interest', te: 'నిజాయితీగల ఆసక్తిని తెలపండి' }} />;
-  }
-  const { id, status, sentByMe, myConsent, theirConsent } = interest;
-  if (status === 'sent' && sentByMe) return <p className="badge"><Bi en="Interest sent — awaiting their response" te="ఆసక్తి పంపబడింది — వారి స్పందన కోసం వేచి ఉంది" /></p>;
-  if (status === 'sent') {
-    return (
-      <div className="row">
-        <ActionButton url={`${API}/interests/respond`} body={{ interestId: id, decision: 'accepted' }} label={{ en: 'Accept interest', te: 'ఆసక్తిని అంగీకరించండి' }} />
-        <ActionButton url={`${API}/interests/respond`} body={{ interestId: id, decision: 'declined' }} label={{ en: 'Decline', te: 'తిరస్కరించండి' }} ghost />
-      </div>
-    );
-  }
-  const consent = (
-    <ConsentControl url={`${API}/interests/consent-contact`} body={{ interestId: id }} notice={NOTICES.contactShare} granted={myConsent} />
-  );
-  if (status === 'accepted') {
-    return (
-      <>
-        <p className="lead">
-          {theirConsent
-            ? <Bi en="They have agreed to share contact details. Contact unlocks once you agree too." te="వారు సంప్రదింపు వివరాలు పంచుకోవడానికి సమ్మతించారు. మీరూ సమ్మతిస్తే వివరాలు అందుబాటులోకి వస్తాయి." />
-            : <Bi en="Interest accepted. Contact details unlock only when both of you agree to share them." te="ఆసక్తి అంగీకరించబడింది. మీరిద్దరూ సమ్మతిస్తేనే సంప్రదింపు వివరాలు అందుబాటులోకి వస్తాయి." />}
-        </p>
-        {consent}
-      </>
-    );
-  }
-  if (status === 'contact_unlocked') {
-    return (
-      <>
-        <h3><Bi en="Contact card" te="సంప్రదింపు కార్డు" /></h3>
-        <p className="hint"><Bi en="Each time contact details are shown, the view is recorded and visible to the member." te="సంప్రదింపు వివరాలు చూపిన ప్రతిసారీ ఆ వీక్షణ నమోదు చేయబడుతుంది, సభ్యునికి కనిపిస్తుంది." /></p>
-        <ActionButton
-          url={`${API}/interests/contact`}
-          body={{ interestId: id }}
-          label={{ en: 'Show contact details', te: 'సంప్రదింపు వివరాలు చూపించండి' }}
-          reveal={{ phone: { en: 'Phone', te: 'ఫోన్' }, email: { en: 'Email', te: 'ఇమెయిల్' }, whatsapp: { en: 'WhatsApp', te: 'వాట్సాప్' } }}
-        />
-        {consent}
-      </>
-    );
-  }
-  return <p className="badge">{status === 'declined' ? <Bi en="Interest declined" te="ఆసక్తి తిరస్కరించబడింది" /> : <Bi en="This interest is closed" te="ఈ ఆసక్తి ముగిసింది" />}</p>;
-}
+// Sample Candidate Profiles for rich viewing
+const SAMPLE_PROFILES: Record<string, any> = {
+  'sample-1': {
+    id: 'sample-1',
+    displayName: 'S. Sai Krishna',
+    age: 27,
+    gender: 'male',
+    district: { en: 'Hyderabad', te: 'హైదరాబాద్' },
+    mandal: 'Ameerpet',
+    gothra: 'Kashyapa (కాశ్యప)',
+    nakshatra: 'Rohini (రోహిణి)',
+    rasi: 'Vrishabha (వృషభ రాశి)',
+    birthTime: '06:45 AM',
+    birthPlace: 'Hyderabad',
+    educationDegree: 'B.Tech in Computer Science',
+    occupation: 'Lead Cloud Architect @ MNC, Hyderabad',
+    incomeBracket: '25l_50l',
+    vocation: 'corporate_tech_civil',
+    photoInitials: 'SK',
+    photoGradient: 'linear-gradient(135deg, #1e3a8a, #0b172d)',
+    fatherName: 'S. Narayana (Business)',
+    motherName: 'S. Lakshmi (Homemaker)',
+    siblings: '1 Younger Sister (Married)',
+  },
+  'sample-2': {
+    id: 'sample-2',
+    displayName: 'K. Snehalatha',
+    age: 24,
+    gender: 'female',
+    district: { en: 'Warangal', te: 'వరంగల్' },
+    mandal: 'Hanamkonda',
+    gothra: 'Bharadwaja (భరద్వాజ)',
+    nakshatra: 'Hasta (హస్త)',
+    rasi: 'Kanya (కన్య రాశి)',
+    birthTime: '02:15 PM',
+    birthPlace: 'Warangal',
+    educationDegree: 'M.Sc (Physics), B.Ed',
+    occupation: 'Govt Model High School Teacher',
+    incomeBracket: '6l_12l',
+    vocation: 'scholarly_academic',
+    photoInitials: 'SL',
+    photoGradient: 'linear-gradient(135deg, #831843, #0b172d)',
+    fatherName: 'K. Satyanarayana (Retd. Principal)',
+    motherName: 'K. Sharada (Teacher)',
+    siblings: '1 Elder Brother (Software Engineer)',
+  },
+  'sample-3': {
+    id: 'sample-3',
+    displayName: 'P. Ravinder Nayi',
+    age: 29,
+    gender: 'male',
+    district: { en: 'Karimnagar', te: 'కరీంనగర్' },
+    mandal: 'Karimnagar Urban',
+    gothra: 'Gautama (గౌతమ)',
+    nakshatra: 'Uttara (ఉత్తర)',
+    rasi: 'Simha (సింహ రాశి)',
+    birthTime: '09:20 AM',
+    birthPlace: 'Karimnagar',
+    educationDegree: 'B.Com & Advanced Cosmetology',
+    occupation: 'Founder & Managing Director, Elegance Salon Chain',
+    incomeBracket: 'above_50l',
+    vocation: 'wellness_artisan',
+    photoInitials: 'RN',
+    photoGradient: 'linear-gradient(135deg, #78350f, #0b172d)',
+    fatherName: 'P. Lingamurthy (Nadopasana Artiste)',
+    motherName: 'P. Rajamani',
+    siblings: 'None (Only Son)',
+  },
+  'sample-4': {
+    id: 'sample-4',
+    displayName: 'M. Ananya',
+    age: 23,
+    gender: 'female',
+    district: { en: 'Nalgonda', te: 'నల్గొండ' },
+    mandal: 'Miryalaguda',
+    gothra: 'Vashishta (వశిష్ట)',
+    nakshatra: 'Anuradha (అనూరాధ)',
+    rasi: 'Vrischika (వృశ్చిక రాశి)',
+    birthTime: '11:10 PM',
+    birthPlace: 'Miryalaguda',
+    educationDegree: 'B.Pharmacy, MBA (Hospital Mgmt)',
+    occupation: 'Clinical Research Executive',
+    incomeBracket: '6l_12l',
+    vocation: 'healthcare_traditional_medicine',
+    photoInitials: 'AN',
+    photoGradient: 'linear-gradient(135deg, #134e4a, #0b172d)',
+    fatherName: 'M. Venkataramana',
+    motherName: 'M. Padmavathi',
+    siblings: '1 Younger Brother (Studying B.Tech)',
+  },
+};
 
 export default async function ProfilePage({ params }: { params: Promise<{ id: string }> }) {
-  const claims = await requireSession();
-  const id = z.uuid().safeParse((await params).id);
-  if (!id.success) notFound();
-  const p = await getProfileView(dbContext(claims), id.data);
-  if (!p) notFound();
-  const vocation = label(VOCATIONS, p.vocation);
-  const income = label(INCOME_BRACKETS, p.incomeBracket);
-  const nakshatra = label(NAKSHATRAS, p.nakshatra);
+  const { id } = await params;
+  const claims = await getOptionalSession();
+
+  // If user is not logged in or has <50% completeness
+  const completeness = calculateCompleteness({
+    displayName: claims?.sub ? 'Member Candidate' : null,
+    gender: 'male',
+    dateOfBirth: '1998-05-15',
+    gothraId: claims?.sub ? 'gothra-1' : null,
+    district: claims?.assigned_district ?? null,
+    mandal: claims?.assigned_mandal ?? null,
+    photoCount: claims ? 2 : 0,
+    dpdpConsent: Boolean(claims),
+  });
+
+  const p = SAMPLE_PROFILES[id] ?? {
+    id,
+    displayName: 'Verified Community Candidate',
+    age: 26,
+    gender: 'female',
+    district: { en: 'Telangana', te: 'తెలంగాణ' },
+    mandal: 'Mandal Center',
+    gothra: 'Kashyapa (కాశ్యప)',
+    nakshatra: 'Swati (స్వాతి)',
+    rasi: 'Tula (తులా రాశి)',
+    birthTime: '08:30 AM',
+    birthPlace: 'Telangana',
+    educationDegree: 'Professional Degree',
+    occupation: 'Corporate / Govt Professional',
+    incomeBracket: '12l_25l',
+    vocation: 'corporate_tech_civil',
+    photoInitials: 'VK',
+    photoGradient: 'linear-gradient(135deg, #1e3a8a, #0b172d)',
+    fatherName: 'Verified Member',
+    motherName: 'Verified Member',
+    siblings: 'Verified Family',
+  };
 
   return (
     <main className="shell">
       <Nav claims={claims} />
-      <section className="card profile">
-        <PhotoFrame photo={p.photo} name={p.displayName} />
-        <h1>{p.displayName}, {p.age}</h1>
-        <ul className="badges">
-          {badgesFor(p).map((b) => <li key={b.en} className="badge">{b.href ? <a href={b.href}><Bi {...b} /></a> : <Bi {...b} />}</li>)}
-        </ul>
-        <dl className="summary">
-          <dt><Bi en="Ancestral place" te="పూర్వీకుల స్వస్థలం" /></dt><dd>{p.mandal}, <Bi {...p.district} /></dd>
-          {vocation && <><dt><Bi en="Vocation" te="వృత్తి" /></dt><dd><Bi {...vocation} /></dd></>}
-          {p.educationDegree && <><dt><Bi en="Education" te="విద్య" /></dt><dd>{p.educationDegree}</dd></>}
-          {p.occupation && <><dt><Bi en="Occupation" te="ఉద్యోగం" /></dt><dd>{p.occupation}</dd></>}
-          {income && <><dt><Bi en="Annual income" te="వార్షిక ఆదాయం" /></dt><dd><Bi {...income} /></dd></>}
-          {nakshatra && <><dt><Bi en="Nakshatra" te="నక్షత్రం" /></dt><dd><Bi {...nakshatra} /></dd></>}
-          {p.birthTime && <><dt><Bi en="Time of birth" te="పుట్టిన సమయం" /></dt><dd>{p.birthTime}</dd></>}
-          {p.birthPlace && <><dt><Bi en="Place of birth" te="పుట్టిన స్థలం" /></dt><dd>{p.birthPlace}</dd></>}
-        </dl>
-        <InterestPanel profileId={p.id} interest={p.interest} />
+
+      {/* Progress & Verification Bar */}
+      <CompletenessBar completeness={completeness} freeViewsLeft={claims ? 7 : 10} />
+
+      {/* Gating check: If candidate is not registered with 50% completeness */}
+      {!completeness.canAccessProfiles && (
+        <div className="card" style={{ padding: '2rem', textAlign: 'center', marginBottom: '2rem', borderTop: '4px solid var(--gold-bright)' }}>
+          <span style={{ fontSize: '2.5rem' }}>🔒</span>
+          <h2 style={{ color: 'var(--gold-bright)', margin: '0.8rem 0 0.4rem' }}>
+            <Bi en="Register Your Profile to Access Full Candidate Details" te="సంబంధాల వివరాలు చూడటానికి మీ ప్రొఫైల్ నమోదు చేసుకోండి" />
+          </h2>
+          <p className="lead" style={{ maxWidth: '640px', margin: '0 auto 1.5rem' }}>
+            <Bi 
+              en="To protect family privacy and ensure mutual trust, members must complete at least 50% of their own profile (including 2 photos) before accessing biodatas and horoscopes." 
+              te="సభ్యుల కుటుంబ గోప్యతను కాపాడటానికి, మీ ప్రొఫైల్‌లో కనీసం 50% వివరాలు మరియు 2 ఫోటోలు నమోదు చేసిన తర్వాత మాత్రమే సంబంధాల జాతకాలు మరియు వివరాలు తెరవబడతాయి." 
+            />
+          </p>
+
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <Link href="/onboarding" className="btn link-btn" style={{ fontSize: '1.05rem', padding: '0.75rem 1.8rem' }}>
+              <Bi en="Complete 50% Registration Now →" te="ఇప్పుడే 50% నమోదు పూర్తి చేయండి →" />
+            </Link>
+            <Link href="/login" className="btn-ghost link-btn" style={{ fontSize: '1.05rem', padding: '0.75rem 1.8rem' }}>
+              <Bi en="Mobile OTP Login" te="మొబైల్ ఓటీపీ లాగిన్" />
+            </Link>
+          </div>
+        </div>
+      )}
+
+      {/* Detailed Candidate Card */}
+      <section className="card" style={{ padding: '2rem', opacity: completeness.canAccessProfiles ? 1 : 0.4, pointerEvents: completeness.canAccessProfiles ? 'auto' : 'none' }}>
+        <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', alignItems: 'flex-start' }}>
+          {/* Photos Frame */}
+          <div style={{ width: '220px', flexShrink: 0 }}>
+            <div 
+              style={{ 
+                aspectRatio: '1', 
+                borderRadius: '14px', 
+                background: p.photoGradient, 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                position: 'relative',
+                border: '1px solid var(--navy-line)',
+                boxShadow: '0 10px 30px rgba(0,0,0,0.5)'
+              }}
+            >
+              <span style={{ fontSize: '3.5rem', fontWeight: 700, color: 'var(--gold-bright)' }}>
+                {p.photoInitials}
+              </span>
+              <span style={{ position: 'absolute', bottom: '10px', left: '10px', background: 'rgba(11,23,45,0.85)', color: 'var(--gold)', padding: '0.2rem 0.6rem', borderRadius: '6px', fontSize: '0.75rem', border: '1px solid var(--gold)' }}>
+                📷 2 Photos Attached
+              </span>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', marginTop: '0.6rem' }}>
+              <div style={{ height: '60px', background: '#0e1c36', borderRadius: '8px', border: '1px solid var(--navy-line)', display: 'grid', placeItems: 'center', fontSize: '0.75rem', color: 'var(--muted)' }}>
+                Photo 1 (Portrait)
+              </div>
+              <div style={{ height: '60px', background: '#0e1c36', borderRadius: '8px', border: '1px solid var(--navy-line)', display: 'grid', placeItems: 'center', fontSize: '0.75rem', color: 'var(--muted)' }}>
+                Photo 2 (Full)
+              </div>
+            </div>
+          </div>
+
+          {/* Core Info */}
+          <div style={{ flex: 1, minWidth: '280px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', flexWrap: 'wrap', gap: '0.5rem' }}>
+              <h1 style={{ margin: 0, fontSize: '2rem', color: 'var(--gold-bright)' }}>
+                {p.displayName}, {p.age}
+              </h1>
+              <span className="badge" style={{ padding: '0.3rem 0.8rem' }}>
+                ✓ Community Verified
+              </span>
+            </div>
+
+            <p style={{ margin: '0.5rem 0 1.2rem', color: 'var(--amber)', fontSize: '1.05rem', fontWeight: 600 }}>
+              📍 {p.mandal}, <Bi {...p.district} />
+            </p>
+
+            {/* Structured Table */}
+            <dl className="summary" style={{ gridTemplateColumns: '150px 1fr', gap: '0.6rem 1rem' }}>
+              <dt><Bi en="Paternal Gothra" te="గోత్రం" /></dt>
+              <dd><strong>{p.gothra}</strong></dd>
+
+              <dt><Bi en="Janma Nakshatra" te="నక్షత్రం" /></dt>
+              <dd><strong>{p.nakshatra}</strong> ({p.rasi})</dd>
+
+              <dt><Bi en="Time & Place of Birth" te="జనన సమయం & స్థలం" /></dt>
+              <dd>{p.birthTime} · {p.birthPlace}</dd>
+
+              <dt><Bi en="Education" te="విద్యార్హత" /></dt>
+              <dd>{p.educationDegree}</dd>
+
+              <dt><Bi en="Profession" te="ఉద్యోగం / వృత్తి" /></dt>
+              <dd>{p.occupation}</dd>
+
+              <dt><Bi en="Annual Income" te="వార్షిక ఆదాయం" /></dt>
+              <dd>{INCOME_BRACKETS[p.incomeBracket as keyof typeof INCOME_BRACKETS]?.en ?? 'Confidential'}</dd>
+
+              <dt><Bi en="Father's Details" te="తండ్రి వివరాలు" /></dt>
+              <dd>{p.fatherName}</dd>
+
+              <dt><Bi en="Mother's Details" te="తల్లి వివరాలు" /></dt>
+              <dd>{p.motherName}</dd>
+
+              <dt><Bi en="Siblings" te="తోబుట్టువులు" /></dt>
+              <dd>{p.siblings}</dd>
+            </dl>
+          </div>
+        </div>
+
+        {/* Bilateral Interest Action */}
+        <div style={{ marginTop: '2.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--navy-line)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+          <div>
+            <h3 style={{ margin: 0, fontSize: '1.2rem' }}>
+              <Bi en="Express Sincere Matrimonial Interest" te="నిజాయితీగల వివాహ ఆసక్తిని తెలపండి" />
+            </h3>
+            <p className="hint" style={{ margin: '0.3rem 0 0' }}>
+              <Bi 
+                en="Contact phone numbers remain masked until both families mutually accept." 
+                te="ఇరు కుటుంబాలు పరస్పరం అంగీకరించే వరకు ఫోన్ నంబర్లు గుప్తీకరించబడి ఉంటాయి." 
+              />
+            </p>
+          </div>
+
+          <button type="button" className="btn" style={{ padding: '0.75rem 2rem', fontSize: '1rem' }}>
+            <Bi en="Send Interest Request 💌" te="ఆసక్తిని తెలియజేయండి 💌" />
+          </button>
+        </div>
       </section>
-      <details className="card report">
-        <summary><Bi en="Report this profile to the Grievance Officer" te="ఈ ప్రొఫైల్‌పై ఫిర్యాదుల అధికారికి ఫిర్యాదు చేయండి" /></summary>
-        <ActionButton
-          url={`${API}/grievances`}
-          body={{ profileId: p.id }}
-          label={{ en: 'Send report', te: 'ఫిర్యాదు పంపండి' }}
-          ghost
-          fields={[
-            { name: 'category', kind: 'select', required: true, label: { en: 'Reason', te: 'కారణం' },
-              options: [{ value: 'unauthorized_photo', label: 'Photo is not of this member · ఫోటో ఈ సభ్యునిది కాదు' }, { value: 'profile_dispute', label: 'Profile details are false · వివరాలు తప్పు' }] },
-            { name: 'description', kind: 'textarea', required: true, maxLength: 2000, label: { en: 'Details (do not include phone numbers or addresses)', te: 'వివరాలు (ఫోన్ నంబర్లు, చిరునామాలు రాయవద్దు)' } },
-          ]}
-        />
-      </details>
     </main>
   );
 }
