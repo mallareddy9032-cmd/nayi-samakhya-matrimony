@@ -170,8 +170,41 @@ const TELANGANA_DISTRICTS = [
 ];
 
 export default function Home() {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Organization',
+        '@id': 'https://nayisamakhya.org/#organization',
+        name: 'Nayi Samakhya Matrimonial Portal',
+        alternateName: 'నాయీ సమాఖ్య కల్యాణ వేదిక',
+        url: 'https://nayisamakhya.org/matrimony',
+        logo: 'https://nayisamakhya.org/matrimony/og-banner.jpg',
+        description: 'Official matrimonial platform for Telangana & Andhra Pradesh Nayi Brahmin community with Sagothra protection and DPDP privacy.',
+        areaServed: [
+          { '@type': 'AdministrativeArea', name: 'Telangana' },
+          { '@type': 'AdministrativeArea', name: 'Andhra Pradesh' },
+          { '@type': 'Country', name: 'India' },
+        ],
+      },
+      {
+        '@type': 'MarriageAgency',
+        '@id': 'https://nayisamakhya.org/matrimony/#agency',
+        name: 'నాయీ సమాఖ్య కల్యాణ వేదిక (Nayi Samakhya Matrimony)',
+        url: 'https://nayisamakhya.org/matrimony',
+        parentOrganization: { '@id': 'https://nayisamakhya.org/#organization' },
+        priceRange: 'Free Community Service',
+        serviceType: 'Matrimonial Matchmaking',
+      },
+    ],
+  };
+
   return (
     <main className="shell wide">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Nav />
       
       {/* Concept 1: Split Hero Section (Responsive Grid) */}
