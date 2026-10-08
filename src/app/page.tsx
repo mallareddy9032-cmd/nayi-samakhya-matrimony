@@ -4,7 +4,7 @@ import { Nav } from './Nav.tsx';
 import { Bi } from './onboarding/Wizard.tsx';
 import { AuspiciousHeader } from './onboarding/AuspiciousHeader.tsx';
 
-// Sample preview profiles representing verified Telangana community matches
+// 10 Sample candidates representing community matches across Telangana with real photos
 const FEATURED_PROFILES = [
   {
     id: 'sample-1',
@@ -15,12 +15,11 @@ const FEATURED_PROFILES = [
     nakshatra: 'Rohini (రోహిణి)',
     district: 'Hyderabad',
     districtTe: 'హైదరాబాద్',
-    education: 'B.Tech (CSE) · Senior Software Engineer',
+    education: 'B.Tech (CSE) · Lead Cloud Architect',
     vocation: 'Corporate / Tech Professional',
     vocationTe: 'సాంకేతిక రంగం',
     badge: 'NS-ID Verified',
-    photoInitials: 'SK',
-    photoGradient: 'linear-gradient(135deg, #1e3a8a, #0b172d)',
+    photoUrl: '/matrimony/profiles/groom-1.jpg',
   },
   {
     id: 'sample-2',
@@ -35,8 +34,7 @@ const FEATURED_PROFILES = [
     vocation: 'Government & Academic',
     vocationTe: 'విద్యా రంగం',
     badge: 'Mandal Lineage Verified',
-    photoInitials: 'SL',
-    photoGradient: 'linear-gradient(135deg, #831843, #0b172d)',
+    photoUrl: '/matrimony/profiles/bride-1.jpg',
   },
   {
     id: 'sample-3',
@@ -51,8 +49,7 @@ const FEATURED_PROFILES = [
     vocation: 'Soundarya & Salon Founder',
     vocationTe: 'సెలూన్ వ్యవస్థాపకులు',
     badge: 'Enterprise Modernist',
-    photoInitials: 'RN',
-    photoGradient: 'linear-gradient(135deg, #78350f, #0b172d)',
+    photoUrl: '/matrimony/profiles/groom-2.jpg',
   },
   {
     id: 'sample-4',
@@ -67,8 +64,97 @@ const FEATURED_PROFILES = [
     vocation: 'Healthcare & Wellness',
     vocationTe: 'ఆరోగ్య సంరక్షణ',
     badge: 'NS-ID Verified',
-    photoInitials: 'AN',
-    photoGradient: 'linear-gradient(135deg, #134e4a, #0b172d)',
+    photoUrl: '/matrimony/profiles/bride-2.jpg',
+  },
+  {
+    id: 'sample-5',
+    name: 'P. Madhav Rao',
+    age: 28,
+    gender: 'Groom · వరుడు',
+    gothra: 'Agastya (అగస్త్య)',
+    nakshatra: 'Swati (స్వాతి)',
+    district: 'Khammam',
+    districtTe: 'ఖమ్మం',
+    education: 'Vidwan / MA Music · Classical Nadaswaram Artiste',
+    vocation: 'Nadopasana Heritage',
+    vocationTe: 'నాదోపాసన కళాకారులు',
+    badge: 'Heritage Custodian',
+    photoUrl: '/matrimony/profiles/groom-3.jpg',
+  },
+  {
+    id: 'sample-6',
+    name: 'K. Divya Sree',
+    age: 25,
+    gender: 'Bride · వధువు',
+    gothra: 'Sandilya (శాండిల్య)',
+    nakshatra: 'Ashwini (అశ్విని)',
+    district: 'Nizamabad',
+    districtTe: 'నిజామాబాద్',
+    education: 'MCA · Senior IT Systems Analyst',
+    vocation: 'Corporate IT',
+    vocationTe: 'సాంకేతిక రంగం',
+    badge: 'NS-ID Verified',
+    photoUrl: '/matrimony/profiles/bride-3.jpg',
+  },
+  {
+    id: 'sample-7',
+    name: 'T. Vamshi Krishna',
+    age: 30,
+    gender: 'Groom · వరుడు',
+    gothra: 'Kaundinya (కౌండిన్య)',
+    nakshatra: 'Makha (మఖ)',
+    district: 'Rangareddy',
+    districtTe: 'రంగారెడ్డి',
+    education: 'M.Tech · Senior Data Scientist',
+    vocation: 'Corporate Tech',
+    vocationTe: 'సాంకేతిక రంగం',
+    badge: 'Mandal Lineage Verified',
+    photoUrl: '/matrimony/profiles/groom-4.jpg',
+  },
+  {
+    id: 'sample-8',
+    name: 'B. Haritha Devi',
+    age: 26,
+    gender: 'Bride · వధువు',
+    gothra: 'Vishwamitra (విశ్వామిత్ర)',
+    nakshatra: 'Revati (రేవతి)',
+    district: 'Siddipet',
+    districtTe: 'సిద్దిపేట',
+    education: 'MBBS · Resident Medical Officer',
+    vocation: 'Healthcare & Medicine',
+    vocationTe: 'వైద్య రంగం',
+    badge: 'NS-ID Verified',
+    photoUrl: '/matrimony/profiles/bride-4.jpg',
+  },
+  {
+    id: 'sample-9',
+    name: 'G. Suresh Kumar',
+    age: 28,
+    gender: 'Groom · వరుడు',
+    gothra: 'Parasara (పరాశర)',
+    nakshatra: 'Arudra (ఆరుద్ర)',
+    district: 'Mahabubnagar',
+    districtTe: 'మహబూబ్‌నగర్',
+    education: 'M.Sc (Agri) · Assistant Agriculture Officer (Govt)',
+    vocation: 'Government Public Sector',
+    vocationTe: 'ప్రభుత్వ రంగం',
+    badge: 'Government Lineage Verified',
+    photoUrl: '/matrimony/profiles/groom-5.jpg',
+  },
+  {
+    id: 'sample-10',
+    name: 'N. Sravanthi',
+    age: 24,
+    gender: 'Bride · వధువు',
+    gothra: 'Atri (అత్రి)',
+    nakshatra: 'Pushyami (పుష్యమి)',
+    district: 'Medchal-Malkajgiri',
+    districtTe: 'మేడ్చల్-మల్కాజ్‌గిరి',
+    education: 'B.Tech, MS · Product Designer',
+    vocation: 'Creative & Tech',
+    vocationTe: 'సాంకేతిక రంగం',
+    badge: 'NS-ID Verified',
+    photoUrl: '/matrimony/profiles/bride-5.jpg',
   },
 ];
 
@@ -89,152 +175,163 @@ export default async function Home() {
     <main className="shell wide">
       <Nav claims={session} />
       
-      {/* 1. Auspicious Cultural Crown */}
-      <AuspiciousHeader />
-
-      {/* 2. Hero Headline & Quick Match Finder Bar */}
-      <section style={{ textAlign: 'center', margin: '1.5rem auto 2.5rem', maxWidth: '880px' }}>
-        <span className="badge" style={{ marginBottom: '0.8rem', padding: '0.35rem 1rem', fontSize: '0.9rem', letterSpacing: '0.04em' }}>
-          <Bi en="Sovereign Community Matrimonial Service" te="నాయీ సమాఖ్య అధికారిక కల్యాణ వేదిక" />
-        </span>
-        <h1 style={{ fontSize: 'clamp(2.2rem, 5vw, 3.2rem)', margin: '0.5rem 0 1rem', lineHeight: '1.2' }}>
-          <Bi en="Telangana Nayi-Brahmin Matrimonial Alliance" te="తెలంగాణ నాయీ బ్రాహ్మణ కల్యాణ వేదిక" />
-        </h1>
-        <p className="lead" style={{ fontSize: '1.2rem', lineHeight: '1.8', maxWidth: '780px', margin: '0 auto 2rem' }}>
-          <Bi 
-            en="Connecting respected families across 33 Telangana districts. Guarded by DB-level Sagothra exclusion, authentic horoscope matching, and bilateral contact privacy under DPDP Act 2023." 
-            te="తెలంగాణ 33 జిల్లాల నాయీ బ్రాహ్మణ కుటుంబాలకు గౌరవప్రదమైన సంబంధాలు. సగోత్ర రక్షణ, జాతక వివరాలు మరియు పూర్తి చట్టబద్ధమైన గోప్యతతో నడిచే అధికారిక వేదిక." 
-          />
-        </p>
-
-        {/* Quick Search Widget */}
-        <div className="card" style={{ padding: '1.5rem', textAlign: 'left', borderTop: '3px solid var(--gold-bright)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-            <span style={{ color: 'var(--gold-bright)', fontSize: '1.2rem' }}>✦</span>
-            <strong style={{ fontSize: '1.1rem' }}>
-              <Bi en="Quick Profile Search across Telangana" te="తెలంగాణ సంబంధాల శోధన" />
-            </strong>
+      {/* Concept 1: Split Hero Section (Responsive Grid) */}
+      <section className="hero-grid" style={{ maxWidth: '1200px', margin: '1.5rem auto 3rem', display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '2.5rem', alignItems: 'center' }}>
+        <div>
+          <span style={{ background: '#FFF1F2', color: '#8B1D2C', padding: '0.35rem 1rem', borderRadius: '999px', fontSize: '0.85rem', fontWeight: 700, border: '1px solid #FECDD3', display: 'inline-block', marginBottom: '1rem' }}>
+            ★ పవిత్ర సగోత్ర రక్షణ & చట్టబద్ధమైన గోప్యత
+          </span>
+          <h1 style={{ fontSize: 'clamp(2.1rem, 4vw, 3rem)', color: '#1A202C', margin: '0 0 1rem', lineHeight: '1.25', fontWeight: 800 }}>
+            తెలంగాణ నాయీ బ్రాహ్మణుల <br />
+            <span style={{ color: '#8B1D2C' }}>గౌరవప్రదమైన కల్యాణ వేదిక</span>
+          </h1>
+          <p style={{ fontSize: '1.1rem', color: '#4A5568', lineHeight: '1.75', margin: '0 0 1.8rem' }}>
+            33 జిల్లాల 589 మండలాల్లోని మన సమాజ కుటుంబాలను ఒకచోట చేర్చే నమ్మకమైన అధికారిక వేదిక. ఎటువంటి ప్రైవేటు దళారులు లేకుండా, పారదర్శకమైన విధానంతో సంబంధాలను వెతకండి.
+          </p>
+          <div className="hero-cta" style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+            <Link
+              href="/onboarding"
+              className="btn"
+              style={{
+                background: '#8B1D2C',
+                color: '#FFF',
+                padding: '0.85rem 2rem',
+                borderRadius: '12px',
+                textDecoration: 'none',
+                fontWeight: 700,
+                fontSize: '1rem',
+                boxShadow: '0 8px 24px rgba(139, 29, 44, 0.3)'
+              }}
+            >
+              ఉచిత ప్రొఫైల్ నమోదు చేసుకోండి →
+            </Link>
+            <Link
+              href="/login"
+              style={{
+                background: '#FFF',
+                border: '1.5px solid #CBD5E0',
+                padding: '0.85rem 1.8rem',
+                borderRadius: '12px',
+                fontWeight: 700,
+                color: '#4A5568',
+                textDecoration: 'none',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
+              సభ్యుల లాగిన్ (ఓటీపీ)
+            </Link>
           </div>
-          <form action="/matrimony/discover" method="get" className="filters" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))' }}>
-            <div className="field">
-              <label htmlFor="hero-gender"><Bi en="Looking For" te="వెతుకుతున్నది" /></label>
-              <select id="hero-gender" name="gender" defaultValue="female">
-                <option value="female">Bride · వధువు</option>
-                <option value="male">Groom · వరుడు</option>
-              </select>
-            </div>
+        </div>
 
-            <div className="field">
-              <label htmlFor="hero-district"><Bi en="Native District" te="జిల్లా" /></label>
-              <select id="hero-district" name="district">
-                <option value="">All 33 Districts (అన్ని జిల్లాలు)</option>
-                {TELANGANA_DISTRICTS.map((d) => (
-                  <option key={d} value={d.toLowerCase().replace(/\s+/g, '-')}>{d}</option>
-                ))}
-              </select>
-            </div>
+        {/* Quick Search Card */}
+        <div style={{ background: '#FFFFFF', borderRadius: '20px', padding: '2rem', boxShadow: '0 15px 35px rgba(0,0,0,0.06)', border: '1px solid #E2E8F0' }}>
+          <div style={{ borderBottom: '2px solid #FAF5FF', paddingBottom: '0.8rem', marginBottom: '1.2rem' }}>
+            <h3 style={{ margin: 0, color: '#8B1D2C', fontSize: '1.3rem', fontWeight: 800 }}>
+              సంబంధాల శోధన (Quick Search)
+            </h3>
+            <p style={{ margin: '0.2rem 0 0', fontSize: '0.88rem', color: '#718096' }}>
+              వెంటనే సరైన సంబంధాలను కనుగొనండి
+            </p>
+          </div>
 
-            <div className="field">
-              <label htmlFor="hero-vocation"><Bi en="Profession / Stream" te="వృత్తి శ్రేణి" /></label>
-              <select id="hero-vocation" name="vocation">
-                <option value="">All Professions (అన్నీ)</option>
-                <option value="corporate_tech_civil">Corporate & IT Software</option>
-                <option value="government">Government & Public Sector</option>
-                <option value="wellness_artisan">Salon Entrepreneur / Stylist</option>
-                <option value="healthcare">Healthcare & Medicine</option>
-                <option value="nadopasana">Nadopasana / Classical</option>
-              </select>
-            </div>
-
-            <div className="field">
-              <label htmlFor="hero-age"><Bi en="Age Preference" te="వయస్సు" /></label>
-              <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
-                <input id="hero-age" name="ageMin" type="number" min={18} max={70} defaultValue={21} style={{ width: '50%' }} />
-                <span>-</span>
-                <input name="ageMax" type="number" min={18} max={70} defaultValue={32} style={{ width: '50%' }} />
+          <form action="/matrimony/discover" method="get" style={{ display: 'grid', gap: '1rem' }}>
+            <div>
+              <label style={{ display: 'block', fontSize: '0.88rem', fontWeight: 700, color: '#4A5568', marginBottom: '0.4rem' }}>నేను వెతుకుతున్నది:</label>
+              <div style={{ display: 'flex', gap: '0.8rem' }}>
+                <label style={{ flex: 1, padding: '0.65rem', borderRadius: '8px', border: '2px solid #8B1D2C', background: '#FFF1F2', color: '#8B1D2C', fontWeight: 700, textAlign: 'center', cursor: 'pointer' }}>
+                  <input type="radio" name="gender" value="female" defaultChecked style={{ display: 'none' }} />
+                  వధువు (Bride)
+                </label>
+                <label style={{ flex: 1, padding: '0.65rem', borderRadius: '8px', border: '1px solid #CBD5E0', background: '#FFF', color: '#4A5568', fontWeight: 600, textAlign: 'center', cursor: 'pointer' }}>
+                  <input type="radio" name="gender" value="male" style={{ display: 'none' }} />
+                  వరుడు (Groom)
+                </label>
               </div>
             </div>
 
-            <button type="submit" className="btn" style={{ height: '46px', alignSelf: 'end', marginBottom: '1rem', whiteSpace: 'nowrap' }}>
-              <Bi en="Search Profiles 🔍" te="సంబంధాలు చూడండి 🔍" />
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '0.8rem' }}>
+              <div>
+                <label htmlFor="quick-age" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#4A5568', marginBottom: '0.3rem' }}>వయస్సు:</label>
+                <select id="quick-age" name="ageMax" style={{ width: '100%', padding: '0.65rem', borderRadius: '8px', border: '1px solid #CBD5E0', background: '#F8FAFC' }}>
+                  <option value="25">18 - 25 సంవత్సరాలు</option>
+                  <option value="30">26 - 30 సంవత్సరాలు</option>
+                  <option value="35">31 - 35 సంవత్సరాలు</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="quick-district" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#4A5568', marginBottom: '0.3rem' }}>స్వస్థల జిల్లా:</label>
+                <select id="quick-district" name="district" style={{ width: '100%', padding: '0.65rem', borderRadius: '8px', border: '1px solid #CBD5E0', background: '#F8FAFC' }}>
+                  <option value="">అన్ని జిల్లాలు (All)</option>
+                  {TELANGANA_DISTRICTS.map((d) => (
+                    <option key={d} value={d.toLowerCase().replace(/\s+/g, '-')}>{d}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="quick-vocation" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#4A5568', marginBottom: '0.3rem' }}>వృత్తి / ఉద్యోగం:</label>
+              <select id="quick-vocation" name="vocation" style={{ width: '100%', padding: '0.65rem', borderRadius: '8px', border: '1px solid #CBD5E0', background: '#F8FAFC' }}>
+                <option value="">అన్ని రంగాలు (All Occupations)</option>
+                <option value="corporate_tech_civil">సాఫ్ట్‌వేర్ & ఐటీ (Software & IT)</option>
+                <option value="government">ప్రభుత్వ రంగం (Government Sector)</option>
+                <option value="wellness_artisan">సెలూన్ వ్యవస్థాపకులు (Salon Founders)</option>
+                <option value="healthcare">వైద్య రంగం (Healthcare)</option>
+                <option value="nadopasana">నాదోపాసన (Classical & Tradition)</option>
+              </select>
+            </div>
+
+            <button type="submit" style={{ background: '#D4AF37', color: '#1A202C', padding: '0.85rem', borderRadius: '10px', border: 'none', fontWeight: 800, fontSize: '1rem', cursor: 'pointer', marginTop: '0.5rem', boxShadow: '0 4px 14px rgba(212, 175, 55, 0.35)' }}>
+              సంబంధాలు శోధించండి 🔍
             </button>
           </form>
         </div>
-
-        {/* Primary Call to Action Buttons */}
-        <div style={{ display: 'flex', gap: '1.2rem', justifyContent: 'center', marginTop: '2rem', flexWrap: 'wrap' }}>
-          <Link href="/onboarding" className="btn link-btn" style={{ fontSize: '1.1rem', padding: '0.85rem 2rem', boxShadow: '0 4px 20px rgba(236, 201, 75, 0.25)' }}>
-            <Bi en="Register Free Matrimonial Profile →" te="ఉచిత వివాహ ప్రొఫైల్ నమోదు చేసుకోండి →" />
-          </Link>
-          <Link href="/login" className="btn-ghost link-btn" style={{ fontSize: '1.1rem', padding: '0.85rem 2rem' }}>
-            <Bi en="Candidate & Parent Login" te="సభ్యులు & తల్లిదండ్రుల లాగిన్" />
-          </Link>
-        </div>
       </section>
 
-      {/* 3. Featured Verified Candidate Showcase */}
+      {/* Featured Candidate Showcase (10 Sample Profiles with Real Photos) */}
       <section style={{ margin: '3.5rem 0' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
           <div>
-            <span className="badge" style={{ marginBottom: '0.4rem' }}>
-              <Bi en="Verified Profiles Showcase" te="ధృవీకరించబడిన ప్రొఫైల్‌లు" />
+            <span className="badge" style={{ marginBottom: '0.4rem', fontSize: '0.85rem' }}>
+              <Bi en="Verified Community Profiles" te="సరికొత్త సంబంధాలు" />
             </span>
-            <h2 style={{ fontSize: '1.9rem', margin: '0.2rem 0' }}>
-              <Bi en="Recently Verified Community Profiles" te="ఇటీవల చేరిన సముదాయ సంబంధాలు" />
+            <h2 style={{ fontSize: '2rem', margin: '0.2rem 0', color: '#1A202C' }}>
+              <Bi en="Featured Community Profiles (10 Verified)" te="ధృవీకరించబడిన ప్రొఫైల్స్" />
             </h2>
             <p className="hint">
               <Bi en="Every profile is verified by local Mandal Lineage Coordinators across Telangana." te="ప్రతి ప్రొఫైల్ మండల సమన్వయకర్తల ద్వారా క్షేత్రస్థాయిలో ధృవీకరించబడుతుంది." />
             </p>
           </div>
-          <Link href="/discover" className="btn-ghost link-btn" style={{ fontSize: '0.95rem' }}>
+          <Link href="/discover" className="btn-ghost link-btn" style={{ fontSize: '0.95rem', fontWeight: 700 }}>
             <Bi en="View All Matches →" te="అన్ని సంబంధాలు చూడండి →" />
           </Link>
         </div>
 
-        <div className="cards" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '1.5rem' }}>
+        <div className="cards" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.5rem' }}>
           {FEATURED_PROFILES.map((p) => (
-            <article key={p.id} className="profile-card" style={{ display: 'flex', flexDirection: 'column', height: '100%', background: '#FFFFFF' }}>
-              {/* Photo Avatar / Frame */}
-              <div 
-                style={{ 
-                  aspectRatio: '1', 
-                  borderRadius: '12px', 
-                  background: p.gender.includes('Bride') ? 'linear-gradient(135deg, #FFE4E6, #FECDD3)' : 'linear-gradient(135deg, #FEF3C7, #FDE68A)', 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  justifyContent: 'center', 
-                  position: 'relative',
-                  border: '1px solid var(--border-light)',
-                  boxShadow: 'var(--shadow-sm)'
-                }}
-              >
-                <div style={{
-                  width: '74px',
-                  height: '74px',
-                  borderRadius: '50%',
-                  background: p.gender.includes('Bride') ? 'var(--maroon)' : '#92400E',
-                  color: '#FFFFFF',
-                  display: 'grid',
-                  placeItems: 'center',
-                  fontSize: '1.7rem',
-                  fontWeight: 800,
-                  border: '3px solid #FFFFFF',
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-                }}>
-                  {p.photoInitials}
-                </div>
+            <article key={p.id} className="profile-card" style={{ display: 'flex', flexDirection: 'column', height: '100%', background: '#FFFFFF', padding: 0, overflow: 'hidden', borderRadius: '16px', boxShadow: '0 8px 24px rgba(0,0,0,0.06)' }}>
+              {/* Profile Photo */}
+              <div style={{ height: '220px', width: '100%', position: 'relative', overflow: 'hidden', background: '#E2E8F0' }}>
+                <img 
+                  src={p.photoUrl} 
+                  alt={p.name}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                  loading="lazy"
+                />
                 <span 
                   style={{ 
                     position: 'absolute', 
-                    top: '10px', 
-                    right: '10px', 
+                    top: '12px', 
+                    right: '12px', 
                     background: 'rgba(255, 255, 255, 0.95)', 
-                    color: 'var(--maroon)', 
-                    padding: '0.2rem 0.6rem', 
+                    color: '#8B1D2C', 
+                    padding: '0.25rem 0.75rem', 
                     borderRadius: '999px', 
-                    fontSize: '0.72rem', 
+                    fontSize: '0.75rem', 
                     fontWeight: 700,
-                    border: '1px solid var(--maroon-border)' 
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
                   }}
                 >
                   🔒 2 Photos Verified
@@ -242,15 +339,14 @@ export default async function Home() {
                 <span 
                   style={{ 
                     position: 'absolute', 
-                    bottom: '10px', 
-                    left: '10px', 
-                    background: 'rgba(255, 255, 255, 0.95)', 
-                    color: 'var(--text-heading)', 
-                    padding: '0.2rem 0.6rem', 
+                    bottom: '12px', 
+                    left: '12px', 
+                    background: 'rgba(139, 29, 44, 0.92)', 
+                    color: '#FFFFFF', 
+                    padding: '0.25rem 0.75rem', 
                     borderRadius: '6px', 
-                    fontSize: '0.75rem',
-                    fontWeight: 600,
-                    border: '1px solid var(--border-light)'
+                    fontSize: '0.78rem',
+                    fontWeight: 700
                   }}
                 >
                   {p.gender}
@@ -258,41 +354,36 @@ export default async function Home() {
               </div>
 
               {/* Profile Details */}
-              <div style={{ marginTop: '1rem', flex: 1 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-                  <h3 style={{ fontSize: '1.25rem', margin: 0, color: 'var(--text-heading)' }}>
-                    {p.name}, {p.age}
-                  </h3>
-                </div>
+              <div style={{ padding: '1.25rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                <h3 style={{ fontSize: '1.3rem', margin: 0, color: '#1A202C' }}>
+                  {p.name}, {p.age}
+                </h3>
 
-                <p style={{ margin: '0.35rem 0', color: 'var(--maroon)', fontSize: '0.88rem', fontWeight: 700 }}>
+                <p style={{ margin: '0.35rem 0 0.8rem', color: '#8B1D2C', fontSize: '0.9rem', fontWeight: 700 }}>
                   📍 {p.district} ({p.districtTe})
                 </p>
 
-                <div style={{ background: 'var(--bg-card-subtle)', padding: '0.65rem 0.8rem', borderRadius: '8px', fontSize: '0.85rem', border: '1px solid var(--border-light)', margin: '0.6rem 0' }}>
-                  <p style={{ margin: '0 0 0.25rem', color: 'var(--text-main)' }}>
+                <div style={{ background: '#FAF7F2', padding: '0.75rem 0.9rem', borderRadius: '10px', fontSize: '0.85rem', border: '1px solid #E8DFD5', marginBottom: '0.8rem' }}>
+                  <p style={{ margin: '0 0 0.3rem', color: '#2D3748' }}>
                     <strong>గోత్రం:</strong> {p.gothra}
                   </p>
-                  <p style={{ margin: '0 0 0.25rem', color: 'var(--text-main)' }}>
+                  <p style={{ margin: '0 0 0.3rem', color: '#2D3748' }}>
                     <strong>నక్షత్రం:</strong> {p.nakshatra}
                   </p>
-                  <p style={{ margin: 0, color: 'var(--text-main)' }}>
+                  <p style={{ margin: 0, color: '#2D3748' }}>
                     🎓 {p.education}
                   </p>
                 </div>
 
-                <div style={{ marginTop: '0.6rem' }}>
-                  <span className="badge" style={{ fontSize: '0.76rem' }}>
+                <div style={{ marginTop: 'auto' }}>
+                  <span className="badge" style={{ fontSize: '0.76rem', marginBottom: '0.8rem', display: 'inline-block' }}>
                     ✓ {p.badge}
                   </span>
-                </div>
-              </div>
 
-              {/* Action Button */}
-              <div style={{ marginTop: '1.1rem', paddingTop: '0.75rem', borderTop: '1px solid var(--border-light)' }}>
-                <Link href={`/profiles/${p.id}`} className="btn link-btn" style={{ width: '100%', textAlign: 'center', padding: '0.55rem', fontSize: '0.88rem', display: 'block' }}>
-                  <Bi en="View Full Profile & Horoscope →" te="పూర్తి జాతకం & వివరాలు →" />
-                </Link>
+                  <Link href={`/profiles/${p.id}`} className="btn link-btn" style={{ width: '100%', textAlign: 'center', padding: '0.65rem', fontSize: '0.9rem', display: 'block', borderRadius: '10px' }}>
+                    <Bi en="View Full Profile & Horoscope →" te="పూర్తి జాతకం & వివరాలు →" />
+                  </Link>
+                </div>
               </div>
             </article>
           ))}

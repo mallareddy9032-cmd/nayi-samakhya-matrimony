@@ -12,7 +12,7 @@ import { PhotoFrame } from '../profiles/PhotoFrame.tsx';
 
 type Search = Promise<Record<string, string | string[] | undefined>>;
 
-// Sample candidate directory for community visitors & new members
+// Sample candidate directory for community visitors & new members (10 Verified Profiles)
 const PUBLIC_DISCOVERY_CARDS = [
   {
     id: 'sample-1',
@@ -25,8 +25,7 @@ const PUBLIC_DISCOVERY_CARDS = [
     education: 'B.Tech (CSE) · Senior Software Engineer',
     photo: null,
     badge: 'NS-ID Verified',
-    photoInitials: 'SK',
-    photoGradient: 'linear-gradient(135deg, #1e3a8a, #0b172d)',
+    photoUrl: '/matrimony/profiles/groom-1.jpg',
   },
   {
     id: 'sample-2',
@@ -39,12 +38,11 @@ const PUBLIC_DISCOVERY_CARDS = [
     education: 'M.Sc, B.Ed · Govt High School Teacher',
     photo: null,
     badge: 'Mandal Lineage Verified',
-    photoInitials: 'SL',
-    photoGradient: 'linear-gradient(135deg, #831843, #0b172d)',
+    photoUrl: '/matrimony/profiles/bride-1.jpg',
   },
   {
     id: 'sample-3',
-    firstName: 'Ravinder',
+    firstName: 'Ravinder Nayi',
     age: 29,
     vocation: 'wellness_artisan',
     district: { en: 'Karimnagar', te: 'కరీంనగర్' },
@@ -53,8 +51,7 @@ const PUBLIC_DISCOVERY_CARDS = [
     education: 'B.Com · Salon Chain Founder & Entrepreneur',
     photo: null,
     badge: 'Enterprise Modernist',
-    photoInitials: 'RN',
-    photoGradient: 'linear-gradient(135deg, #78350f, #0b172d)',
+    photoUrl: '/matrimony/profiles/groom-2.jpg',
   },
   {
     id: 'sample-4',
@@ -67,8 +64,7 @@ const PUBLIC_DISCOVERY_CARDS = [
     education: 'B.Pharm, MBA · Healthcare Executive',
     photo: null,
     badge: 'NS-ID Verified',
-    photoInitials: 'AN',
-    photoGradient: 'linear-gradient(135deg, #134e4a, #0b172d)',
+    photoUrl: '/matrimony/profiles/bride-2.jpg',
   },
   {
     id: 'sample-5',
@@ -81,8 +77,7 @@ const PUBLIC_DISCOVERY_CARDS = [
     education: 'Vidwan / MA Music · Classical Nadaswaram Artiste',
     photo: null,
     badge: 'Heritage Custodian',
-    photoInitials: 'MR',
-    photoGradient: 'linear-gradient(135deg, #4c1d95, #0b172d)',
+    photoUrl: '/matrimony/profiles/groom-3.jpg',
   },
   {
     id: 'sample-6',
@@ -92,11 +87,62 @@ const PUBLIC_DISCOVERY_CARDS = [
     district: { en: 'Nizamabad', te: 'నిజామాబాద్' },
     gothra: 'Sandilya (శాండిల్య)',
     nakshatra: 'Ashwini (అశ్విని)',
-    education: 'MCA · IT Systems Analyst',
+    education: 'MCA · Senior IT Systems Analyst',
     photo: null,
     badge: 'NS-ID Verified',
-    photoInitials: 'DS',
-    photoGradient: 'linear-gradient(135deg, #065f46, #0b172d)',
+    photoUrl: '/matrimony/profiles/bride-3.jpg',
+  },
+  {
+    id: 'sample-7',
+    firstName: 'Vamshi Krishna',
+    age: 30,
+    vocation: 'corporate_tech_civil',
+    district: { en: 'Rangareddy', te: 'రంగారెడ్డి' },
+    gothra: 'Kaundinya (కౌండిన్య)',
+    nakshatra: 'Makha (మఖ)',
+    education: 'M.Tech · Senior Data Scientist',
+    photo: null,
+    badge: 'Mandal Lineage Verified',
+    photoUrl: '/matrimony/profiles/groom-4.jpg',
+  },
+  {
+    id: 'sample-8',
+    firstName: 'Haritha Devi',
+    age: 26,
+    vocation: 'healthcare_traditional_medicine',
+    district: { en: 'Siddipet', te: 'సిద్దిపేట' },
+    gothra: 'Vishwamitra (విశ్వామిత్ర)',
+    nakshatra: 'Revati (రేవతి)',
+    education: 'MBBS · Resident Medical Officer',
+    photo: null,
+    badge: 'NS-ID Verified',
+    photoUrl: '/matrimony/profiles/bride-4.jpg',
+  },
+  {
+    id: 'sample-9',
+    firstName: 'Suresh Kumar',
+    age: 28,
+    vocation: 'corporate_tech_civil',
+    district: { en: 'Mahabubnagar', te: 'మహబూబ్‌నగర్' },
+    gothra: 'Parasara (పరాశర)',
+    nakshatra: 'Arudra (ఆరుద్ర)',
+    education: 'M.Sc (Agri) · Assistant Agriculture Officer (Govt)',
+    photo: null,
+    badge: 'Government Lineage Verified',
+    photoUrl: '/matrimony/profiles/groom-5.jpg',
+  },
+  {
+    id: 'sample-10',
+    firstName: 'Sravanthi',
+    age: 24,
+    vocation: 'corporate_tech_civil',
+    district: { en: 'Medchal-Malkajgiri', te: 'మేడ్చల్-మల్కాజ్‌గిరి' },
+    gothra: 'Atri (అత్రి)',
+    nakshatra: 'Pushyami (పుష్యమి)',
+    education: 'B.Tech, MS · Product Designer',
+    photo: null,
+    badge: 'NS-ID Verified',
+    photoUrl: '/matrimony/profiles/bride-5.jpg',
   },
 ];
 
@@ -203,7 +249,18 @@ export default async function DiscoverPage({ searchParams }: { searchParams: Sea
       <div className="cards" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.5rem' }}>
         {displayCards.map((c: any) => (
           <article key={c.id} className="profile-card" style={{ display: 'flex', flexDirection: 'column', background: '#FFFFFF' }}>
-            {c.photoInitials ? (
+            {c.photoUrl ? (
+              <div style={{ position: 'relative', width: '100%', height: '260px', borderRadius: '12px', overflow: 'hidden' }}>
+                <img 
+                  src={c.photoUrl} 
+                  alt={c.firstName} 
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                />
+                <span style={{ position: 'absolute', top: '10px', right: '10px', background: 'rgba(255, 255, 255, 0.92)', color: 'var(--maroon)', padding: '0.25rem 0.65rem', borderRadius: '999px', fontSize: '0.72rem', fontWeight: 700, border: '1px solid var(--maroon-border)', boxShadow: '0 2px 6px rgba(0,0,0,0.15)' }}>
+                  🔒 2+ Photos Verified
+                </span>
+              </div>
+            ) : c.photoInitials ? (
               <div 
                 style={{ 
                   aspectRatio: '1', 

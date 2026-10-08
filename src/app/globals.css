@@ -612,3 +612,105 @@ button {
   color: var(--text-muted);
   padding-left: 1.2rem;
 }
+
+/* Mobile & Tablet Responsiveness Enhancements */
+@media (max-width: 768px) {
+  .shell {
+    padding: 0 1rem 3rem;
+  }
+  
+  .topnav {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.85rem;
+    padding: 0.75rem 0 1rem;
+  }
+
+  .topnav > div:first-child a {
+    gap: 0.6rem !important;
+  }
+
+  .topnav > div:last-child {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.6rem !important;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 0.25rem;
+    scrollbar-width: none;
+  }
+
+  .topnav > div:last-child::-webkit-scrollbar {
+    display: none;
+  }
+
+  .topnav > div:last-child a {
+    white-space: nowrap;
+    font-size: 0.88rem !important;
+  }
+
+  .hero-grid {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+    margin: 1rem auto 2rem !important;
+  }
+
+  .hero-grid h1 {
+    font-size: 2.1rem !important;
+  }
+
+  .hero-cta {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .hero-cta a, .hero-cta button {
+    width: 100%;
+    text-align: center;
+  }
+
+  .filters {
+    grid-template-columns: 1fr !important;
+  }
+
+  .cards {
+    grid-template-columns: 1fr !important;
+    gap: 1.25rem !important;
+  }
+
+  .profile .photo {
+    float: none;
+    width: 100%;
+    max-width: 280px;
+    margin: 0 auto 1.5rem;
+  }
+
+  .profile-detail-header {
+    flex-direction: column;
+    align-items: flex-start !important;
+  }
+
+  .summary {
+    grid-template-columns: 1fr !important;
+    gap: 0.2rem !important;
+  }
+
+  .summary dt {
+    font-size: 0.85rem;
+    margin-top: 0.4rem;
+  }
+
+  .card {
+    padding: 1.25rem !important;
+  }
+
+  .commencement svg {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .commencement h1 {
+    font-size: 1.8rem !important;
+  }
+}

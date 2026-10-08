@@ -29,8 +29,7 @@ const SAMPLE_PROFILES: Record<string, any> = {
     occupation: 'Lead Cloud Architect @ MNC, Hyderabad',
     incomeBracket: '25l_50l',
     vocation: 'corporate_tech_civil',
-    photoInitials: 'SK',
-    photoGradient: 'linear-gradient(135deg, #1e3a8a, #0b172d)',
+    photoUrl: '/matrimony/profiles/groom-1.jpg',
     fatherName: 'S. Narayana (Business)',
     motherName: 'S. Lakshmi (Homemaker)',
     siblings: '1 Younger Sister (Married)',
@@ -51,8 +50,7 @@ const SAMPLE_PROFILES: Record<string, any> = {
     occupation: 'Govt Model High School Teacher',
     incomeBracket: '6l_12l',
     vocation: 'scholarly_academic',
-    photoInitials: 'SL',
-    photoGradient: 'linear-gradient(135deg, #831843, #0b172d)',
+    photoUrl: '/matrimony/profiles/bride-1.jpg',
     fatherName: 'K. Satyanarayana (Retd. Principal)',
     motherName: 'K. Sharada (Teacher)',
     siblings: '1 Elder Brother (Software Engineer)',
@@ -73,8 +71,7 @@ const SAMPLE_PROFILES: Record<string, any> = {
     occupation: 'Founder & Managing Director, Elegance Salon Chain',
     incomeBracket: 'above_50l',
     vocation: 'wellness_artisan',
-    photoInitials: 'RN',
-    photoGradient: 'linear-gradient(135deg, #78350f, #0b172d)',
+    photoUrl: '/matrimony/profiles/groom-2.jpg',
     fatherName: 'P. Lingamurthy (Nadopasana Artiste)',
     motherName: 'P. Rajamani',
     siblings: 'None (Only Son)',
@@ -95,11 +92,136 @@ const SAMPLE_PROFILES: Record<string, any> = {
     occupation: 'Clinical Research Executive',
     incomeBracket: '6l_12l',
     vocation: 'healthcare_traditional_medicine',
-    photoInitials: 'AN',
-    photoGradient: 'linear-gradient(135deg, #134e4a, #0b172d)',
+    photoUrl: '/matrimony/profiles/bride-2.jpg',
     fatherName: 'M. Venkataramana',
     motherName: 'M. Padmavathi',
     siblings: '1 Younger Brother (Studying B.Tech)',
+  },
+  'sample-5': {
+    id: 'sample-5',
+    displayName: 'P. Madhav Rao',
+    age: 28,
+    gender: 'male',
+    district: { en: 'Khammam', te: 'ఖమ్మం' },
+    mandal: 'Khammam Urban',
+    gothra: 'Agastya (అగస్త్య)',
+    nakshatra: 'Swati (స్వాతి)',
+    rasi: 'Tula (తులా రాశి)',
+    birthTime: '07:15 AM',
+    birthPlace: 'Khammam',
+    educationDegree: 'Vidwan / MA Music',
+    occupation: 'Classical Nadaswaram Artiste & Teacher',
+    incomeBracket: '6l_12l',
+    vocation: 'nadopasana',
+    photoUrl: '/matrimony/profiles/groom-3.jpg',
+    fatherName: 'P. Raghavaiah (Asthana Vidwan)',
+    motherName: 'P. Saraswathi',
+    siblings: '1 Younger Sister',
+  },
+  'sample-6': {
+    id: 'sample-6',
+    displayName: 'K. Divya Sree',
+    age: 25,
+    gender: 'female',
+    district: { en: 'Nizamabad', te: 'నిజామాబాద్' },
+    mandal: 'Armoor',
+    gothra: 'Sandilya (శాండిల్య)',
+    nakshatra: 'Ashwini (అశ్విని)',
+    rasi: 'Mesha (మేష రాశి)',
+    birthTime: '04:30 AM',
+    birthPlace: 'Nizamabad',
+    educationDegree: 'MCA (Computer Applications)',
+    occupation: 'Senior IT Systems Analyst @ Infosys',
+    incomeBracket: '12l_25l',
+    vocation: 'corporate_tech_civil',
+    photoUrl: '/matrimony/profiles/bride-3.jpg',
+    fatherName: 'K. Gopalakrishna (Govt Officer)',
+    motherName: 'K. Sujatha',
+    siblings: '1 Younger Brother (Engineer)',
+  },
+  'sample-7': {
+    id: 'sample-7',
+    displayName: 'T. Vamshi Krishna',
+    age: 30,
+    gender: 'male',
+    district: { en: 'Rangareddy', te: 'రంగారెడ్డి' },
+    mandal: 'Serilingampally',
+    gothra: 'Kaundinya (కౌండిన్య)',
+    nakshatra: 'Makha (మఖ)',
+    rasi: 'Simha (సింహ రాశి)',
+    birthTime: '10:45 AM',
+    birthPlace: 'Hyderabad',
+    educationDegree: 'M.Tech (AI / Data Science)',
+    occupation: 'Senior Data Scientist @ Tech MNC',
+    incomeBracket: '25l_50l',
+    vocation: 'corporate_tech_civil',
+    photoUrl: '/matrimony/profiles/groom-4.jpg',
+    fatherName: 'T. Mallesham (Business)',
+    motherName: 'T. Rama',
+    siblings: '1 Elder Sister (Married)',
+  },
+  'sample-8': {
+    id: 'sample-8',
+    displayName: 'Dr. B. Haritha Devi',
+    age: 26,
+    gender: 'female',
+    district: { en: 'Siddipet', te: 'సిద్దిపేట' },
+    mandal: 'Gajwel',
+    gothra: 'Vishwamitra (విశ్వామిత్ర)',
+    nakshatra: 'Revati (రేవతి)',
+    rasi: 'Meena (మీన రాశి)',
+    birthTime: '01:20 PM',
+    birthPlace: 'Siddipet',
+    educationDegree: 'MBBS (Preparing for MD Pediatrics)',
+    occupation: 'Resident Medical Officer @ Super Specialty Hospital',
+    incomeBracket: '12l_25l',
+    vocation: 'healthcare_traditional_medicine',
+    photoUrl: '/matrimony/profiles/bride-4.jpg',
+    fatherName: 'Dr. B. Srinivas Rao (Surgeon)',
+    motherName: 'B. Anuradha (Lecturer)',
+    siblings: '1 Elder Brother (Doctor)',
+  },
+  'sample-9': {
+    id: 'sample-9',
+    displayName: 'G. Suresh Kumar',
+    age: 28,
+    gender: 'male',
+    district: { en: 'Mahabubnagar', te: 'మహబూబ్‌నగర్' },
+    mandal: 'Jadcherla',
+    gothra: 'Parasara (పరాశర)',
+    nakshatra: 'Arudra (ఆరుద్ర)',
+    rasi: 'Mithuna (మిథున రాశి)',
+    birthTime: '08:00 AM',
+    birthPlace: 'Mahabubnagar',
+    educationDegree: 'M.Sc (Agri) · PJTSAU',
+    occupation: 'Assistant Agriculture Officer (Govt of Telangana)',
+    incomeBracket: '6l_12l',
+    vocation: 'corporate_tech_civil',
+    photoUrl: '/matrimony/profiles/groom-5.jpg',
+    fatherName: 'G. Yadaiah (Retd Govt Employee)',
+    motherName: 'G. Kamalamma',
+    siblings: '1 Younger Brother',
+  },
+  'sample-10': {
+    id: 'sample-10',
+    displayName: 'N. Sravanthi',
+    age: 24,
+    gender: 'female',
+    district: { en: 'Medchal-Malkajgiri', te: 'మేడ్చల్-మల్కాజ్‌గిరి' },
+    mandal: 'Kompally',
+    gothra: 'Atri (అత్రి)',
+    nakshatra: 'Pushyami (పుష్యమి)',
+    rasi: 'Karkataka (కర్కాటక రాశి)',
+    birthTime: '05:50 PM',
+    birthPlace: 'Secunderabad',
+    educationDegree: 'B.Tech, MS (Human-Computer Interaction)',
+    occupation: 'Product Designer @ Fintech Unicorn',
+    incomeBracket: '12l_25l',
+    vocation: 'corporate_tech_civil',
+    photoUrl: '/matrimony/profiles/bride-5.jpg',
+    fatherName: 'N. Chandrashekar (Architect)',
+    motherName: 'N. Vanaja',
+    siblings: '1 Younger Sister',
   },
 };
 
@@ -179,44 +301,70 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
         <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', alignItems: 'flex-start' }}>
           {/* Photos Frame */}
           <div style={{ width: '220px', flexShrink: 0 }}>
-            <div 
-              style={{ 
-                aspectRatio: '1', 
-                borderRadius: '14px', 
-                background: 'linear-gradient(135deg, #FFE4E6, #FEF3C7)', 
-                display: 'flex', 
-                alignItems: 'center', 
-                justifyContent: 'center', 
-                position: 'relative',
-                border: '1px solid var(--border-light)',
-                boxShadow: 'var(--shadow-sm)'
-              }}
-            >
-              <div style={{
-                width: '88px',
-                height: '88px',
-                borderRadius: '50%',
-                background: 'var(--maroon)',
-                color: '#FFFFFF',
-                display: 'grid',
-                placeItems: 'center',
-                fontSize: '2rem',
-                fontWeight: 800,
-                border: '3px solid #FFFFFF',
-                boxShadow: '0 4px 14px rgba(0,0,0,0.1)'
-              }}>
-                {p.photoInitials}
+            {p.photoUrl ? (
+              <div 
+                style={{ 
+                  aspectRatio: '1', 
+                  borderRadius: '14px', 
+                  overflow: 'hidden',
+                  position: 'relative',
+                  border: '1px solid var(--border-light)',
+                  boxShadow: 'var(--shadow-md)'
+                }}
+              >
+                <img 
+                  src={p.photoUrl} 
+                  alt={p.displayName} 
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                />
+                <span style={{ position: 'absolute', bottom: '10px', left: '10px', background: 'rgba(255,255,255,0.95)', color: 'var(--maroon)', padding: '0.2rem 0.6rem', borderRadius: '6px', fontSize: '0.72rem', fontWeight: 700, border: '1px solid var(--maroon-border)', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
+                  📷 2 Photos Attached
+                </span>
               </div>
-              <span style={{ position: 'absolute', bottom: '10px', left: '10px', background: 'rgba(255,255,255,0.95)', color: 'var(--maroon)', padding: '0.2rem 0.6rem', borderRadius: '6px', fontSize: '0.72rem', fontWeight: 700, border: '1px solid var(--maroon-border)' }}>
-                📷 2 Photos Attached
-              </span>
-            </div>
+            ) : (
+              <div 
+                style={{ 
+                  aspectRatio: '1', 
+                  borderRadius: '14px', 
+                  background: 'linear-gradient(135deg, #FFE4E6, #FEF3C7)', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
+                  position: 'relative',
+                  border: '1px solid var(--border-light)',
+                  boxShadow: 'var(--shadow-sm)'
+                }}
+              >
+                <div style={{
+                  width: '88px',
+                  height: '88px',
+                  borderRadius: '50%',
+                  background: 'var(--maroon)',
+                  color: '#FFFFFF',
+                  display: 'grid',
+                  placeItems: 'center',
+                  fontSize: '2rem',
+                  fontWeight: 800,
+                  border: '3px solid #FFFFFF',
+                  boxShadow: '0 4px 14px rgba(0,0,0,0.1)'
+                }}>
+                  {p.photoInitials ?? p.displayName.slice(0, 2)}
+                </div>
+                <span style={{ position: 'absolute', bottom: '10px', left: '10px', background: 'rgba(255,255,255,0.95)', color: 'var(--maroon)', padding: '0.2rem 0.6rem', borderRadius: '6px', fontSize: '0.72rem', fontWeight: 700, border: '1px solid var(--maroon-border)' }}>
+                  📷 2 Photos Attached
+                </span>
+              </div>
+            )}
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', marginTop: '0.6rem' }}>
-              <div style={{ height: '60px', background: 'var(--bg-surface)', borderRadius: '8px', border: '1px solid var(--border-light)', display: 'grid', placeItems: 'center', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                Photo 1 (Portrait)
+              <div style={{ height: '65px', borderRadius: '8px', overflow: 'hidden', border: '1px solid var(--border-light)' }}>
+                {p.photoUrl ? (
+                  <img src={p.photoUrl} alt="Portrait" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                ) : (
+                  <div style={{ height: '100%', background: 'var(--bg-surface)', display: 'grid', placeItems: 'center', fontSize: '0.75rem', color: 'var(--text-muted)' }}>Photo 1</div>
+                )}
               </div>
-              <div style={{ height: '60px', background: 'var(--bg-surface)', borderRadius: '8px', border: '1px solid var(--border-light)', display: 'grid', placeItems: 'center', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+              <div style={{ height: '65px', borderRadius: '8px', overflow: 'hidden', border: '1px solid var(--border-light)', background: 'var(--bg-surface)', display: 'grid', placeItems: 'center', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                 Photo 2 (Full)
               </div>
             </div>
