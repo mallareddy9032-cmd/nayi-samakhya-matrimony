@@ -1027,3 +1027,23 @@ button {
   transform: translateY(-4px);
   box-shadow: 0 14px 28px rgba(139, 29, 44, 0.1);
 }
+
+/* Option 2: Luxury Velvet Hero & Vocation Card Enhancements */
+.vocation-card:hover {
+  transform: translateY(-3px);
+  border-color: #D4AF37 !important;
+  box-shadow: 0 10px 24px rgba(212, 175, 55, 0.15) !important;
+}
+
+@media (max-width: 960px) {
+  .hero-luxury {
+    padding: 2rem 1.5rem !important;
+    border-radius: 24px !important;
+  }
+
+  .hero-luxury .hero-grid {
+    grid-template-columns: 1fr !important;
+    gap: 2.2rem !important;
+  }
+}
+

@@ -257,71 +257,341 @@ export default function Home() {
       />
       <Nav />
 
-      {/* Sacred Invocation & Auspicious Thoranam Header */}
-      <AuspiciousHeader />
-      
-      {/* Concept 1: Split Hero Section (Responsive Grid) */}
-      <section className="hero-grid" style={{ maxWidth: '1200px', margin: '1rem auto 3rem', display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '2.5rem', alignItems: 'center' }}>
-        <div>
-          <span style={{ background: '#FFF1F2', color: '#801426', padding: '0.35rem 1rem', borderRadius: '999px', fontSize: '0.85rem', fontWeight: 800, border: '1.5px solid #FECDD3', display: 'inline-block', marginBottom: '1rem', letterSpacing: '0.02em' }}>
-            <Bi en="★ Sacred Sagothra Protection & Legal DPDP Privacy" te="★ పవిత్ర సగోత్ర రక్షణ & చట్టబద్ధమైన గోప్యత" />
-          </span>
+      {/* Option 2: Luxury Velvet Glassmorphism Hero Section */}
+      <section 
+        className="hero-luxury"
+        style={{ 
+          maxWidth: '1240px', 
+          margin: '0.75rem auto 3rem', 
+          background: 'linear-gradient(135deg, #450814 0%, #2A040B 50%, #160205 100%)',
+          borderRadius: '32px',
+          padding: '3rem 2.5rem',
+          border: '1.5px solid rgba(212, 175, 55, 0.45)',
+          boxShadow: '0 30px 70px rgba(22, 2, 5, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.08) inset',
+          position: 'relative',
+          overflow: 'hidden'
+        }}
+      >
+        {/* Ambient Gold Radial Glow Overlays */}
+        <div style={{
+          position: 'absolute',
+          top: '-15%',
+          right: '-10%',
+          width: '500px',
+          height: '500px',
+          background: 'radial-gradient(circle, rgba(212, 175, 55, 0.22) 0%, transparent 70%)',
+          pointerEvents: 'none'
+        }} />
+        <div style={{
+          position: 'absolute',
+          bottom: '-20%',
+          left: '-10%',
+          width: '550px',
+          height: '550px',
+          background: 'radial-gradient(circle, rgba(128, 20, 38, 0.4) 0%, transparent 70%)',
+          pointerEvents: 'none'
+        }} />
 
-          <h1 style={{ fontSize: 'clamp(2.1rem, 4vw, 3.1rem)', color: '#1A202C', margin: '0 0 1rem', lineHeight: '1.25', fontWeight: 800 }}>
-            <Bi 
-              en="Dignified Kalyana Vedika for Nayi Brahmin Families" 
-              te="తెలంగాణ నాయీ బ్రాహ్మణుల గౌరవప్రదమైన కల్యాణ వేదిక" 
-            />
-          </h1>
-
-          <p style={{ fontSize: '1.08rem', color: '#4A5568', lineHeight: '1.75', margin: '0 0 1.8rem' }}>
-            <Bi 
-              en="Telangana's official, lineage-guarded matrimonial forum connecting families across 33 districts and 589 mandals. Absolutely zero private brokers or commercial exploitation." 
-              te="33 జిల్లాల 589 మండలాల్లోని మన సమాజ కుటుంబాలను ఒకచోట చేర్చే నమ్మకమైన అధికారిక వేదిక. ఎటువంటి ప్రైవేటు దళారులు లేకుండా, పారదర్శకమైన విధానంతో సంబంధాలను వెతకండి." 
-            />
-          </p>
-
-          <div className="hero-cta" style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-            <Link
-              href="/onboarding"
-              className="btn"
-              style={{
-                background: 'linear-gradient(135deg, #801426 0%, #5B0C1A 100%)',
-                color: '#FFF',
-                padding: '0.85rem 2rem',
-                borderRadius: '12px',
-                textDecoration: 'none',
+        <div className="hero-grid" style={{ display: 'grid', gridTemplateColumns: '1.15fr 1fr', gap: '3rem', alignItems: 'center', position: 'relative', zIndex: 1 }}>
+          {/* Left Column: Emotion, Prestige, & Social Proof */}
+          <div>
+            {/* Sacred Invocation Shimmer */}
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1.1rem' }}>
+              <span style={{ fontSize: '1.3rem' }}>🪔</span>
+              <span style={{
+                color: '#FDE68A',
+                fontSize: '0.98rem',
                 fontWeight: 800,
-                fontSize: '1rem',
-                border: '1.5px solid rgba(212, 175, 55, 0.4)',
-                boxShadow: '0 8px 24px rgba(128, 20, 38, 0.3)'
-              }}
-            >
-              <Bi en="Register Free Profile →" te="ఉచిత ప్రొఫైల్ నమోదు చేసుకోండి →" />
-            </Link>
-            <Link
-              href="/login"
-              style={{
-                background: '#FFF',
-                border: '1.5px solid #CBD5E0',
-                padding: '0.85rem 1.8rem',
-                borderRadius: '12px',
-                fontWeight: 700,
-                color: '#4A5568',
-                textDecoration: 'none',
+                letterSpacing: '0.12em',
+                textShadow: '0 2px 10px rgba(212, 175, 55, 0.5)'
+              }}>
+                ॥ శ్రీరస్తు · శుభమస్తు · అవిఘ్నమస్తు ॥
+              </span>
+            </div>
+
+            {/* Official Initiative Badge */}
+            <div style={{ marginBottom: '1.25rem' }}>
+              <span style={{ 
+                background: 'rgba(212, 175, 55, 0.15)', 
+                color: '#FCD34D', 
+                padding: '0.4rem 1.1rem', 
+                borderRadius: '999px', 
+                fontSize: '0.84rem', 
+                fontWeight: 800, 
+                border: '1.2px solid rgba(212, 175, 55, 0.45)', 
                 display: 'inline-flex',
                 alignItems: 'center',
-                justifyContent: 'center',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
-              }}
-            >
-              <Bi en="Member Login (OTP)" te="సభ్యుల లాగిన్ (ఓటీపీ)" />
-            </Link>
+                gap: '0.45rem',
+                backdropFilter: 'blur(8px)',
+                letterSpacing: '0.02em',
+                boxShadow: '0 4px 14px rgba(0, 0, 0, 0.2)'
+              }}>
+                <span>✨</span>
+                <Bi 
+                  en="Official Community Matrimonial Initiative · 33 Districts" 
+                  te="అధికారిక నాయీ సమాఖ్య కల్యాణ వేదిక · 33 జిల్లాలు" 
+                />
+              </span>
+            </div>
+
+            {/* Main Headline */}
+            <h1 style={{ 
+              fontSize: 'clamp(2.1rem, 4.2vw, 3.2rem)', 
+              color: '#FFFFFF', 
+              margin: '0 0 1.2rem', 
+              lineHeight: '1.22', 
+              fontWeight: 800,
+              textShadow: '0 2px 12px rgba(0, 0, 0, 0.6)'
+            }}>
+              <Bi 
+                en="Dignified Matrimony for the Next Generation of Nayi Brahmin Families" 
+                te="రెండు సంస్కారవంతమైన కుటుంబాల పవిత్ర కల్యాణ బంధం" 
+              />
+            </h1>
+
+            {/* Compelling Paragraph */}
+            <p style={{ 
+              fontSize: '1.08rem', 
+              color: '#F1F5F9', 
+              lineHeight: '1.75', 
+              margin: '0 0 1.8rem',
+              fontWeight: 400,
+              maxWidth: '580px',
+              textShadow: '0 1px 4px rgba(0, 0, 0, 0.4)'
+            }}>
+              <Bi 
+                en="Connecting verified families across 33 districts and 589 mandals of Telangana and Andhra Pradesh. 100% Sagothra protected, DPDP-grade privacy, and absolutely zero private brokers or commercial exploitation." 
+                te="తెలంగాణ & ఆంధ్రప్రదేశ్ 33 జిల్లాల 589 మండలాల్లోని మన సమాజ సంబంధాలను ఒకచోట చేర్చే పవిత్ర వేదిక. 100% సగోత్ర రక్షణ, చట్టబద్ధమైన గోప్యత, మరియు ఎటువంటి ప్రైవేటు దళారులు లేని పారదర్శక సేవ." 
+              />
+            </p>
+
+            {/* Live Social Proof Floating Chips */}
+            <div style={{ display: 'flex', gap: '0.7rem', flexWrap: 'wrap', marginBottom: '2.2rem' }}>
+              <div style={{ 
+                background: 'rgba(255, 255, 255, 0.08)', 
+                border: '1px solid rgba(255, 255, 255, 0.18)', 
+                borderRadius: '999px', 
+                padding: '0.4rem 0.95rem', 
+                color: '#FFFFFF', 
+                fontSize: '0.82rem', 
+                fontWeight: 700,
+                backdropFilter: 'blur(8px)',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.4rem'
+              }}>
+                <span>💍</span>
+                <Bi en="1,240+ Verified Candidates" te="1,240+ ధృవీకరించబడిన సంబంధాలు" />
+              </div>
+
+              <div style={{ 
+                background: 'rgba(255, 255, 255, 0.08)', 
+                border: '1px solid rgba(255, 255, 255, 0.18)', 
+                borderRadius: '999px', 
+                padding: '0.4rem 0.95rem', 
+                color: '#FFFFFF', 
+                fontSize: '0.82rem', 
+                fontWeight: 700,
+                backdropFilter: 'blur(8px)',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.4rem'
+              }}>
+                <span>📍</span>
+                <Bi en="Active in 33 Districts" te="33 జిల్లాల్లో ప్రత్యక్షం" />
+              </div>
+
+              <div style={{ 
+                background: 'rgba(212, 175, 55, 0.15)', 
+                border: '1px solid rgba(212, 175, 55, 0.4)', 
+                borderRadius: '999px', 
+                padding: '0.4rem 0.95rem', 
+                color: '#FDE68A', 
+                fontSize: '0.82rem', 
+                fontWeight: 700,
+                backdropFilter: 'blur(8px)',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.4rem'
+              }}>
+                <span>⚡</span>
+                <Bi en="100% Sagothra Guarded" te="100% సగోత్ర నిషిద్ధం" />
+              </div>
+            </div>
+
+            {/* Dual CTAs */}
+            <div className="hero-cta" style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'center' }}>
+              <Link
+                href="/onboarding"
+                className="btn"
+                style={{
+                  background: 'linear-gradient(135deg, #D4AF37 0%, #C59B27 50%, #A67C1E 100%)',
+                  color: '#2A040B',
+                  padding: '1rem 2.2rem',
+                  borderRadius: '14px',
+                  textDecoration: 'none',
+                  fontWeight: 800,
+                  fontSize: '1.05rem',
+                  border: '1.5px solid rgba(255, 255, 255, 0.6)',
+                  boxShadow: '0 10px 30px rgba(212, 175, 55, 0.45)',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  transition: 'transform 0.2s ease, box-shadow 0.2s ease'
+                }}
+              >
+                <span>✨</span>
+                <Bi en="Register Free Profile (2 Mins) →" te="ఉచిత ప్రొఫైల్ నమోదు చేసుకోండి →" />
+              </Link>
+              
+              <Link
+                href="/discover"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  border: '1.5px solid rgba(255, 255, 255, 0.3)',
+                  padding: '1rem 1.8rem',
+                  borderRadius: '14px',
+                  fontWeight: 700,
+                  color: '#FFFFFF',
+                  textDecoration: 'none',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.45rem',
+                  backdropFilter: 'blur(10px)',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                <span>🔍</span>
+                <Bi en="Explore Matches →" te="సంబంధాల అన్వేషణ →" />
+              </Link>
+            </div>
+          </div>
+
+          {/* Right Column: Quick Match Frosted Glass Engine */}
+          <div>
+            <QuickSearch districts={TELANGANA_DISTRICTS} />
           </div>
         </div>
+      </section>
 
-        {/* Quick Search Card */}
-        <QuickSearch districts={TELANGANA_DISTRICTS} />
+      {/* 1-Click Vocation & Lifestyle Discovery Pills (Option 2 Feature) */}
+      <section style={{ maxWidth: '1240px', margin: '-1rem auto 3.5rem', padding: '0 0.5rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '1.2rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+          <div>
+            <h3 style={{ margin: 0, fontSize: '1.25rem', color: '#801426', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <span>🎯</span>
+              <Bi en="Explore Profiles by Profession & Background" te="వృత్తి & రంగం ఆధారంగా సంబంధాలు అన్వేషించండి" />
+            </h3>
+            <p style={{ margin: '0.2rem 0 0', fontSize: '0.88rem', color: '#64748B' }}>
+              <Bi en="Click any stream for instant curated matchmaking" te="మీకు నచ్చిన రంగాన్ని ఎంచుకుని నేరుగా సంబంధాలను చూడండి" />
+            </p>
+          </div>
+          <Link href="/discover" style={{ fontSize: '0.9rem', fontWeight: 800, color: '#801426', textDecoration: 'none' }}>
+            <Bi en="View All Streams →" te="అన్ని రంగాలు చూడండి →" />
+          </Link>
+        </div>
+
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(185px, 1fr))',
+          gap: '0.85rem'
+        }}>
+          {[
+            {
+              icon: '💻',
+              en: 'Software & IT Tech',
+              te: 'సాఫ్ట్‌వేర్ & ఐటీ',
+              count: '340+',
+              vocation: 'corporate_tech_civil',
+              gradient: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)',
+              color: '#1D4ED8'
+            },
+            {
+              icon: '🩺',
+              en: 'Doctors & Healthcare',
+              te: 'వైద్యులు & ఫార్మా',
+              count: '95+',
+              vocation: 'healthcare',
+              gradient: 'linear-gradient(135deg, #ECFDF5, #D1FAE5)',
+              color: '#047857'
+            },
+            {
+              icon: '🏛️',
+              en: 'Govt & Civil Services',
+              te: 'ప్రభుత్వ ఉద్యోగులు',
+              count: '120+',
+              vocation: 'government',
+              gradient: 'linear-gradient(135deg, #FFFBEB, #FEF3C7)',
+              color: '#B45309'
+            },
+            {
+              icon: '💈',
+              en: 'Salon & Wellness Founders',
+              te: 'సెలూన్ వ్యవస్థాపకులు',
+              count: '210+',
+              vocation: 'wellness_artisan',
+              gradient: 'linear-gradient(135deg, #FFF1F2, #FFE4E6)',
+              color: '#BE123C'
+            },
+            {
+              icon: '🎵',
+              en: 'Classical Music Masters',
+              te: 'నాదోపాసన విద్వాంసులు',
+              count: '45+',
+              vocation: 'nadopasana',
+              gradient: 'linear-gradient(135deg, #FAF5FF, #F3E8FF)',
+              color: '#7E22CE'
+            },
+            {
+              icon: '🎓',
+              en: 'Teachers & Academics',
+              te: 'ఉపాధ్యాయులు & విద్య',
+              count: '80+',
+              vocation: 'scholarly_academic',
+              gradient: 'linear-gradient(135deg, #F0FDF4, #DCFCE7)',
+              color: '#15803D'
+            },
+          ].map((item) => (
+            <Link
+              key={item.vocation}
+              href={`/discover?vocation=${item.vocation}`}
+              style={{
+                textDecoration: 'none',
+                background: '#FFFFFF',
+                borderRadius: '16px',
+                padding: '1rem',
+                border: '1.5px solid #E2D9CC',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.03)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+                transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
+              }}
+              className="vocation-card"
+            >
+              <div style={{
+                width: '44px',
+                height: '44px',
+                borderRadius: '12px',
+                background: item.gradient,
+                display: 'grid',
+                placeItems: 'center',
+                fontSize: '1.35rem',
+                flexShrink: 0
+              }}>
+                {item.icon}
+              </div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <strong style={{ display: 'block', fontSize: '0.88rem', color: '#1E293B', lineHeight: 1.25, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  <Bi en={item.en} te={item.te} />
+                </strong>
+                <span style={{ fontSize: '0.76rem', color: item.color, fontWeight: 700 }}>
+                  {item.count} <Bi en="Profiles" te="సంబంధాలు" />
+                </span>
+              </div>
+            </Link>
+          ))}
+        </div>
       </section>
 
       {/* Featured Candidate Showcase (10 Sample Profiles with Real Photos) */}
