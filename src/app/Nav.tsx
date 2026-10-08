@@ -12,7 +12,7 @@ export function Nav({ claims }: { claims?: SsoClaims | null }) {
       {claims && <Link href="/interests"><Bi en="Interests" te="ఆసక్తులు" /></Link>}
       {claims && <Link href="/settings/privacy"><Bi en="Privacy" te="గోప్యత" /></Link>}
       {admin && <Link href="/nsm-admin"><Bi en="Admin" te="నిర్వహణ" /></Link>}
-      {!claims && <Link href="/admin/login" className="link-btn" style={{ marginLeft: 'auto', padding: '0.2rem 0.8rem', fontSize: '0.85rem' }}><Bi en="Member Login" te="సభ్యుల లాగిన్" /></Link>}
+      {!claims && <Link href="/login" className="link-btn" style={{ marginLeft: 'auto', padding: '0.2rem 0.8rem', fontSize: '0.85rem' }}><Bi en="Member Login" te="సభ్యుల లాగిన్" /></Link>}
     </nav>
   );
 }

@@ -45,7 +45,7 @@ function log(event: string, fields: Record<string, string>): void {
 
 export async function proxy(req: NextRequest): Promise<NextResponse> {
   const { pathname, search, basePath } = req.nextUrl;
-  if (pathname === '/healthz' || pathname === '/api/healthz' || pathname === '/api/health' || pathname === '/') return NextResponse.next();
+  if (pathname === '/healthz' || pathname === '/api/healthz' || pathname === '/api/health' || pathname === '/' || pathname === '/login') return NextResponse.next();
 
   const sso = getSsoConfig();
   const requestId = req.headers.get('x-request-id') ?? '-';
