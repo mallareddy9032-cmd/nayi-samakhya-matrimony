@@ -55,9 +55,10 @@ export function MatrimonyBot() {
 
     if (typeof window === "undefined") return;
 
-    // Direct path under basePath /matrimony
-    const audioUrl = `/matrimony/audio/bot/faq-${faq.id}.mp3`;
-    const audio = new Audio(audioUrl);
+    // Try primary path under /matrimony basePath with fallback to /audio
+    const primaryUrl = `/matrimony/audio/bot/faq-${faq.id}.mp3?v=2`;
+    const fallbackUrl = `/audio/bot/faq-${faq.id}.mp3?v=2`;
+    const audio = new Audio(primaryUrl);
     audioRef.current = audio;
 
     audio.onplay = () => {
@@ -70,20 +71,32 @@ export function MatrimonyBot() {
     };
 
     audio.onerror = () => {
-      console.warn("Studio audio file load error, falling back to local speech synthesis...");
+      // Try fallback relative path if /matrimony prefix was stripped or rewrited
+      if (audio.src.includes("/matrimony/")) {
+        console.warn("Primary audio path failed, trying fallback root path:", fallbackUrl);
+        const fallbackAudio = new Audio(fallbackUrl);
+        audioRef.current = fallbackAudio;
+        fallbackAudio.onplay = () => setIsSpeaking(true);
+        fallbackAudio.onended = () => {
+          setIsSpeaking(false);
+          audioRef.current = null;
+        };
+        fallbackAudio.onerror = () => {
+          console.error("Audio failed to load from both paths.");
+          setIsSpeaking(false);
+          audioRef.current = null;
+          alert("ఆడియో ఫైల్ లోడ్ కాలేదు. దయచేసి ఇంటర్నెట్ కనెక్షన్ తనిఖీ చేయండి.");
+        };
+        fallbackAudio.play().catch((e) => {
+          console.warn("Fallback audio play failed:", e);
+          setIsSpeaking(false);
+        });
+        return;
+      }
+
+      console.error("Audio playback error.");
       setIsSpeaking(false);
       audioRef.current = null;
-      // Graceful device speech synthesis fallback if audio file network fails
-      if ("speechSynthesis" in window) {
-        const text = lang === "te" ? `${faq.questionTe}. ${faq.answerTe}` : `${faq.questionEn}. ${faq.answerEn}`;
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = lang === "te" ? "te-IN" : "en-IN";
-        utterance.rate = 0.9;
-        utterance.onstart = () => setIsSpeaking(true);
-        utterance.onend = () => setIsSpeaking(false);
-        utterance.onerror = () => setIsSpeaking(false);
-        window.speechSynthesis.speak(utterance);
-      }
     };
 
     audio.play().catch((err) => {
