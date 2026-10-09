@@ -27,6 +27,12 @@ test('discover filters: blanks ignored, cursor and ranges validated, no gothra f
   assert.ok(!DiscoverQuerySchema.safeParse({ ageMin: '30', ageMax: '25' }).success);
   assert.ok(!DiscoverQuerySchema.safeParse({ ageMin: '17' }).success);
   assert.ok(!('gothra' in DiscoverQuerySchema.parse({ gothra: 'kashyapa' })));
+
+  // Pan-Telugu & Diaspora district filters
+  assert.equal(DiscoverQuerySchema.parse({ district: 'visakhapatnam' }).district, 'visakhapatnam');
+  assert.equal(DiscoverQuerySchema.parse({ district: 'guntur' }).district, 'guntur');
+  assert.equal(DiscoverQuerySchema.parse({ district: 'sri-potti-sriramulu-nellore' }).district, 'sri-potti-sriramulu-nellore');
+  assert.equal(DiscoverQuerySchema.parse({ district: 'other-state' }).district, 'other-state');
 });
 
 test('identity never from the body; consents pinned to the shown notice; photo consent only with an upload', () => {

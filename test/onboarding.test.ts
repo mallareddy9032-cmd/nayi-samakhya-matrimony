@@ -91,3 +91,30 @@ test('status -> resume step', () => {
   assert.equal(stepForState('pending_mandal_review'), 7);
   assert.equal(stepForState('verified'), 7);
 });
+
+test('pan-telugu & pan-india onboarding: AP districts, mandals, and diaspora payloads validate strictly', () => {
+  // Andhra Pradesh candidate
+  const apCandidate = valid();
+  apCandidate.heritage.ancestralNativeDistrict = 'visakhapatnam';
+  apCandidate.heritage.ancestralNativeMandal = ' Bheemunipatnam ';
+  const parsedAP = OnboardingSchema.parse(apCandidate);
+  assert.equal(parsedAP.heritage.ancestralNativeDistrict, 'visakhapatnam');
+  assert.equal(parsedAP.heritage.ancestralNativeMandal, 'bheemunipatnam');
+
+  // Multi-hyphen AP district
+  const nelloreCandidate = valid();
+  nelloreCandidate.heritage.ancestralNativeDistrict = 'sri-potti-sriramulu-nellore';
+  nelloreCandidate.heritage.ancestralNativeMandal = 'kavali';
+  const parsedNellore = OnboardingSchema.parse(nelloreCandidate);
+  assert.equal(parsedNellore.heritage.ancestralNativeDistrict, 'sri-potti-sriramulu-nellore');
+  assert.equal(parsedNellore.heritage.ancestralNativeMandal, 'kavali');
+
+  // Other State / Pan-India diaspora candidate
+  const otherStateCandidate = valid();
+  otherStateCandidate.heritage.ancestralNativeDistrict = 'other-state';
+  otherStateCandidate.heritage.ancestralNativeMandal = 'other-mandal';
+  const parsedOther = OnboardingSchema.parse(otherStateCandidate);
+  assert.equal(parsedOther.heritage.ancestralNativeDistrict, 'other-state');
+  assert.equal(parsedOther.heritage.ancestralNativeMandal, 'other-mandal');
+});
+

@@ -85,9 +85,14 @@ function toPayload(f: Form, lang: Lang) {
 
   if (f.state === 'other') {
     const rawCity = f.otherCity || f.otherState || 'other-state';
-    distSlug = slugify(rawCity).slice(0, 40) || 'other-state';
+    let sDist = slugify(rawCity).slice(0, 40);
+    if (!/^[a-z][a-z-]{1,40}$/.test(sDist)) sDist = 'other-state';
+    distSlug = sDist;
+
     const rawLocality = f.otherLocality || 'other-mandal';
-    mandSlug = slugify(rawLocality).slice(0, 40) || 'other-mandal';
+    let sMand = slugify(rawLocality).slice(0, 40);
+    if (!/^[a-z][a-z-]{1,40}$/.test(sMand)) sMand = 'other-mandal';
+    mandSlug = sMand;
   }
 
   let defaultAddress = 'India';

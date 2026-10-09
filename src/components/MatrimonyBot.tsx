@@ -12,6 +12,8 @@ export function MatrimonyBot() {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const audioRef = React.useRef<HTMLAudioElement | null>(null);
 
+  const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
+
   // Stop any currently playing audio cleanly
   const stopAudio = () => {
     if (audioRef.current) {
@@ -25,8 +27,15 @@ export function MatrimonyBot() {
     setIsSpeaking(false);
   };
 
-  // Cleanup on component unmount
+  // Pre-cache voices and cleanup on component unmount
   useEffect(() => {
+    if (typeof window !== "undefined" && "speechSynthesis" in window) {
+      const updateVoices = () => {
+        setVoices(window.speechSynthesis.getVoices());
+      };
+      updateVoices();
+      window.speechSynthesis.onvoiceschanged = updateVoices;
+    }
     return () => {
       stopAudio();
     };
@@ -82,8 +91,8 @@ export function MatrimonyBot() {
         utterance.rate = 0.9; // Slightly slower, clear cadence for rural/elderly understanding
         
         // Pick Telugu voice if available in browser
-        const voices = window.speechSynthesis.getVoices();
-        const teVoice = voices.find(v => v.lang.startsWith("te") || v.name.toLowerCase().includes("telugu"));
+        const availableVoices = voices.length > 0 ? voices : window.speechSynthesis.getVoices();
+        const teVoice = availableVoices.find(v => v.lang.startsWith("te") || v.name.toLowerCase().includes("telugu"));
         if (teVoice && lang === "te") {
           utterance.voice = teVoice;
         }
