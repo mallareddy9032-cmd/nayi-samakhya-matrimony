@@ -29,6 +29,7 @@ function contentSecurityPolicy(nonce: string, https: boolean): string {
     `script-src 'self' 'nonce-${nonce}' https://apis.google.com https://www.google.com https://www.gstatic.com 'strict-dynamic'${dev ? " 'unsafe-eval'" : ''}`,
     `style-src 'self' 'nonce-${nonce}' 'unsafe-inline'`,
     "img-src 'self' blob: data: https://www.google.com https://www.gstatic.com",
+    "media-src 'self' blob: data:",
     "font-src 'self'",
     "connect-src 'self' https://*.firebaseio.com https://*.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com",
     "frame-src 'self' https://*.firebaseapp.com https://www.google.com",
@@ -55,6 +56,7 @@ export async function proxy(req: NextRequest): Promise<NextResponse> {
     pathname === '/preview' ||
     pathname === '/discover' ||
     pathname === '/onboarding' ||
+    pathname.startsWith('/audio') ||
     pathname.startsWith('/api/auth') ||
     pathname.startsWith('/profiles')
   ) {
@@ -104,5 +106,5 @@ export async function proxy(req: NextRequest): Promise<NextResponse> {
 // '/' (the basePath root) is not covered by the regex entry and must stay listed.
 // Prefetches are deliberately NOT excluded: they return RSC payloads and must be authenticated.
 export const config = {
-  matcher: ['/', '/((?!_next/static|_next/image|favicon.ico).*)'],
+  matcher: ['/', '/((?!_next/static|_next/image|favicon.ico|audio|.*\\.(?:mp3|wav|ogg|png|jpg|jpeg|gif|svg|webp|ico)).*)'],
 };
