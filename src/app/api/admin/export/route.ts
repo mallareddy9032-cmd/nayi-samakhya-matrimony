@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getOptionalSession } from "../../../../lib/session.ts";
 
 // Sample candidate database for Master Admin export
 const CANDIDATE_MASTER_DATA = [
@@ -79,12 +80,39 @@ const CANDIDATE_MASTER_DATA = [
   }
 ];
 
+/**
+ * Sanitizes cell values to prevent CSV formula injection attacks (=, +, -, @)
+ */
+function sanitizeCsvCell(value: string | number): string {
+  const str = String(value ?? "");
+  const trimmed = str.trim();
+  if (/^[=+\-@\t\r]/.test(trimmed)) {
+    return `"'${trimmed.replace(/"/g, '""')}"`;
+  }
+  return `"${str.replace(/"/g, '""')}"`;
+}
+
 export async function GET(req: Request) {
+  // 1. Session RBAC check: Only authorized coordinators or officers may export
+  const session = await getOptionalSession();
+  const isAuthorized = session && (
+    session.roles.includes("district_lineage_officer") ||
+    session.roles.includes("mandal_coordinator") ||
+    session.roles.includes("grievance_officer")
+  );
+
+  // In production / non-test mode, enforce RBAC
+  if (!isAuthorized && process.env.NODE_ENV === "production") {
+    return NextResponse.json(
+      { error: "అనధికారిక ప్రవేశం. కేవలం అధీకృత సమన్వయకర్తలకు మాత్రమే అనుమతి ఉంది. (Unauthorized: Master Admin Role Required)" },
+      { status: 403 }
+    );
+  }
+
   const { searchParams } = new URL(req.url);
   const format = searchParams.get("format");
 
   if (format === "csv") {
-    // Generate CSV output with unmasked mobile numbers for authorized administration
     const headers = [
       "Unique ID",
       "Full Name",
@@ -102,28 +130,30 @@ export async function GET(req: Request) {
     ];
 
     const rows = CANDIDATE_MASTER_DATA.map((c) => [
-      c.uniqueId,
-      `"${c.fullName}"`,
-      c.gender,
-      c.age,
-      `"${c.gothra}"`,
-      `"${c.district}"`,
-      `"${c.mandal}"`,
-      `"${c.education}"`,
-      `"${c.occupation}"`,
-      `"'+91${c.phone}"`, // prepended with +91 for Excel
-      c.registeredAt,
-      `"${c.subscriptionStatus}"`,
-      `"${c.photoKey}"`
+      sanitizeCsvCell(c.uniqueId),
+      sanitizeCsvCell(c.fullName),
+      sanitizeCsvCell(c.gender),
+      sanitizeCsvCell(c.age),
+      sanitizeCsvCell(c.gothra),
+      sanitizeCsvCell(c.district),
+      sanitizeCsvCell(c.mandal),
+      sanitizeCsvCell(c.education),
+      sanitizeCsvCell(c.occupation),
+      sanitizeCsvCell(`+91${c.phone}`), // Prepend +91 for Excel
+      sanitizeCsvCell(c.registeredAt),
+      sanitizeCsvCell(c.subscriptionStatus),
+      sanitizeCsvCell(c.photoKey)
     ]);
 
-    const csvContent = [headers.join(","), ...rows.map(r => r.join(","))].join("\r\n");
+    // UTF-8 BOM (\uFEFF) ensures Telugu characters and Excel open seamlessly without garbled text
+    const csvContent = "\uFEFF" + [headers.map(sanitizeCsvCell).join(","), ...rows.map(r => r.join(","))].join("\r\n");
 
     return new NextResponse(csvContent, {
       status: 200,
       headers: {
         "Content-Type": "text/csv; charset=utf-8",
         "Content-Disposition": `attachment; filename="NSM_Candidates_Master_Export_${new Date().toISOString().slice(0, 10)}.csv"`,
+        "Cache-Control": "private, no-cache, no-store, must-revalidate",
       },
     });
   }

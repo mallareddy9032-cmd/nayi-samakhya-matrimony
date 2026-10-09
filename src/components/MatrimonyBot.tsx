@@ -60,9 +60,15 @@ export function MatrimonyBot() {
       {/* Floating Trigger Button */}
       <button
         type="button"
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => {
+          if (isOpen && typeof window !== "undefined" && "speechSynthesis" in window) {
+            window.speechSynthesis.cancel();
+            setIsSpeaking(false);
+          }
+          setIsOpen(!isOpen);
+        }}
         aria-label="Open Kalyana Mitra Bot"
-        className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 bg-gradient-to-r from-amber-700 via-amber-800 to-amber-900 text-white px-4 py-3 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all border-2 border-amber-300"
+        className="fixed bottom-6 right-6 z-[9999] flex items-center gap-2.5 bg-gradient-to-r from-amber-700 via-amber-800 to-amber-900 text-white px-4 py-3 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all border-2 border-amber-300"
       >
         <span className="text-2xl animate-pulse">🪔</span>
         <div className="text-left hidden sm:block">
