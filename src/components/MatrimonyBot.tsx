@@ -10,21 +10,26 @@ export function MatrimonyBot() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFaq, setSelectedFaq] = useState<BotFaqItem | null>(null);
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
+  const audioRef = React.useRef<HTMLAudioElement | null>(null);
 
-  // Load available system synthesis voices once mounted
+  // Stop any currently playing audio cleanly
+  const stopAudio = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      audioRef.current = null;
+    }
+    if (typeof window !== "undefined" && "speechSynthesis" in window) {
+      window.speechSynthesis.cancel();
+    }
+    setIsSpeaking(false);
+  };
+
+  // Cleanup on component unmount
   useEffect(() => {
-    if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
-
-    const updateVoices = () => {
-      const voices = window.speechSynthesis.getVoices();
-      if (voices && voices.length > 0) {
-        setAvailableVoices(voices);
-      }
+    return () => {
+      stopAudio();
     };
-
-    updateVoices();
-    window.speechSynthesis.onvoiceschanged = updateVoices;
   }, []);
 
   // Filtered FAQs based on category and search query
@@ -38,88 +43,58 @@ export function MatrimonyBot() {
     });
   }, [selectedCategory, searchQuery]);
 
-  // Robust Text to Speech synthesis with sentence-chunking & Telugu voice fallback
-  const speakText = (text: string) => {
-    if (typeof window === "undefined" || !("speechSynthesis" in window)) {
-      alert("వాయిస్ స్పీచ్ మీ బ్రౌజర్‌లో అందుబాటులో లేదు.");
-      return;
-    }
-
-    // Toggle: if currently speaking, cancel immediately
+  // Play authentic studio Telugu audio MP3 (with zero device TTS glitch)
+  const togglePlayAudio = (faq: BotFaqItem) => {
     if (isSpeaking) {
-      window.speechSynthesis.cancel();
-      setIsSpeaking(false);
+      stopAudio();
       return;
     }
 
-    window.speechSynthesis.cancel();
+    // Stop any previously playing audio instance
+    stopAudio();
 
-    // Clean text: strip numbers or non-essential punctuation that can cause speech glitches
-    const cleanText = text
-      .replace(/[\(\)\[\]\{\}\<\>]/g, " ")
-      .replace(/\s+/g, " ")
-      .trim();
+    if (typeof window === "undefined") return;
 
-    if (!cleanText) return;
+    // Direct path under basePath /matrimony
+    const audioUrl = `/matrimony/audio/bot/faq-${faq.id}.mp3`;
+    const audio = new Audio(audioUrl);
+    audioRef.current = audio;
 
-    const utterance = new SpeechSynthesisUtterance(cleanText);
-
-    // Look for matching voice in system
-    if (availableVoices.length > 0) {
-      if (lang === "te") {
-        // Look for Telugu voice, otherwise Indian English or natural Indian voice
-        const teVoice = availableVoices.find(
-          (v) => v.lang === "te-IN" || v.lang === "te" || v.name.toLowerCase().includes("telugu")
-        );
-        const inVoice = availableVoices.find(
-          (v) => v.lang === "en-IN" || v.lang === "hi-IN" || v.name.toLowerCase().includes("india")
-        );
-        if (teVoice) {
-          utterance.voice = teVoice;
-          utterance.lang = "te-IN";
-        } else if (inVoice) {
-          utterance.voice = inVoice;
-          utterance.lang = inVoice.lang;
-        } else {
-          utterance.lang = "en-IN";
-        }
-      } else {
-        const enInVoice = availableVoices.find(
-          (v) => v.lang === "en-IN" || v.name.toLowerCase().includes("india")
-        );
-        if (enInVoice) utterance.voice = enInVoice;
-        utterance.lang = "en-IN";
-      }
-    } else {
-      utterance.lang = lang === "te" ? "te-IN" : "en-IN";
-    }
-
-    utterance.rate = 0.92;
-    utterance.pitch = 1.0;
-
-    utterance.onstart = () => {
+    audio.onplay = () => {
       setIsSpeaking(true);
     };
 
-    utterance.onend = () => {
+    audio.onended = () => {
       setIsSpeaking(false);
+      audioRef.current = null;
     };
 
-    utterance.onerror = (e) => {
-      console.warn("Speech synthesis notice:", e);
+    audio.onerror = () => {
+      console.warn("Studio audio file load error, falling back to local speech synthesis...");
       setIsSpeaking(false);
+      audioRef.current = null;
+      // Graceful device speech synthesis fallback if audio file network fails
+      if ("speechSynthesis" in window) {
+        const text = lang === "te" ? `${faq.questionTe}. ${faq.answerTe}` : `${faq.questionEn}. ${faq.answerEn}`;
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = lang === "te" ? "te-IN" : "en-IN";
+        utterance.rate = 0.9;
+        utterance.onstart = () => setIsSpeaking(true);
+        utterance.onend = () => setIsSpeaking(false);
+        utterance.onerror = () => setIsSpeaking(false);
+        window.speechSynthesis.speak(utterance);
+      }
     };
 
-    setIsSpeaking(true);
-    window.speechSynthesis.speak(utterance);
+    audio.play().catch((err) => {
+      console.warn("Audio autoplay blocked or interrupted:", err);
+      setIsSpeaking(false);
+    });
   };
 
   const handleSelectFaq = (faq: BotFaqItem) => {
+    stopAudio();
     setSelectedFaq(faq);
-    if (typeof window !== "undefined" && "speechSynthesis" in window) {
-      window.speechSynthesis.cancel();
-      setIsSpeaking(false);
-    }
   };
 
   return (
@@ -128,9 +103,8 @@ export function MatrimonyBot() {
       <button
         type="button"
         onClick={() => {
-          if (isOpen && typeof window !== "undefined" && "speechSynthesis" in window) {
-            window.speechSynthesis.cancel();
-            setIsSpeaking(false);
+          if (isOpen) {
+            stopAudio();
           }
           setIsOpen(!isOpen);
         }}
@@ -224,10 +198,7 @@ export function MatrimonyBot() {
               <button
                 type="button"
                 onClick={() => {
-                  if (typeof window !== "undefined" && "speechSynthesis" in window) {
-                    window.speechSynthesis.cancel();
-                    setIsSpeaking(false);
-                  }
+                  stopAudio();
                   setLang(lang === "te" ? "en" : "te");
                 }}
                 style={{
@@ -249,10 +220,7 @@ export function MatrimonyBot() {
                 type="button"
                 onClick={() => {
                   setIsOpen(false);
-                  if (typeof window !== "undefined" && "speechSynthesis" in window) {
-                    window.speechSynthesis.cancel();
-                  }
-                  setIsSpeaking(false);
+                  stopAudio();
                 }}
                 style={{
                   background: "none",
@@ -338,11 +306,8 @@ export function MatrimonyBot() {
                 <button
                   type="button"
                   onClick={() => {
+                    stopAudio();
                     setSelectedFaq(null);
-                    if (typeof window !== "undefined" && "speechSynthesis" in window) {
-                      window.speechSynthesis.cancel();
-                    }
-                    setIsSpeaking(false);
                   }}
                   style={{
                     background: "none",
@@ -383,25 +348,20 @@ export function MatrimonyBot() {
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "6px" }}>
                   <button
                     type="button"
-                    onClick={() => {
-                      const fullSpeechText = lang === "te" 
-                        ? `${selectedFaq.questionTe}. ${selectedFaq.answerTe}` 
-                        : `${selectedFaq.questionEn}. ${selectedFaq.answerEn}`;
-                      speakText(fullSpeechText);
-                    }}
+                    onClick={() => togglePlayAudio(selectedFaq)}
                     style={{
                       display: "inline-flex",
                       alignItems: "center",
                       gap: "6px",
-                      padding: "7px 16px",
+                      padding: "8px 16px",
                       background: isSpeaking ? "#991B1B" : "#801426",
                       color: "#FFFFFF",
                       borderRadius: "10px",
                       border: "none",
-                      fontSize: "12.5px",
+                      fontSize: "13px",
                       fontWeight: 800,
                       cursor: "pointer",
-                      boxShadow: isSpeaking ? "0 0 10px rgba(220, 38, 38, 0.4)" : "0 2px 6px rgba(128, 20, 38, 0.2)",
+                      boxShadow: isSpeaking ? "0 0 12px rgba(220, 38, 38, 0.45)" : "0 2px 6px rgba(128, 20, 38, 0.2)",
                       transition: "all 0.2s ease",
                     }}
                   >
@@ -409,12 +369,12 @@ export function MatrimonyBot() {
                     <span>
                       {isSpeaking 
                         ? (lang === "te" ? "ఆపండి (Stop)" : "Stop Voice") 
-                        : (lang === "te" ? "వాయిస్ వినండి (Listen)" : "Listen to Voice")}
+                        : (lang === "te" ? "వాయిస్ వినండి (Telugu Audio)" : "Listen to Voice")}
                     </span>
                   </button>
 
-                  <span style={{ fontSize: "11px", color: "#64748B", fontWeight: 600 }}>
-                    {isSpeaking ? "🔊 మాట్లాడుతోంది..." : (lang === "te" ? "ఆడియో సహాయం" : "Audio Synthesis")}
+                  <span style={{ fontSize: "11.5px", color: "#475569", fontWeight: 700 }}>
+                    {isSpeaking ? "🔊 స్పష్టమైన తెలుగు వాయిస్ ప్లే అవుతోంది..." : (lang === "te" ? "🎧 స్పష్టమైన తెలుగు ఆడియో సాయం" : "🎧 Authentic Voice Guide")}
                   </span>
                 </div>
               </div>
