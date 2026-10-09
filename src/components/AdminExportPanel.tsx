@@ -31,6 +31,25 @@ export function AdminExportPanel() {
         </div>
       </div>
 
+      {/* Regional Demographics Telemetry KPI Cards */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "1rem", marginBottom: "1.5rem" }}>
+        <div style={{ background: "#FFFDF9", border: "1.5px solid #F3E5AB", borderRadius: "12px", padding: "1rem", borderLeft: "4px solid #801426" }}>
+          <div style={{ fontSize: "0.78rem", fontWeight: 700, color: "#92400E", textTransform: "uppercase" }}>తెలంగాణ సభ్యులు (Telangana)</div>
+          <div style={{ fontSize: "1.6rem", fontWeight: 800, color: "#801426", margin: "0.2rem 0" }}>33 <span style={{ fontSize: "0.9rem", fontWeight: 600 }}>జిల్లాలు</span></div>
+          <div style={{ fontSize: "0.78rem", color: "#64748B" }}>589 రెవెన్యూ మండలాలు ధృవీకృతం</div>
+        </div>
+        <div style={{ background: "#FFFDF9", border: "1.5px solid #F3E5AB", borderRadius: "12px", padding: "1rem", borderLeft: "4px solid #B45309" }}>
+          <div style={{ fontSize: "0.78rem", fontWeight: 700, color: "#92400E", textTransform: "uppercase" }}>ఆంధ్రప్రదేశ్ సభ్యులు (Andhra Pradesh)</div>
+          <div style={{ fontSize: "1.6rem", fontWeight: 800, color: "#B45309", margin: "0.2rem 0" }}>26 <span style={{ fontSize: "0.9rem", fontWeight: 600 }}>పునర్వ్యవస్థీకృత జిల్లాలు</span></div>
+          <div style={{ fontSize: "0.78rem", color: "#64748B" }}>773 మండలాలు &amp; పట్టణ కేంద్రాలు</div>
+        </div>
+        <div style={{ background: "#FFFDF9", border: "1.5px solid #F3E5AB", borderRadius: "12px", padding: "1rem", borderLeft: "4px solid #0D9488" }}>
+          <div style={{ fontSize: "0.78rem", fontWeight: 700, color: "#0D9488", textTransform: "uppercase" }}>అఖిల భారత విస్తృతి (Pan-India / Diaspora)</div>
+          <div style={{ fontSize: "1.6rem", fontWeight: 800, color: "#0D9488", margin: "0.2rem 0" }}>ఇతర రాష్ట్రాలు</div>
+          <div style={{ fontSize: "0.78rem", color: "#64748B" }}>బెంగళూరు, ముంబై, చెన్నై, సూరత్ &amp; ఎన్ఆర్ఐ</div>
+        </div>
+      </div>
+
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.2rem" }}>
         {/* CSV Export Card */}
         <div style={{ background: "var(--bg-surface)", padding: "1.2rem", borderRadius: "12px", border: "1.5px solid var(--border-light)" }}>

@@ -32,6 +32,32 @@ const SAMPLE_PROFILES_BIODATA: Record<string, any> = {
     birthTime: '02:15 PM',
     birthPlace: 'Warangal',
   },
+  'sample-5': {
+    displayName: 'P. Madhav Rao',
+    age: 28,
+    district: { en: 'Guntur, Andhra Pradesh', te: 'గుంటూరు, ఆంధ్రప్రదేశ్' },
+    mandal: 'Tenali',
+    vocation: 'Nadopasana Heritage',
+    educationDegree: 'Vidwan / MA Music',
+    occupation: 'Classical Nadaswaram Artiste',
+    incomeBracket: '6L - 12L PA',
+    nakshatra: 'Swati (స్వాతి)',
+    birthTime: '07:15 AM',
+    birthPlace: 'Tenali, Guntur',
+  },
+  'sample-6': {
+    displayName: 'K. Divya Sree',
+    age: 25,
+    district: { en: 'Visakhapatnam, Andhra Pradesh', te: 'విశాఖపట్నం, ఆంధ్రప్రదేశ్' },
+    mandal: 'Gajuwaka',
+    vocation: 'Corporate Tech & Civil Services',
+    educationDegree: 'MCA',
+    occupation: 'Senior IT Systems Analyst',
+    incomeBracket: '12L - 25L PA',
+    nakshatra: 'Ashwini (అశ్విని)',
+    birthTime: '04:30 AM',
+    birthPlace: 'Visakhapatnam',
+  },
 };
 
 export async function GET(

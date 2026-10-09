@@ -70,6 +70,41 @@ export function MatrimonyBot() {
       audioRef.current = null;
     };
 
+    // Speech synthesis fallback helper in case MP3 file fails or for dynamic guidance
+    const speakWithFallbackTts = () => {
+      if (typeof window !== "undefined" && "speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+        const textToSpeak = lang === "te" 
+          ? `${faq.questionTe} ... ${faq.answerTe}` 
+          : `${faq.questionEn} ... ${faq.answerEn}`;
+        const utterance = new SpeechSynthesisUtterance(textToSpeak);
+        utterance.lang = lang === "te" ? "te-IN" : "en-IN";
+        utterance.rate = 0.9; // Slightly slower, clear cadence for rural/elderly understanding
+        
+        // Pick Telugu voice if available in browser
+        const voices = window.speechSynthesis.getVoices();
+        const teVoice = voices.find(v => v.lang.startsWith("te") || v.name.toLowerCase().includes("telugu"));
+        if (teVoice && lang === "te") {
+          utterance.voice = teVoice;
+        }
+
+        utterance.onstart = () => setIsSpeaking(true);
+        utterance.onend = () => {
+          setIsSpeaking(false);
+          audioRef.current = null;
+        };
+        utterance.onerror = () => {
+          setIsSpeaking(false);
+          audioRef.current = null;
+        };
+
+        window.speechSynthesis.speak(utterance);
+      } else {
+        setIsSpeaking(false);
+        audioRef.current = null;
+      }
+    };
+
     audio.onerror = () => {
       // Try fallback relative path if /matrimony prefix was stripped or rewrited
       if (audio.src.includes("/matrimony/")) {
@@ -82,26 +117,23 @@ export function MatrimonyBot() {
           audioRef.current = null;
         };
         fallbackAudio.onerror = () => {
-          console.error("Audio failed to load from both paths.");
-          setIsSpeaking(false);
-          audioRef.current = null;
-          alert("ఆడియో ఫైల్ లోడ్ కాలేదు. దయచేసి ఇంటర్నెట్ కనెక్షన్ తనిఖీ చేయండి.");
+          console.warn("Audio MP3 failed from both paths, invoking resilient Telugu SpeechSynthesis TTS.");
+          speakWithFallbackTts();
         };
         fallbackAudio.play().catch((e) => {
-          console.warn("Fallback audio play failed:", e);
-          setIsSpeaking(false);
+          console.warn("Fallback audio play failed, activating TTS:", e);
+          speakWithFallbackTts();
         });
         return;
       }
 
-      console.error("Audio playback error.");
-      setIsSpeaking(false);
-      audioRef.current = null;
+      console.warn("Audio playback error, falling back to Web Speech Synthesis.");
+      speakWithFallbackTts();
     };
 
     audio.play().catch((err) => {
-      console.warn("Audio autoplay blocked or interrupted:", err);
-      setIsSpeaking(false);
+      console.warn("Audio autoplay blocked or interrupted, attempting SpeechSynthesis:", err);
+      speakWithFallbackTts();
     });
   };
 
@@ -147,7 +179,7 @@ export function MatrimonyBot() {
             {lang === "te" ? "కల్యాణ మిత్ర సహాయం" : "Kalyana Mitra AI"}
           </div>
           <div style={{ fontSize: "11px", color: "rgba(255, 255, 255, 0.9)", lineHeight: 1.2 }}>
-            {lang === "te" ? "30 ప్రశ్నలు & వాయిస్ సమాధానాలు" : "30 FAQs & Audio Voice"}
+            {lang === "te" ? "31 ప్రశ్నలు & వాయిస్ సమాధానాలు" : "31 FAQs & Audio Voice"}
           </div>
         </div>
       </button>

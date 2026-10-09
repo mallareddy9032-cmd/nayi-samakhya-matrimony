@@ -289,5 +289,14 @@ export const BOT_FAQS: BotFaqItem[] = [
     questionEn: "How can I contact Nayi Samakhya community representatives for help?",
     answerTe: "మా అధికారిక ఇమెయిల్ matrimony@nayisamakhya.org లేదా మీ జిల్లా/మండల నాయీ సమాఖ్య కార్యవర్గ ప్రతినిధులను నేరుగా సంప్రదించవచ్చు.",
     answerEn: "Reach out to matrimony@nayisamakhya.org or contact your local district/mandal Nayi Samakhya committee office."
+  },
+  {
+    id: 31,
+    category: "REGISTRATION",
+    categoryTe: "నమోదు & ప్రాంతం",
+    questionTe: "ఈ వేదిక తెలంగాణ వారికి మాత్రమేనా, లేక ఆంధ్రప్రదేశ్ మరియు ఇతర రాష్ట్రాల వారికి కూడానా?",
+    questionEn: "Is this platform only for Telangana, or for Andhra Pradesh and other states as well?",
+    answerTe: "ఇది ప్రపంచవ్యాప్తంగా ఉన్న సమస్త తెలుగు నాయీ బ్రాహ్మణుల ఉమ్మడి సార్వభౌమ వేదిక! తెలంగాణలోని 33 జిల్లాలు, ఆంధ్రప్రదేశ్‌లోని 26 పునర్వ్యవస్థీకృత జిల్లాలు (773 మండలాలు & పట్టణాలు), అలాగే బెంగళూరు, ముంబై, సూరత్, చెన్నై మరియు విదేశాల్లో స్థిరపడిన మన కుటుంబాలందరికీ సమాన ప్రాధాన్యతతో సేవలు అందిస్తున్నాము.",
+    answerEn: "This is a unified sovereign platform for all Telugu Nayi Brahmins worldwide! It fully covers all 33 districts of Telangana, all 26 reorganized districts of Andhra Pradesh (773 mandals and towns), and families settled across Bengaluru, Mumbai, Chennai, Surat, and overseas."
   }
 ];
