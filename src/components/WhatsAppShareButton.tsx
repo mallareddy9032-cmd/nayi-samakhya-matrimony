@@ -52,30 +52,73 @@ _🔒 DPDP Act 2023 ద్వారా వ్యక్తిగత గోప్�
   const handleCopyLink = () => {
     navigator.clipboard.writeText(shareText);
     setCopied(true);
-    setTimeout(() => setCopied(false), 2500);
+    setTimeout(() => setCopied(false), 2200);
   };
 
   return (
-    <div className="inline-flex items-center gap-2">
+    <div style={{
+      display: 'grid',
+      gridTemplateColumns: '1fr auto',
+      gap: '0.45rem',
+      width: '100%',
+      alignItems: 'center'
+    }}>
+      {/* Primary WhatsApp Family Share CTA */}
       <button
         type="button"
         onClick={handleShare}
-        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#25D366] hover:bg-[#1EBE5D] text-white text-xs font-bold rounded-lg shadow-sm transition"
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '0.45rem',
+          padding: '0.55rem 0.85rem',
+          background: 'linear-gradient(135deg, #25D366 0%, #128C7E 100%)',
+          color: '#FFFFFF',
+          fontSize: '0.82rem',
+          fontWeight: 700,
+          borderRadius: '10px',
+          border: 'none',
+          boxShadow: '0 2px 6px rgba(18, 140, 126, 0.25)',
+          cursor: 'pointer',
+          transition: 'all 0.2s ease',
+          lineHeight: 1.2
+        }}
         title="కుటుంబ సభ్యులకు వాట్సాప్‌లో షేర్ చేయండి"
       >
-        <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+        <svg 
+          style={{ width: '16px', height: '16px', fill: '#FFFFFF', flexShrink: 0 }} 
+          viewBox="0 0 24 24"
+        >
           <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.969.584 1.961.947 2.796.947 3.179 0 5.765-2.587 5.765-5.768 0-3.179-2.585-5.732-5.765-5.732zm3.38 8.167c-.14.394-.813.729-1.127.776-.307.046-.7.067-2.008-.476-1.571-.652-2.582-2.254-2.66-2.359-.078-.105-.636-.846-.636-1.616 0-.77.404-1.147.547-1.303.14-.156.312-.196.417-.196.104 0 .208.002.299.007.098.005.228-.037.357.273.136.326.467 1.14.508 1.223.041.083.068.182.013.292-.055.11-.083.179-.164.275-.082.096-.172.215-.246.289-.082.083-.167.172-.072.335.095.163.422.696.906 1.127.622.553 1.146.724 1.309.805.163.082.259.068.355-.041.096-.11.41-477.52-.641.11-.164.22-.137.368-.082.148.055.941.444 1.103.525.162.081.27.122.31.19.04.068.04.394-.1.788z"/>
         </svg>
         <span>వాట్సాప్ షేర్ (WhatsApp)</span>
       </button>
 
+      {/* Copy Text Button */}
       <button
         type="button"
         onClick={handleCopyLink}
-        className="px-2 py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-medium rounded-lg border border-stone-300 transition"
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '0.3rem',
+          padding: '0.55rem 0.75rem',
+          background: '#F8FAFC',
+          color: copied ? '#059669' : '#475569',
+          border: '1.5px solid #E2E8F0',
+          borderRadius: '10px',
+          fontSize: '0.8rem',
+          fontWeight: 700,
+          cursor: 'pointer',
+          transition: 'all 0.2s ease',
+          whiteSpace: 'nowrap'
+        }}
         title="సందేశాన్ని కాపీ చేయండి"
       >
-        {copied ? "కాపీ అయింది! ✓" : "📋 టెక్స్ట్ కాపీ"}
+        <span>{copied ? "✓" : "📋"}</span>
+        <span>{copied ? "కాపీ అయింది!" : "కాపీ"}</span>
       </button>
     </div>
   );
