@@ -10,6 +10,8 @@ import { calculateCompleteness } from '../../../lib/completeness.ts';
 import { CompletenessBar } from '../../../components/CompletenessBar.tsx';
 import { HoroscopeChart } from '../../../components/HoroscopeChart.tsx';
 import { ProfileInteractiveSuite } from '../../../components/ProfileInteractiveSuite.tsx';
+import { ElderEndorsementCard } from '../../../components/ElderEndorsementCard.tsx';
+import { getProfileEndorsement } from '../../../lib/endorsement/endorsement-store.ts';
 import { Nav } from '../../Nav.tsx';
 import { Bi } from '../../onboarding/Wizard.tsx';
 
@@ -321,6 +323,8 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
         },
       });
 
+  const endorsement = getProfileEndorsement(p.id);
+
   return (
     <main className="shell">
       <Nav claims={claims} />
@@ -606,6 +610,13 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
             </div>
           </div>
         </div>
+
+        {/* POD 4: Community Endorsement & Village Elder Attestation (గ్రామ పెద్దల & సంఘ ధృవీకరణ) */}
+        {endorsement && (
+          <div style={{ marginTop: '1.5rem', marginBottom: '1.5rem' }}>
+            <ElderEndorsementCard endorsement={endorsement} lang="te" />
+          </div>
+        )}
 
         {/* Bilateral Interest & Action Suite (A4 Biodata PDF & WhatsApp Share) */}
         <div style={{ marginTop: '2.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--border-light)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>

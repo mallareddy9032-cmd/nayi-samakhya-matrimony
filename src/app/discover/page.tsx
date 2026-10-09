@@ -657,6 +657,22 @@ export default async function DiscoverPage({ searchParams }: { searchParams: Sea
                       <Bi en={c.kinship.titleEn} te={c.kinship.titleTe} />
                     </span>
                   )}
+
+                  {/* Village Elder Attestation Badge */}
+                  <span style={{
+                    background: '#FFFBEB',
+                    color: '#92400E',
+                    border: '1px solid #FDE68A',
+                    borderRadius: '6px',
+                    padding: '0.22rem 0.55rem',
+                    fontSize: '0.74rem',
+                    fontWeight: 700,
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.3rem'
+                  }}>
+                    🏛️ <Bi en="Elder Verified" te="గ్రామ పెద్దల ధృవీకృతం" />
+                  </span>
                 </div>
               </div>
 

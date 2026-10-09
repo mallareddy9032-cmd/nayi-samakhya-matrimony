@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { KalyanaPatrikaModal } from './KalyanaPatrikaModal.tsx';
 import { ElderAssistNarrator } from './ElderAssistNarrator.tsx';
+import { KalyanaRayabharamModal } from './KalyanaRayabharamModal.tsx';
 
 export interface ProfileInteractiveSuiteProps {
   candidate: {
@@ -34,6 +35,7 @@ export function ProfileInteractiveSuite({
   lang = 'te',
 }: ProfileInteractiveSuiteProps) {
   const [isPatrikaOpen, setIsPatrikaOpen] = useState(false);
+  const [isRayabharamOpen, setIsRayabharamOpen] = useState(false);
 
   // Natural Telugu voice narration text for elders
   const summaryTe = `నమస్కారం! నాయీ సమాఖ్య వివాహ వేదిక ద్వారా సంబంధం వివరాలు: ` +
@@ -84,12 +86,45 @@ export function ProfileInteractiveSuite({
           <span>📜</span>
           <span>{lang === 'te' ? 'కల్యాణ పరిచయ పత్రిక (WhatsApp Patrika)' : 'Share Kalyana Patrika'}</span>
         </button>
+
+        {/* Kalyana Rayabharam Elder Mediation Button */}
+        <button
+          type="button"
+          onClick={() => setIsRayabharamOpen(true)}
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px',
+            background: 'linear-gradient(135deg, #801426, #5A0B1A)',
+            color: '#FDE68A',
+            padding: '8px 16px',
+            borderRadius: '999px',
+            fontSize: '13px',
+            fontWeight: 800,
+            border: '1.5px solid #D4AF37',
+            cursor: 'pointer',
+            boxShadow: '0 3px 10px rgba(128, 20, 38, 0.3)',
+            transition: 'all 0.2s ease',
+            fontFamily: "'Noto Sans Telugu', system-ui, sans-serif",
+          }}
+        >
+          <span>🤝</span>
+          <span>{lang === 'te' ? 'కల్యాణ రాయబారం కోరండి' : 'Request Elder Mediation'}</span>
+        </button>
       </div>
 
       {/* The Patrika Modal Dialog */}
       <KalyanaPatrikaModal
         isOpen={isPatrikaOpen}
         onClose={() => setIsPatrikaOpen(false)}
+        candidate={c}
+        lang={lang}
+      />
+
+      {/* The Kalyana Rayabharam Modal Dialog */}
+      <KalyanaRayabharamModal
+        isOpen={isRayabharamOpen}
+        onClose={() => setIsRayabharamOpen(false)}
         candidate={c}
         lang={lang}
       />

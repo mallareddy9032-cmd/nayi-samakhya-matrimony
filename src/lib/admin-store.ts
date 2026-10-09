@@ -47,6 +47,26 @@ export async function reviewQueue(ctx: DbContext) {
 export async function reviewProfile(ctx: DbContext, a: ReviewAction) {
   return withTx(ctx, async (tx) => {
     if (a.action === 'door_address') return { address: await unmaskDoorAddress(tx, a.profileId) };
+    if (a.action === 'physical_verify') {
+      const note = `[Physical Field Verification Verified] ${a.notes ?? 'Residential door address and ancestral family roots confirmed in person by Mandal Coordinator.'}`;
+      const { rowCount } = await tx.query(
+        `UPDATE matrimony_shared.profiles SET review_note = $3
+          WHERE id = $1 AND root_user_id <> $2 AND status IN ('pending_mandal_review', 'verified')`,
+        [a.profileId, ctx.sub, note],
+      );
+      if (rowCount !== 1) throw new AppError(404, 'not_found');
+      return { status: 'physically_verified', note };
+    }
+    if (a.action === 'elder_endorse') {
+      const endorsementNote = `[Village Elder Endorsement] ${a.elderName} (${a.elderTitle}): ${a.statement}`;
+      const { rowCount } = await tx.query(
+        `UPDATE matrimony_shared.profiles SET review_note = $3
+          WHERE id = $1 AND root_user_id <> $2 AND status IN ('pending_mandal_review', 'verified')`,
+        [a.profileId, ctx.sub, endorsementNote],
+      );
+      if (rowCount !== 1) throw new AppError(404, 'not_found');
+      return { status: 'elder_endorsed', elder: a.elderName };
+    }
     const { rowCount } = await tx.query(
       `UPDATE matrimony_shared.profiles SET status = $3::matrimony_shared.profile_status, review_note = $4
         WHERE id = $1 AND root_user_id <> $2 AND status = 'pending_mandal_review'`,

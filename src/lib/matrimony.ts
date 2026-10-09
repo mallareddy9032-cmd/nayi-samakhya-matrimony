@@ -101,7 +101,23 @@ export const ReviewActionSchema = z.discriminatedUnion('action', [
   z.strictObject({ action: z.literal('verify'), profileId: uuid }),
   z.strictObject({ action: z.literal('reject'), profileId: uuid, reason: text(500) }),
   z.strictObject({ action: z.literal('door_address'), profileId: uuid }),
+  z.strictObject({ action: z.literal('physical_verify'), profileId: uuid, notes: text(500).optional() }),
+  z.strictObject({
+    action: z.literal('elder_endorse'),
+    profileId: uuid,
+    elderName: text(80),
+    elderTitle: text(120),
+    statement: text(500),
+  }),
 ]);
+
+export const ElderMediationRequestSchema = z.strictObject({
+  toProfileId: uuid,
+  preferredVenue: z.enum(['temple_meet', 'home_visit', 'guided_call']),
+  notes: text(500).optional(),
+});
+export type ElderMediationInput = z.infer<typeof ElderMediationRequestSchema>;
+
 export const GothraResolutionSchema = z.strictObject({ gothraId: uuid, mergeInto: z.preprocess(blankToUndefined, uuid.optional()) });
 export const GrievanceActionSchema = z.discriminatedUnion('action', [
   z.strictObject({ action: z.literal('assign'), ticketId: uuid }),
