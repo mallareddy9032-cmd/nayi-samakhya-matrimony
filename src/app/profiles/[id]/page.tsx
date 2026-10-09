@@ -8,6 +8,8 @@ import { dbContext } from '../../../lib/onboarding-store.ts';
 import { getOptionalSession } from '../../../lib/session.ts';
 import { calculateCompleteness } from '../../../lib/completeness.ts';
 import { CompletenessBar } from '../../../components/CompletenessBar.tsx';
+import { HoroscopeChart } from '../../../components/HoroscopeChart.tsx';
+import { ProfileInteractiveSuite } from '../../../components/ProfileInteractiveSuite.tsx';
 import { Nav } from '../../Nav.tsx';
 import { Bi } from '../../onboarding/Wizard.tsx';
 
@@ -383,9 +385,14 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
               </span>
             </div>
 
-            <p style={{ margin: '0 0 1.5rem', color: 'var(--maroon)', fontSize: '1.05rem', fontWeight: 700 }}>
+            <p style={{ margin: '0 0 1rem', color: 'var(--maroon)', fontSize: '1.05rem', fontWeight: 700 }}>
               📍 {p.mandal}, <Bi {...p.district} />
             </p>
+
+            {/* 10x Interactive Suite: Elder Voice Summary + WhatsApp Kalyana Patrika */}
+            <div style={{ marginBottom: '1.4rem' }}>
+              <ProfileInteractiveSuite candidate={p} />
+            </div>
 
             {/* POD 1: Horoscope & Sacred Lineage (జాతకం & గోత్ర వివరాలు) */}
             <div style={{ background: '#FFFDF9', borderRadius: '16px', padding: '1.4rem', border: '1.5px solid #EADDC7', marginBottom: '1.25rem', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
@@ -423,6 +430,16 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
                     {p.birthTime} · {p.birthPlace}
                   </strong>
                 </div>
+              </div>
+
+              {/* 10x Vedic Astrological Chart (ద్వాదశ రాశి చక్రం) */}
+              <div style={{ marginTop: '1.4rem', paddingTop: '1.2rem', borderTop: '1.5px dashed #E2D0B5' }}>
+                <HoroscopeChart
+                  nakshatra={p.nakshatra}
+                  rasi={p.rasi}
+                  birthTime={p.birthTime}
+                  birthPlace={p.birthPlace}
+                />
               </div>
             </div>
 
