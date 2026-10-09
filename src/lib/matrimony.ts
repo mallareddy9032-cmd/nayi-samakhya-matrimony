@@ -40,7 +40,9 @@ export const DiscoverQuerySchema = z
     vocation: z.preprocess(blankToUndefined, z.enum(vocationKeys).optional()),
     ageMin: z.preprocess(blankToUndefined, age.optional()),
     ageMax: z.preprocess(blankToUndefined, age.optional()),
-    after: z.preprocess(blankToUndefined, z.string().regex(/^[0-2]\.[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/).optional()),
+    after: z.preprocess(blankToUndefined, z.string().regex(/^[0-4]\.[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/).optional()),
+    includeBorderDistricts: z.preprocess((v) => v === 'true' || v === true, z.boolean().optional()),
+    excludeMaternalGotra: z.preprocess((v) => v === 'true' || v === true, z.boolean().optional()),
   })
   .refine((q) => q.ageMin === undefined || q.ageMax === undefined || q.ageMin <= q.ageMax, { path: ['ageMax'] });
 export type DiscoverQuery = z.infer<typeof DiscoverQuerySchema>;

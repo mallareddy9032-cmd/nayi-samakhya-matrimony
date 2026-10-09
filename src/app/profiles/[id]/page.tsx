@@ -23,6 +23,7 @@ const SAMPLE_PROFILES: Record<string, any> = {
     district: { en: 'Hyderabad', te: 'హైదరాబాద్' },
     mandal: 'Ameerpet',
     gothra: 'Kashyapa (కాశ్యప)',
+    maternalLineage: 'Bharadwaja (భరద్వాజ)',
     nakshatra: 'Rohini (రోహిణి)',
     rasi: 'Vrishabha (వృషభ రాశి)',
     birthTime: '06:45 AM',
@@ -35,6 +36,7 @@ const SAMPLE_PROFILES: Record<string, any> = {
     fatherName: 'S. Narayana (Business)',
     motherName: 'S. Lakshmi (Homemaker)',
     siblings: '1 Younger Sister (Married)',
+    kinship: { relationType: 'independent', titleEn: 'Independent Lineages', titleTe: 'స్వతంత్ర వంశ ధార', descriptionEn: 'Both paternal and maternal lineages are completely distinct and independent.', descriptionTe: 'పితృ మరియు మాతృ గోత్రాలు రెండూ వేర్వేరుగా ఉన్న శుభకరమైన సంబంధం.', badgeStyle: { bg: '#ECFDF5', color: '#065F46', border: '#10B981' } },
   },
   'sample-2': {
     id: 'sample-2',
@@ -44,6 +46,7 @@ const SAMPLE_PROFILES: Record<string, any> = {
     district: { en: 'Warangal', te: 'వరంగల్' },
     mandal: 'Hanamkonda',
     gothra: 'Bharadwaja (భరద్వాజ)',
+    maternalLineage: 'Kashyapa (కాశ్యప)',
     nakshatra: 'Hasta (హస్త)',
     rasi: 'Kanya (కన్య రాశి)',
     birthTime: '02:15 PM',
@@ -56,6 +59,7 @@ const SAMPLE_PROFILES: Record<string, any> = {
     fatherName: 'K. Satyanarayana (Retd. Principal)',
     motherName: 'K. Sharada (Teacher)',
     siblings: '1 Elder Brother (Software Engineer)',
+    kinship: { relationType: 'independent', titleEn: 'Independent Lineages', titleTe: 'స్వతంత్ర వంశ ధార', descriptionEn: 'Both paternal and maternal lineages are completely distinct and independent.', descriptionTe: 'పితృ మరియు మాతృ గోత్రాలు రెండూ వేర్వేరుగా ఉన్న శుభకరమైన సంబంధం.', badgeStyle: { bg: '#ECFDF5', color: '#065F46', border: '#10B981' } },
   },
   'sample-3': {
     id: 'sample-3',
@@ -65,6 +69,7 @@ const SAMPLE_PROFILES: Record<string, any> = {
     district: { en: 'Karimnagar', te: 'కరీంనగర్' },
     mandal: 'Karimnagar Urban',
     gothra: 'Gautama (గౌతమ)',
+    maternalLineage: 'Kaundinya (కౌండిన్య)',
     nakshatra: 'Uttara (ఉత్తర)',
     rasi: 'Simha (సింహ రాశి)',
     birthTime: '09:20 AM',
@@ -77,6 +82,7 @@ const SAMPLE_PROFILES: Record<string, any> = {
     fatherName: 'P. Lingamurthy (Nadopasana Artiste)',
     motherName: 'P. Rajamani',
     siblings: 'None (Only Son)',
+    kinship: { relationType: 'independent', titleEn: 'Independent Lineages', titleTe: 'స్వతంత్ర వంశ ధార', descriptionEn: 'Both paternal and maternal lineages are completely distinct and independent.', descriptionTe: 'పితృ మరియు మాతృ గోత్రాలు రెండూ వేర్వేరుగా ఉన్న శుభకరమైన సంబంధం.', badgeStyle: { bg: '#ECFDF5', color: '#065F46', border: '#10B981' } },
   },
   'sample-4': {
     id: 'sample-4',
@@ -86,6 +92,7 @@ const SAMPLE_PROFILES: Record<string, any> = {
     district: { en: 'Nalgonda', te: 'నల్గొండ' },
     mandal: 'Miryalaguda',
     gothra: 'Vashishta (వశిష్ట)',
+    maternalLineage: 'Agastya (అగస్త్య)',
     nakshatra: 'Anuradha (అనూరాధ)',
     rasi: 'Vrischika (వృశ్చిక రాశి)',
     birthTime: '11:10 PM',
@@ -98,6 +105,7 @@ const SAMPLE_PROFILES: Record<string, any> = {
     fatherName: 'M. Venkataramana',
     motherName: 'M. Padmavathi',
     siblings: '1 Younger Brother (Studying B.Tech)',
+    kinship: { relationType: 'independent', titleEn: 'Independent Lineages', titleTe: 'స్వతంత్ర వంశ ధార', descriptionEn: 'Both paternal and maternal lineages are completely distinct and independent.', descriptionTe: 'పితృ మరియు మాతృ గోత్రాలు రెండూ వేర్వేరుగా ఉన్న శుభకరమైన సంబంధం.', badgeStyle: { bg: '#ECFDF5', color: '#065F46', border: '#10B981' } },
   },
   'sample-5': {
     id: 'sample-5',
@@ -107,6 +115,7 @@ const SAMPLE_PROFILES: Record<string, any> = {
     district: { en: 'Guntur, Andhra Pradesh', te: 'గుంటూరు, ఆంధ్రప్రదేశ్' },
     mandal: 'Tenali (తేనాలి)',
     gothra: 'Agastya (అగస్త్య)',
+    maternalLineage: 'Sandilya (శాండిల్య)',
     nakshatra: 'Swati (స్వాతి)',
     rasi: 'Tula (తులా రాశి)',
     birthTime: '07:15 AM',
@@ -119,6 +128,7 @@ const SAMPLE_PROFILES: Record<string, any> = {
     fatherName: 'P. Raghavaiah (Asthana Vidwan)',
     motherName: 'P. Saraswathi',
     siblings: '1 Younger Sister',
+    kinship: { relationType: 'menarikam_related', titleEn: 'Menarikam Lineage Link', titleTe: 'మేనరిక బాంధవ్యం (సాంప్రదాయానుకూలం)', descriptionEn: 'Connected through maternal uncle gotra (eligible under traditional Menarikam customs if mutually preferred).', descriptionTe: 'మాతృవంశ గోత్ర సాన్నిహిత్యం కలదు (మేనరికం సాంప్రదాయం ప్రకారం పరిశీలించదగినది).', badgeStyle: { bg: '#FEF3C7', color: '#92400E', border: '#F59E0B' } },
   },
   'sample-6': {
     id: 'sample-6',
@@ -128,6 +138,7 @@ const SAMPLE_PROFILES: Record<string, any> = {
     district: { en: 'Visakhapatnam, Andhra Pradesh', te: 'విశాఖపట్నం, ఆంధ్రప్రదేశ్' },
     mandal: 'Gajuwaka (గాజువాక)',
     gothra: 'Sandilya (శాండిల్య)',
+    maternalLineage: 'Kashyapa (కాశ్యప)',
     nakshatra: 'Ashwini (అశ్విని)',
     rasi: 'Mesha (మేష రాశి)',
     birthTime: '04:30 AM',
@@ -137,9 +148,9 @@ const SAMPLE_PROFILES: Record<string, any> = {
     incomeBracket: '12l_25l',
     vocation: 'corporate_tech_civil',
     photoUrl: '/matrimony/profiles/bride-3.jpg',
-    fatherName: 'K. Gopalakrishna (Govt Officer)',
     motherName: 'K. Sujatha',
     siblings: '1 Younger Brother (Engineer)',
+    kinship: { relationType: 'independent', titleEn: 'Independent Lineages', titleTe: 'స్వతంత్ర వంశ ధార', descriptionEn: 'Both paternal and maternal lineages are completely distinct and independent.', descriptionTe: 'పితృ మరియు మాతృ గోత్రాలు రెండూ వేర్వేరుగా ఉన్న శుభకరమైన సంబంధం.', badgeStyle: { bg: '#ECFDF5', color: '#065F46', border: '#10B981' } },
   },
   'sample-7': {
     id: 'sample-7',
@@ -243,28 +254,72 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
     dpdpConsent: Boolean(claims),
   });
 
-  const p = SAMPLE_PROFILES[id] ?? {
-    id,
-    displayName: 'Verified Community Candidate',
-    age: 26,
-    gender: 'female',
-    district: { en: 'Telangana & Andhra Pradesh', te: 'ఉభయ తెలుగు రాష్ట్రాలు' },
-    mandal: 'Mandal Center',
-    gothra: 'Kashyapa (కాశ్యప)',
-    nakshatra: 'Swati (స్వాతి)',
-    rasi: 'Tula (తులా రాశి)',
-    birthTime: '08:30 AM',
-    birthPlace: 'Telangana',
-    educationDegree: 'Professional Degree',
-    occupation: 'Corporate / Govt Professional',
-    incomeBracket: '12l_25l',
-    vocation: 'corporate_tech_civil',
-    photoInitials: 'VK',
-    photoGradient: 'linear-gradient(135deg, #1e3a8a, #0b172d)',
-    fatherName: 'Verified Member',
-    motherName: 'Verified Member',
-    siblings: 'Verified Family',
-  };
+  let dbProfile: any = null;
+  if (claims) {
+    try {
+      const ctx = dbContext(claims);
+      dbProfile = await getProfileView(ctx, id);
+    } catch {
+      // not found or error
+    }
+  }
+
+  const p = dbProfile
+    ? {
+        id: dbProfile.id,
+        displayName: dbProfile.displayName,
+        age: dbProfile.age,
+        gender: 'female',
+        district: dbProfile.district,
+        mandal: dbProfile.mandal,
+        gothra: `${dbProfile.gothra.en} (${dbProfile.gothra.te})`,
+        maternalLineage: dbProfile.maternalLineage,
+        nakshatra: dbProfile.nakshatra ?? 'Rohini (రోహిణి)',
+        rasi: 'Mithuna (మిథున రాశి)',
+        birthTime: dbProfile.birthTime ?? '06:00 AM',
+        birthPlace: dbProfile.birthPlace ?? 'Telangana',
+        educationDegree: dbProfile.educationDegree ?? 'Degree',
+        occupation: dbProfile.occupation ?? 'Professional',
+        incomeBracket: dbProfile.incomeBracket ?? 'prefer_not_to_say',
+        vocation: dbProfile.vocation,
+        photoUrl: dbProfile.photo?.url ?? null,
+        kinship: dbProfile.kinship,
+        proximityTier: dbProfile.proximityTier,
+        fatherName: 'Verified Member',
+        motherName: 'Verified Member',
+        siblings: 'Verified Family',
+      }
+    : (SAMPLE_PROFILES[id] ?? {
+        id,
+        displayName: 'Verified Community Candidate',
+        age: 26,
+        gender: 'female',
+        district: { en: 'Telangana & Andhra Pradesh', te: 'ఉభయ తెలుగు రాష్ట్రాలు' },
+        mandal: 'Mandal Center',
+        gothra: 'Kashyapa (కాశ్యప)',
+        maternalLineage: 'Bharadwaja (భరద్వాజ)',
+        nakshatra: 'Swati (స్వాతి)',
+        rasi: 'Tula (తులా రాశి)',
+        birthTime: '08:30 AM',
+        birthPlace: 'Telangana',
+        educationDegree: 'Professional Degree',
+        occupation: 'Corporate / Govt Professional',
+        incomeBracket: '12l_25l',
+        vocation: 'corporate_tech_civil',
+        photoInitials: 'VK',
+        photoGradient: 'linear-gradient(135deg, #1e3a8a, #0b172d)',
+        fatherName: 'Verified Member',
+        motherName: 'Verified Member',
+        siblings: 'Verified Family',
+        kinship: {
+          relationType: 'independent',
+          titleEn: 'Independent Lineages',
+          titleTe: 'స్వతంత్ర వంశ ధార',
+          descriptionEn: 'Both paternal and maternal lineages are completely distinct and independent.',
+          descriptionTe: 'పితృ మరియు మాతృ గోత్రాలు రెండూ వేర్వేరుగా ఉన్న శుభకరమైన సంబంధం.',
+          badgeStyle: { bg: '#ECFDF5', color: '#065F46', border: '#10B981' },
+        },
+      });
 
   return (
     <main className="shell">
@@ -414,6 +469,15 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
                 </div>
 
                 <div>
+                  <span style={{ display: 'block', fontSize: '0.78rem', color: '#065F46', fontWeight: 600 }}>
+                    <Bi en="Maternal Gotra (Menamama Lineage)" te="మాతృవంశ గోత్రం (మేనమామ గోత్రం)" />:
+                  </span>
+                  <span style={{ display: 'inline-block', marginTop: '0.2rem', padding: '0.25rem 0.7rem', background: '#ECFDF5', color: '#065F46', borderRadius: '6px', fontWeight: 800, fontSize: '0.95rem', border: '1px solid #A7F3D0' }}>
+                    {p.maternalLineage ?? 'స్వతంత్ర వంశం (Not Specified)'}
+                  </span>
+                </div>
+
+                <div>
                   <span style={{ display: 'block', fontSize: '0.78rem', color: '#64748B', fontWeight: 600 }}>
                     <Bi en="Birth Star & Rasi" te="జన్మ నక్షత్రం & రాశి" />:
                   </span>
@@ -430,6 +494,26 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
                     {p.birthTime} · {p.birthPlace}
                   </strong>
                 </div>
+
+                {p.kinship && (
+                  <div style={{
+                    gridColumn: '1 / -1',
+                    marginTop: '0.4rem',
+                    padding: '0.75rem 1rem',
+                    borderRadius: '10px',
+                    background: p.kinship?.badgeStyle?.bg ?? '#ECFDF5',
+                    border: `1.5px solid ${p.kinship?.badgeStyle?.border ?? '#10B981'}`,
+                    color: p.kinship?.badgeStyle?.color ?? '#065F46'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 800, fontSize: '0.92rem' }}>
+                      <span>{p.kinship.relationType === 'menarikam_related' ? '🤝' : p.kinship.relationType === 'shared_maternal' ? '🛡️' : '🌿'}</span>
+                      <span><Bi en={p.kinship.titleEn} te={p.kinship.titleTe} /></span>
+                    </div>
+                    <p style={{ margin: '0.25rem 0 0', fontSize: '0.82rem', fontWeight: 500, lineHeight: 1.4 }}>
+                      <Bi en={p.kinship.descriptionEn} te={p.kinship.descriptionTe} />
+                    </p>
+                  </div>
+                )}
               </div>
 
               {/* 10x Vedic Astrological Chart (ద్వాదశ రాశి చక్రం) */}

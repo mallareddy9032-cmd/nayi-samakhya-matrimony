@@ -8,6 +8,9 @@ import { CONSENT_NOTICES, parseCursor, type ConsentPurpose, type DiscoverQuery }
 import { NOTICES, type Lang } from './onboarding.ts';
 import { photoUrl } from './storage.ts';
 
+import { getBorderingDistricts, calculateProximityTier } from './geo/bordering-districts.ts';
+import { evaluateKinship, type KinshipRelation, type LineageProfile } from './lineage/maternal-menarikam.ts';
+
 // Member-facing reads and writes. Every query runs as nsm_app_user under RLS; the explicit
 // verified / non-self / non-Sagothra predicates below repeat the policy on purpose, because a
 // coordinator's own policy would otherwise let in-scope profiles into their member views.
@@ -20,53 +23,149 @@ export type Photo = { url: string; variant: 'full' | 'blurred' } | null;
 const PhotoCols = z.object({ object_id: z.uuid().nullable(), variant: z.enum(['full', 'blurred']).nullable() });
 const toPhoto = (r: z.infer<typeof PhotoCols>): Photo => (r.object_id && r.variant ? { url: photoUrl(r.object_id, r.variant), variant: r.variant } : null);
 
-const ViewerRow = z.object({ id: z.uuid(), status: z.string(), gender: z.enum(['male', 'female']).nullable() });
+const ViewerRow = z.object({
+  id: z.uuid(),
+  status: z.string(),
+  gender: z.enum(['male', 'female']).nullable(),
+  district: z.string().nullable(),
+  mandal: z.string().nullable(),
+  maternal_lineage: z.string().nullable(),
+  gothra_en: z.string().nullable(),
+  gothra_te: z.string().nullable(),
+  gothra_slug: z.string().nullable(),
+});
 async function viewer(tx: PoolClient, sub: string) {
-  const { rows } = await tx.query('SELECT id, status, gender FROM matrimony_shared.profiles WHERE root_user_id = $1', [sub]);
+  const { rows } = await tx.query(
+    `SELECT p.id, p.status, p.gender,
+            p.ancestral_native_district AS district,
+            p.ancestral_native_mandal AS mandal,
+            p.maternal_lineage,
+            gm.name_en AS gothra_en,
+            gm.name_te AS gothra_te,
+            gm.slug AS gothra_slug
+       FROM matrimony_shared.profiles p
+       LEFT JOIN matrimony_shared.gothra_master gm ON gm.id = p.gothra_id
+      WHERE p.root_user_id = $1`,
+    [sub],
+  );
   return rows[0] === undefined ? null : ViewerRow.parse(rows[0]);
 }
 
 // ------------------------------------------------------------------------------------ discover
 const CardRow = PhotoCols.extend({
-  id: z.uuid(), first_name: z.string(), age: z.number(), vocation: z.string(), salon_hub_slug: z.string().nullable(),
-  district_en: z.string(), district_te: z.string(), tier: z.number(),
+  id: z.uuid(),
+  first_name: z.string(),
+  age: z.number(),
+  vocation: z.string(),
+  salon_hub_slug: z.string().nullable(),
+  district_en: z.string(),
+  district_te: z.string(),
+  tier: z.number(),
+  gothra_en: z.string(),
+  gothra_te: z.string(),
+  maternal_lineage: z.string().nullable(),
+  ancestral_native_district: z.string(),
+  ancestral_native_mandal: z.string(),
 });
 
-/** Same mandal, then same district, then the rest of Telangana; keyset-paginated on (tier, id). */
+/** Same mandal (tier 0), same district (tier 1), bordering sister district (tier 2), then rest of Telugu states (tier 3); keyset-paginated on (tier, id). */
 export async function discover(ctx: DbContext, q: DiscoverQuery) {
   return withTx(ctx, async (tx) => {
     const me = await viewer(tx, ctx.sub);
     if (me?.status !== 'verified') return { viewerStatus: me?.status ?? 'not_started', gender: null, cards: [], next: null };
     const gender = q.gender ?? (me.gender === 'male' ? 'female' : 'male');
     const cursor = parseCursor(q.after);
+
+    // Expand search if includeBorderDistricts is requested
+    const targetDistricts = q.district
+      ? (q.includeBorderDistricts ? getBorderingDistricts(q.district) : [q.district])
+      : null;
+
+    // Bordering sister districts of viewer for tier 2 proximity ranking
+    const meBordering = me?.district ? getBorderingDistricts(me.district) : [];
+    const excludeMaternal = Boolean(q.excludeMaternalGotra);
+
     const { rows } = await tx.query(
       `SELECT c.*, ph.object_id, ph.variant FROM (
          SELECT p.id, split_part(p.display_name, ' ', 1) AS first_name,
                 extract(year FROM age(${TODAY}, p.date_of_birth))::int AS age,
                 p.vocation::text AS vocation, p.salon_hub_slug, d.name_en AS district_en, d.name_te AS district_te,
+                p.ancestral_native_district, p.ancestral_native_mandal, p.maternal_lineage,
+                gm.name_en AS gothra_en, gm.name_te AS gothra_te,
                 CASE WHEN p.ancestral_native_district = me.district AND p.ancestral_native_mandal = me.mandal THEN 0
-                     WHEN p.ancestral_native_district = me.district THEN 1 ELSE 2 END AS tier
+                     WHEN p.ancestral_native_district = me.district THEN 1
+                     WHEN p.ancestral_native_district = ANY($10::text[]) THEN 2
+                     ELSE 3 END AS tier
            FROM matrimony_shared.profiles p
            JOIN matrimony_shared.districts d ON d.slug = p.ancestral_native_district
-          CROSS JOIN (SELECT ancestral_native_district AS district, ancestral_native_mandal AS mandal
-                        FROM matrimony_shared.profiles WHERE root_user_id = $1) me
+           JOIN matrimony_shared.gothra_master gm ON gm.id = p.gothra_id
+          CROSS JOIN (SELECT ancestral_native_district AS district, ancestral_native_mandal AS mandal,
+                             maternal_lineage, gm0.name_en AS gothra_en, gm0.slug AS gothra_slug
+                        FROM matrimony_shared.profiles p0
+                        JOIN matrimony_shared.gothra_master gm0 ON gm0.id = p0.gothra_id
+                       WHERE p0.root_user_id = $1) me
           WHERE ${VISIBLE}
             AND p.gender = $2::matrimony_shared.gender
-            AND ($3::text IS NULL OR p.ancestral_native_district = $3)
+            AND ($3::text[] IS NULL OR p.ancestral_native_district = ANY($3))
             AND ($4::text IS NULL OR p.vocation::text = $4)
             AND ($5::int IS NULL OR p.date_of_birth <= ${TODAY} - make_interval(years => $5))
             AND ($6::int IS NULL OR p.date_of_birth > ${TODAY} - make_interval(years => $6 + 1))
+            AND (
+              NOT $11::boolean
+              OR (
+                (me.maternal_lineage IS NULL OR (
+                  lower(replace(gm.name_en, ' ', '')) <> lower(replace(me.maternal_lineage, ' ', ''))
+                  AND lower(replace(gm.slug, '-', '')) <> lower(replace(me.maternal_lineage, ' ', ''))
+                ))
+                AND (p.maternal_lineage IS NULL OR (
+                  lower(replace(p.maternal_lineage, ' ', '')) <> lower(replace(me.gothra_en, ' ', ''))
+                  AND lower(replace(p.maternal_lineage, ' ', '')) <> lower(replace(me.gothra_slug, '-', ''))
+                ))
+                AND (me.maternal_lineage IS NULL OR p.maternal_lineage IS NULL OR (
+                  lower(replace(p.maternal_lineage, ' ', '')) <> lower(replace(me.maternal_lineage, ' ', ''))
+                ))
+              )
+            )
        ) c
        LEFT JOIN LATERAL matrimony_shared.fn_photo_access(c.id) ph ON true
        WHERE ($7::int IS NULL OR (c.tier, c.id) > ($7, $8::uuid))
        ORDER BY c.tier, c.id
        LIMIT $9`,
-      [ctx.sub, gender, q.district ?? null, q.vocation ?? null, q.ageMin ?? null, q.ageMax ?? null, cursor?.tier ?? null, cursor?.id ?? null, PAGE + 1],
+      [ctx.sub, gender, targetDistricts, q.vocation ?? null, q.ageMin ?? null, q.ageMax ?? null, cursor?.tier ?? null, cursor?.id ?? null, PAGE + 1, meBordering, excludeMaternal],
     );
-    const cards = z.array(CardRow).parse(rows).map((r) => ({
-      id: r.id, firstName: r.first_name, age: r.age, vocation: r.vocation, salonHubSlug: r.salon_hub_slug,
-      district: { en: r.district_en, te: r.district_te }, tier: r.tier, photo: toPhoto(r),
-    }));
+    const cards = z.array(CardRow).parse(rows).map((r) => {
+      const viewerLineage: LineageProfile = {
+        gothra: me.gothra_en ?? '',
+        maternalLineage: me.maternal_lineage,
+      };
+      const candidateLineage: LineageProfile = {
+        gothra: r.gothra_en,
+        maternalLineage: r.maternal_lineage,
+      };
+      const kinship = evaluateKinship(viewerLineage, candidateLineage);
+      const proximityLabel = {
+        en: r.tier === 0 ? 'Same Mandal & District' : r.tier === 1 ? 'Same District' : r.tier === 2 ? 'Bordering Sister District' : 'Telugu States',
+        te: r.tier === 0 ? 'స్వస్థల మండలం' : r.tier === 1 ? 'స్వస్థల జిల్లా' : r.tier === 2 ? 'సరిహద్దు జిల్లా' : 'తెలుగు రాష్ట్రాలు',
+      };
+      return {
+        id: r.id,
+        firstName: r.first_name,
+        age: r.age,
+        vocation: r.vocation,
+        salonHubSlug: r.salon_hub_slug,
+        district: { en: r.district_en, te: r.district_te },
+        tier: r.tier,
+        photo: toPhoto(r),
+        gothra: { en: r.gothra_en, te: r.gothra_te },
+        maternalLineage: r.maternal_lineage,
+        kinship,
+        proximity: {
+          tier: r.tier,
+          isBordering: r.tier === 2,
+          ...proximityLabel,
+        },
+      };
+    });
     const last = cards.length > PAGE ? cards[PAGE - 1] : undefined;
     return { viewerStatus: me.status, gender, cards: cards.slice(0, PAGE), next: last ? `${last.tier}.${last.id}` : null };
   });
@@ -78,6 +177,8 @@ const ProfileRow = PhotoCols.extend({
   education_degree: z.string().nullable(), occupation: z.string().nullable(), income_bracket: z.string().nullable(),
   nakshatra: z.string().nullable(), birth_time: z.string().nullable(), birth_place: z.string().nullable(),
   district_en: z.string(), district_te: z.string(), mandal_en: z.string(),
+  ancestral_native_district: z.string(), ancestral_native_mandal: z.string(),
+  maternal_lineage: z.string().nullable(), gothra_en: z.string(), gothra_te: z.string(),
 });
 const InterestRow = z.object({
   id: z.uuid(), status: z.string(), sent_by_me: z.boolean(), my_consent: z.boolean(), their_consent: z.boolean(),
@@ -92,10 +193,13 @@ export async function getProfileView(ctx: DbContext, profileId: string) {
       `SELECT p.id, p.display_name, extract(year FROM age(${TODAY}, p.date_of_birth))::int AS age, p.vocation::text AS vocation,
               p.salon_hub_slug, p.education_degree, p.occupation, p.income_bracket::text AS income_bracket, p.nakshatra::text AS nakshatra,
               to_char(p.birth_time, 'HH24:MI') AS birth_time, p.birth_place,
-              d.name_en AS district_en, d.name_te AS district_te, m.name_en AS mandal_en, ph.object_id, ph.variant
+              d.name_en AS district_en, d.name_te AS district_te, m.name_en AS mandal_en, ph.object_id, ph.variant,
+              p.ancestral_native_district, p.ancestral_native_mandal, p.maternal_lineage,
+              gm.name_en AS gothra_en, gm.name_te AS gothra_te
          FROM matrimony_shared.profiles p
          JOIN matrimony_shared.districts d ON d.slug = p.ancestral_native_district
          JOIN matrimony_shared.mandals m ON m.district = p.ancestral_native_district AND m.slug = p.ancestral_native_mandal
+         JOIN matrimony_shared.gothra_master gm ON gm.id = p.gothra_id
          LEFT JOIN LATERAL matrimony_shared.fn_photo_access(p.id) ph ON true
         WHERE p.id = $2 AND ${VISIBLE}`,
       [ctx.sub, z.uuid().parse(profileId)],
@@ -114,11 +218,32 @@ export async function getProfileView(ctx: DbContext, profileId: string) {
     const interest: InterestState = row && { id: row.id, status: row.status, sentByMe: row.sent_by_me, myConsent: row.my_consent, theirConsent: row.their_consent };
     // Exact birth time and place only once both sides have accepted (horoscope matching).
     const accepted = interest?.status === 'accepted' || interest?.status === 'contact_unlocked';
+
+    const viewerLineage: LineageProfile = {
+      gothra: me.gothra_en ?? '',
+      maternalLineage: me.maternal_lineage,
+    };
+    const candidateLineage: LineageProfile = {
+      gothra: p.gothra_en,
+      maternalLineage: p.maternal_lineage,
+    };
+    const kinship = evaluateKinship(viewerLineage, candidateLineage);
+    const proximityTier = calculateProximityTier(
+      me.district ?? '',
+      me.mandal ?? '',
+      p.ancestral_native_district,
+      p.ancestral_native_mandal,
+    );
+
     return {
       id: p.id, displayName: p.display_name, age: p.age, vocation: p.vocation, salonHubSlug: p.salon_hub_slug,
       educationDegree: p.education_degree, occupation: p.occupation, incomeBracket: p.income_bracket, nakshatra: p.nakshatra,
       birthTime: accepted ? p.birth_time : null, birthPlace: accepted ? p.birth_place : null,
       district: { en: p.district_en, te: p.district_te }, mandal: p.mandal_en, photo: toPhoto(p), interest,
+      gothra: { en: p.gothra_en, te: p.gothra_te },
+      maternalLineage: p.maternal_lineage,
+      kinship,
+      proximityTier,
     };
   });
 }

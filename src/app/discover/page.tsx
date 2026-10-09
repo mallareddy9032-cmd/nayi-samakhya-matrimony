@@ -32,9 +32,13 @@ const PUBLIC_DISCOVERY_CARDS = [
     nakshatraTe: 'రోహిణి',
     educationEn: 'B.Tech (CSE) · Senior Software Engineer',
     educationTe: 'బి.టెక్ (సిఎస్ఇ) · సీనియర్ సాఫ్ట్‌వేర్ ఇంజనీర్',
+    maternalLineageEn: 'Bharadwaja',
+    maternalLineageTe: 'భరద్వాజ',
     photo: null,
     badgeEn: 'NS-ID Verified',
     badgeTe: 'ఎన్ఎస్-ఐడీ ధృవీకృతం',
+    proximity: { isBordering: false, en: 'Same District', te: 'స్వస్థల జిల్లా' },
+    kinship: { relationType: 'independent', titleEn: 'Independent Lineages', titleTe: 'స్వతంత్ర వంశ ధార', badgeStyle: { bg: '#ECFDF5', color: '#065F46', border: '#10B981' } },
     photoUrl: '/matrimony/profiles/groom-1.jpg',
   },
   {
@@ -53,9 +57,13 @@ const PUBLIC_DISCOVERY_CARDS = [
     nakshatraTe: 'హస్త',
     educationEn: 'M.Sc, B.Ed · Govt High School Teacher',
     educationTe: 'ఎం.ఎస్సీ, బి.ఎడ్ · ప్రభుత్వ ఉపాధ్యాయురాలు',
+    maternalLineageEn: 'Kashyapa',
+    maternalLineageTe: 'కాశ్యప',
     photo: null,
     badgeEn: 'Mandal Lineage Verified',
     badgeTe: 'మండల వంశ ధృవీకృతం',
+    proximity: { isBordering: true, en: 'Bordering District (Warangal ↔ Jangaon)', te: 'సరిహద్దు జిల్లా (వరంగల్ ↔ జనగామ)' },
+    kinship: { relationType: 'independent', titleEn: 'Independent Lineages', titleTe: 'స్వతంత్ర వంశ ధార', badgeStyle: { bg: '#ECFDF5', color: '#065F46', border: '#10B981' } },
     photoUrl: '/matrimony/profiles/bride-1.jpg',
   },
   {
@@ -74,9 +82,13 @@ const PUBLIC_DISCOVERY_CARDS = [
     nakshatraTe: 'ఉత్తర',
     educationEn: 'B.Com · Salon Chain Founder & Entrepreneur',
     educationTe: 'బి.కామ్ · సెలూన్ వ్యవస్థాపకులు & వ్యాపారవేత్త',
+    maternalLineageEn: 'Kaundinya',
+    maternalLineageTe: 'కౌండిన్య',
     photo: null,
     badgeEn: 'Enterprise Modernist',
     badgeTe: 'స్వయం ఉపాధి సాధకులు',
+    proximity: { isBordering: false, en: 'Same District', te: 'స్వస్థల జిల్లా' },
+    kinship: { relationType: 'independent', titleEn: 'Independent Lineages', titleTe: 'స్వతంత్ర వంశ ధార', badgeStyle: { bg: '#ECFDF5', color: '#065F46', border: '#10B981' } },
     photoUrl: '/matrimony/profiles/groom-2.jpg',
   },
   {
@@ -95,9 +107,13 @@ const PUBLIC_DISCOVERY_CARDS = [
     nakshatraTe: 'అనూరాధ',
     educationEn: 'B.Pharm, MBA · Healthcare Executive',
     educationTe: 'బి.ఫార్మ్, ఎంబీఏ · హెల్త్‌కేర్ ఎగ్జిక్యూటివ్',
+    maternalLineageEn: 'Agastya',
+    maternalLineageTe: 'అగస్త్య',
     photo: null,
     badgeEn: 'NS-ID Verified',
     badgeTe: 'ఎన్ఎస్-ఐడీ ధృవీకృతం',
+    proximity: { isBordering: true, en: 'Cross-Border Sister District (Nalgonda ↔ Palnadu/Guntur)', te: 'సరిహద్దు జిల్లా (నల్గొండ ↔ పల్నాడు/గుంటూరు)' },
+    kinship: { relationType: 'independent', titleEn: 'Independent Lineages', titleTe: 'స్వతంత్ర వంశ ధార', badgeStyle: { bg: '#ECFDF5', color: '#065F46', border: '#10B981' } },
     photoUrl: '/matrimony/profiles/bride-2.jpg',
   },
   {
@@ -116,9 +132,13 @@ const PUBLIC_DISCOVERY_CARDS = [
     nakshatraTe: 'స్వాతి',
     educationEn: 'Vidwan / MA Music · Classical Nadaswaram Artiste',
     educationTe: 'విద్వాన్ / ఎంఏ సంగీతం · నాదస్వర విద్వాంసులు',
+    maternalLineageEn: 'Sandilya',
+    maternalLineageTe: 'శాండిల్య',
     photo: null,
     badgeEn: 'Heritage Custodian',
     badgeTe: 'సాంస్కృతిక సంరక్షకులు',
+    proximity: { isBordering: true, en: 'Cross-Border Sister District (Guntur ↔ Suryapet/Khammam)', te: 'సరిహద్దు జిల్లా (గుంటూరు ↔ సూర్యాపేట/ఖమ్మం)' },
+    kinship: { relationType: 'menarikam_related', titleEn: 'Menarikam Lineage Link', titleTe: 'మేనరిక బాంధవ్యం (సాంప్రదాయానుకూలం)', badgeStyle: { bg: '#FEF3C7', color: '#92400E', border: '#F59E0B' } },
     photoUrl: '/matrimony/profiles/groom-3.jpg',
   },
   {
@@ -137,9 +157,13 @@ const PUBLIC_DISCOVERY_CARDS = [
     nakshatraTe: 'అశ్విని',
     educationEn: 'MCA · Senior IT Systems Analyst',
     educationTe: 'ఎంసిఎ · సీనియర్ ఐటీ సిస్టమ్స్ అనలిస్ట్',
+    maternalLineageEn: 'Kashyapa',
+    maternalLineageTe: 'కాశ్యప',
     photo: null,
     badgeEn: 'NS-ID Verified',
     badgeTe: 'ఎన్ఎస్-ఐడీ ధృవీకృతం',
+    proximity: { isBordering: false, en: 'Andhra Pradesh Coastal Cluster', te: 'కోస్తా ఆంధ్ర ప్రాంతం' },
+    kinship: { relationType: 'independent', titleEn: 'Independent Lineages', titleTe: 'స్వతంత్ర వంశ ధార', badgeStyle: { bg: '#ECFDF5', color: '#065F46', border: '#10B981' } },
     photoUrl: '/matrimony/profiles/bride-3.jpg',
   },
   {
@@ -158,9 +182,13 @@ const PUBLIC_DISCOVERY_CARDS = [
     nakshatraTe: 'మఖ',
     educationEn: 'M.Tech · Senior Data Scientist',
     educationTe: 'ఎం.టెక్ · సీనియర్ డేటా సైంటిస్ట్',
+    maternalLineageEn: 'Gautama',
+    maternalLineageTe: 'గౌతమ',
     photo: null,
     badgeEn: 'Mandal Lineage Verified',
     badgeTe: 'మండల వంశ ధృవీకృతం',
+    proximity: { isBordering: false, en: 'Hyderabad-Rangareddy Urban Cluster', te: 'హైదరాబాద్-రంగారెడ్డి అర్బన్' },
+    kinship: { relationType: 'independent', titleEn: 'Independent Lineages', titleTe: 'స్వతంత్ర వంశ ధార', badgeStyle: { bg: '#ECFDF5', color: '#065F46', border: '#10B981' } },
     photoUrl: '/matrimony/profiles/groom-4.jpg',
   },
   {
@@ -179,9 +207,13 @@ const PUBLIC_DISCOVERY_CARDS = [
     nakshatraTe: 'రేవతి',
     educationEn: 'MBBS · Resident Medical Officer',
     educationTe: 'ఎంబీబీఎస్ · రెసిడెంట్ మెడికల్ ఆఫీసర్ (వైద్యురాలు)',
+    maternalLineageEn: 'Bharadwaja',
+    maternalLineageTe: 'భరద్వాజ',
     photo: null,
     badgeEn: 'NS-ID Verified',
     badgeTe: 'ఎన్ఎస్-ఐడీ ధృవీకృతం',
+    proximity: { isBordering: true, en: 'Bordering District (Siddipet ↔ Karimnagar)', te: 'సరిహద్దు జిల్లా (సిద్దిపేట ↔ కరీంనగర్)' },
+    kinship: { relationType: 'independent', titleEn: 'Independent Lineages', titleTe: 'స్వతంత్ర వంశ ధార', badgeStyle: { bg: '#ECFDF5', color: '#065F46', border: '#10B981' } },
     photoUrl: '/matrimony/profiles/bride-4.jpg',
   },
   {
@@ -200,9 +232,13 @@ const PUBLIC_DISCOVERY_CARDS = [
     nakshatraTe: 'ఆరుద్ర',
     educationEn: 'M.Sc (Agri) · Assistant Agriculture Officer (Govt)',
     educationTe: 'ఎం.ఎస్సీ (అగ్రి) · సహాయ వ్యవసాయ అధికారి (ప్రభుత్వ ఉద్యోగి)',
+    maternalLineageEn: 'Kashyapa',
+    maternalLineageTe: 'కాశ్యప',
     photo: null,
     badgeEn: 'Government Lineage Verified',
     badgeTe: 'ప్రభుత్వ ఉద్యోగి ధృవీకృతం',
+    proximity: { isBordering: true, en: 'Cross-Border Sister District (Mahabubnagar ↔ Kurnool)', te: 'సరిహద్దు జిల్లా (మహబూబ్‌నగర్ ↔ కర్నూలు)' },
+    kinship: { relationType: 'independent', titleEn: 'Independent Lineages', titleTe: 'స్వతంత్ర వంశ ధార', badgeStyle: { bg: '#ECFDF5', color: '#065F46', border: '#10B981' } },
     photoUrl: '/matrimony/profiles/groom-5.jpg',
   },
   {
@@ -221,9 +257,13 @@ const PUBLIC_DISCOVERY_CARDS = [
     nakshatraTe: 'పుష్యమి',
     educationEn: 'B.Tech, MS · Product Designer',
     educationTe: 'బి.టెక్, ఎంఎస్ · ప్రొడక్ట్ డిజైనర్',
+    maternalLineageEn: 'Vashishta',
+    maternalLineageTe: 'వశిష్ట',
     photo: null,
     badgeEn: 'NS-ID Verified',
     badgeTe: 'ఎన్ఎస్-ఐడీ ధృవీకృతం',
+    proximity: { isBordering: false, en: 'Hyderabad-Medchal Twin City Cluster', te: 'హైదరాబాద్-మేడ్చల్ జంట నగరాలు' },
+    kinship: { relationType: 'independent', titleEn: 'Independent Lineages', titleTe: 'స్వతంత్ర వంశ ధార', badgeStyle: { bg: '#ECFDF5', color: '#065F46', border: '#10B981' } },
     photoUrl: '/matrimony/profiles/bride-5.jpg',
   },
 ];
@@ -354,6 +394,35 @@ export default async function DiscoverPage({ searchParams }: { searchParams: Sea
             <Link href="/discover" className="btn secondary" style={{ height: '46px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '10px', padding: '0 0.9rem', fontSize: '0.85rem', textDecoration: 'none' }} title="Reset All Filters">
               <Bi en="Reset" te="రీసెట్" />
             </Link>
+          </div>
+
+          {/* Proximity & Maternal Lineage (మేనరికం) Advanced Filter Controls */}
+          <div style={{ gridColumn: '1 / -1', display: 'flex', flexWrap: 'wrap', gap: '1.4rem', paddingTop: '0.8rem', marginTop: '0.3rem', borderTop: '1px dashed #E2D9CC' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '0.55rem', cursor: 'pointer', fontSize: '0.88rem', fontWeight: 600, color: '#1E293B' }}>
+              <input
+                type="checkbox"
+                name="includeBorderDistricts"
+                value="true"
+                defaultChecked={Boolean(q.includeBorderDistricts)}
+                style={{ width: '18px', height: '18px', accentColor: '#801426', cursor: 'pointer' }}
+              />
+              <span>
+                🌐 <Bi en="Include Border & Adjacent Sister Districts (TG ↔ AP Cross-Border Matching)" te="సరిహద్దు & సమీప జిల్లాలు కూడా చేర్చండి (తెలంగాణ ↔ ఆంధ్రప్రదేశ్ సమీప బంధాలు)" />
+              </span>
+            </label>
+
+            <label style={{ display: 'flex', alignItems: 'center', gap: '0.55rem', cursor: 'pointer', fontSize: '0.88rem', fontWeight: 600, color: '#1E293B' }}>
+              <input
+                type="checkbox"
+                name="excludeMaternalGotra"
+                value="true"
+                defaultChecked={Boolean(q.excludeMaternalGotra)}
+                style={{ width: '18px', height: '18px', accentColor: '#801426', cursor: 'pointer' }}
+              />
+              <span>
+                🛡️ <Bi en="Exclude Maternal Gotra Overlaps (Menarikam Protection)" te="మాతృవంశ గోత్ర రక్షణ (మేనరికం నిరోధం / స్వతంత్ర వంశాలు మాత్రమే)" />
+              </span>
+            </label>
           </div>
         </div>
       </form>
@@ -520,6 +589,17 @@ export default async function DiscoverPage({ searchParams }: { searchParams: Sea
                   </div>
                 )}
 
+                {(c.maternalLineageEn || c.maternalLineage) && (
+                  <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px dashed #EEDCC8', paddingBottom: '0.35rem' }}>
+                    <span style={{ color: '#065F46', fontWeight: 700 }}>
+                      🌿 <Bi en="Maternal Gotra" te="మాతృవంశ గోత్రం" />:
+                    </span>
+                    <span style={{ fontWeight: 600, color: '#1E293B' }}>
+                      <Bi en={c.maternalLineageEn ?? c.maternalLineage} te={c.maternalLineageTe ?? c.maternalLineage} />
+                    </span>
+                  </div>
+                )}
+
                 {(c.nakshatraEn || c.nakshatra) && (
                   <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px dashed #EEDCC8', paddingBottom: '0.35rem' }}>
                     <span style={{ color: '#801426', fontWeight: 700 }}>
@@ -539,6 +619,44 @@ export default async function DiscoverPage({ searchParams }: { searchParams: Sea
                       te={c.educationTe ?? c.education ?? (VOCATIONS[c.vocation as keyof typeof VOCATIONS]?.te ?? '')} 
                     />
                   </span>
+                </div>
+
+                {/* Cultural Kinship & Regional Proximity Badges */}
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.45rem', marginTop: '0.5rem', paddingTop: '0.45rem', borderTop: '1px dashed #EEDCC8' }}>
+                  {c.proximity && (
+                    <span style={{
+                      background: c.proximity.isBordering ? '#EFF6FF' : '#F8FAFC',
+                      color: c.proximity.isBordering ? '#1D4ED8' : '#334155',
+                      border: `1px solid ${c.proximity.isBordering ? '#BFDBFE' : '#CBD5E1'}`,
+                      borderRadius: '6px',
+                      padding: '0.22rem 0.55rem',
+                      fontSize: '0.74rem',
+                      fontWeight: 700,
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.3rem'
+                    }}>
+                      {c.proximity.isBordering ? '🌐' : '📍'} <Bi en={c.proximity.en ?? 'Telugu States'} te={c.proximity.te ?? 'తెలుగు రాష్ట్రాలు'} />
+                    </span>
+                  )}
+
+                  {c.kinship && (
+                    <span style={{
+                      background: c.kinship.badgeStyle?.bg ?? '#ECFDF5',
+                      color: c.kinship.badgeStyle?.color ?? '#065F46',
+                      border: `1px solid ${c.kinship.badgeStyle?.border ?? '#10B981'}`,
+                      borderRadius: '6px',
+                      padding: '0.22rem 0.55rem',
+                      fontSize: '0.74rem',
+                      fontWeight: 700,
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.3rem'
+                    }}>
+                      {c.kinship.relationType === 'menarikam_related' ? '🤝' : c.kinship.relationType === 'shared_maternal' ? '🛡️' : '🌿'}
+                      <Bi en={c.kinship.titleEn} te={c.kinship.titleTe} />
+                    </span>
+                  )}
                 </div>
               </div>
 
