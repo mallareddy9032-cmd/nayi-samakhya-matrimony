@@ -56,7 +56,7 @@ export default function LoginPage() {
           // invisible reCAPTCHA solved
         },
         'expired-callback': () => {
-          setErrorMsg('Verification session expired. Please tap Send SMS OTP again.');
+          setErrorMsg('పరిశీలన సెషన్ గడువు ముగిసింది. దయచేసి మళ్ళీ ప్రయత్నించండి.');
         },
       });
     }
@@ -116,7 +116,7 @@ export default function LoginPage() {
 
     const cleanOtp = otp.trim();
     if (cleanOtp.length !== 6) {
-      setErrorMsg('Please enter the full 6-digit verification code.');
+      setErrorMsg('దయచేసి పూర్తి 6 అంకెల ధృవీకరణ కోడ్‌ను నమోదు చేయండి.');
       return;
     }
 
@@ -126,7 +126,7 @@ export default function LoginPage() {
       if (window.confirmationResult) {
         await window.confirmationResult.confirm(cleanOtp);
       } else if (cleanOtp !== '123456') {
-        throw new Error('Invalid code entered.');
+        throw new Error('చెల్లని కోడ్ నమోదు చేయబడింది.');
       }
 
       // Establish verified session cookie
@@ -171,7 +171,7 @@ export default function LoginPage() {
         return;
       }
       setIsSubmitting(false);
-      setErrorMsg('Incorrect or expired verification code. Please check your SMS and try again.');
+      setErrorMsg('తప్పుడు లేదా గడువు ముగిసిన ధృవీకరణ కోడ్. దయచేసి SMS చూసి మళ్ళీ ప్రయత్నించండి.');
     }
   };
 
@@ -181,189 +181,507 @@ export default function LoginPage() {
       {/* Invisible container for Firebase reCAPTCHA */}
       <div id="recaptcha-container" ref={recaptchaContainerRef} />
 
-      <div style={{ maxWidth: '490px', margin: '2.5rem auto' }}>
-        <div className="card" style={{ padding: '2.2rem', borderTop: '4px solid var(--maroon)', background: '#FFFFFF', boxShadow: 'var(--shadow-md)' }}>
-          <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
-            <span className="badge" style={{ marginBottom: '0.6rem', padding: '0.3rem 0.8rem' }}>
-              <Bi en="Candidate & Parent Sign In" te="అభ్యర్థులు & కుటుంబాల లాగిన్" />
-            </span>
-            <h1 style={{ fontSize: '1.8rem', margin: '0.3rem 0 0.5rem', color: 'var(--maroon)' }}>
-              <Bi en="Smart Dual Sign-In" te="స్మార్ట్ ద్వంద్వ లాగిన్" />
-            </h1>
-            <p className="hint" style={{ fontSize: '0.9rem' }}>
-              <Bi 
-                en="Login using either your Registered Mobile Number OR Unique ID (e.g. NS-M1042)." 
-                te="మీ రిజిస్టర్డ్ మొబైల్ నంబర్ లేదా మీ యూనిక్ ఐడీ (ఉదా: NS-M1042) ద్వారా సురక్షితంగా ప్రవేశించండి." 
-              />
-            </p>
-          </div>
+      <div style={{ maxWidth: '520px', margin: '3rem auto 5rem', padding: '0 1rem' }}>
+        {/* Luxury Multi-Layered Card Container with Temple Gold Framing */}
+        <div 
+          style={{
+            position: 'relative',
+            borderRadius: '28px',
+            background: 'linear-gradient(180deg, #FFFFFF 0%, #FFFDF9 100%)',
+            border: '1.5px solid rgba(212, 175, 55, 0.45)',
+            boxShadow: '0 25px 60px rgba(128, 20, 38, 0.09), 0 4px 20px rgba(212, 175, 55, 0.08)',
+            overflow: 'hidden',
+          }}
+        >
+          {/* Top Royal Metallic Accent Line */}
+          <div style={{
+            height: '5px',
+            background: 'linear-gradient(90deg, #D4AF37 0%, #801426 50%, #D4AF37 100%)',
+          }} />
 
-          {step === 'input' ? (
-            <div>
-              {/* Dual Selector Tabs */}
-              <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', background: 'var(--bg-surface)', padding: '0.3rem', borderRadius: '12px' }}>
-                <button
-                  type="button"
-                  onClick={() => { setLoginMode('mobile'); setErrorMsg(null); }}
-                  style={{
-                    flex: 1,
-                    padding: '0.6rem 0.8rem',
-                    borderRadius: '10px',
-                    border: 'none',
-                    fontWeight: 700,
-                    fontSize: '0.88rem',
-                    cursor: 'pointer',
-                    background: loginMode === 'mobile' ? 'var(--maroon)' : 'transparent',
-                    color: loginMode === 'mobile' ? '#FFFFFF' : 'var(--text-muted)',
-                    transition: 'all 0.2s ease',
-                  }}
-                >
-                  📱 మొబైల్ నంబర్ (Mobile)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => { setLoginMode('uniqueId'); setErrorMsg(null); }}
-                  style={{
-                    flex: 1,
-                    padding: '0.6rem 0.8rem',
-                    borderRadius: '10px',
-                    border: 'none',
-                    fontWeight: 700,
-                    fontSize: '0.88rem',
-                    cursor: 'pointer',
-                    background: loginMode === 'uniqueId' ? 'var(--maroon)' : 'transparent',
-                    color: loginMode === 'uniqueId' ? '#FFFFFF' : 'var(--text-muted)',
-                    transition: 'all 0.2s ease',
-                  }}
-                >
-                  🆔 యూనిక్ ఐడీ (Unique ID)
-                </button>
+          <div style={{ padding: '2.5rem 2.2rem' }}>
+            {/* Sacred Invocation & Auspicious Header */}
+            <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+              <div style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.4rem',
+                fontSize: '0.85rem',
+                fontWeight: 800,
+                color: '#B45309',
+                letterSpacing: '0.12em',
+                marginBottom: '0.6rem',
+              }}>
+                <span>卐</span>
+                <span>శ్రీ ధన్వంతరి ప్రసన్నః</span>
+                <span>卐</span>
               </div>
 
-              <form onSubmit={handleSendOtp}>
-                {loginMode === 'mobile' ? (
-                  <div className="field">
-                    <label htmlFor="phone-input">
-                      <Bi en="Mobile Number (SMS / WhatsApp)" te="మొబైల్ నంబర్ (ఎస్ఎంఎస్ / వాట్సాప్)" />
-                    </label>
-                    <div style={{ display: 'flex', gap: '0.5rem' }}>
-                      <span style={{ 
-                        padding: '0.65rem 0.8rem', 
-                        background: 'var(--bg-surface)', 
-                        border: '1.5px solid var(--border-light)', 
-                        borderRadius: '10px',
-                        color: 'var(--maroon)',
-                        fontWeight: 700
-                      }}>
-                        +91
-                      </span>
-                      <input
-                        id="phone-input"
-                        type="tel"
-                        placeholder="98480 12345"
-                        value={phone}
-                        maxLength={10}
-                        onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
-                        required
-                        style={{ flex: 1, fontSize: '1.1rem', letterSpacing: '0.05em' }}
-                      />
+              <div style={{ marginBottom: '0.8rem' }}>
+                <span 
+                  style={{
+                    display: 'inline-block',
+                    padding: '0.35rem 1rem',
+                    background: 'linear-gradient(135deg, #FEF9E7 0%, #FFF1F3 100%)',
+                    border: '1px solid rgba(212, 175, 55, 0.4)',
+                    borderRadius: '999px',
+                    color: '#801426',
+                    fontSize: '0.78rem',
+                    fontWeight: 800,
+                    letterSpacing: '0.04em',
+                    boxShadow: '0 2px 6px rgba(128, 20, 38, 0.04)',
+                  }}
+                >
+                  <Bi en="Candidate & Parent Sign In" te="అభ్యర్థులు & కుటుంబాల లాగిన్" />
+                </span>
+              </div>
+
+              <h1 
+                style={{
+                  fontSize: '2.2rem',
+                  margin: '0.2rem 0 0.5rem',
+                  color: '#801426',
+                  fontWeight: 800,
+                  fontFamily: "var(--font-display), Georgia, serif",
+                  letterSpacing: '-0.01em',
+                  lineHeight: 1.2,
+                }}
+              >
+                <Bi en="Smart Dual Sign-In" te="స్మార్ట్ ద్వంద్వ లాగిన్" />
+              </h1>
+
+              <p style={{ margin: 0, fontSize: '0.92rem', color: '#64748B', lineHeight: 1.5, maxWidth: '420px', marginInline: 'auto' }}>
+                <Bi 
+                  en="Access your matrimonial profile with your Mobile Number or Unique ID." 
+                  te="మీ రిజిస్టర్డ్ మొబైల్ నంబర్ లేదా మీకు కేటాయించిన యూనిక్ ఐడీ ద్వారా సురక్షితంగా ప్రవేశించండి." 
+                />
+              </p>
+            </div>
+
+            {step === 'input' ? (
+              <div>
+                {/* Segmented Dual Selector (iOS-Style Velvet Track) */}
+                <div 
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: '1fr 1fr',
+                    gap: '0.4rem',
+                    marginBottom: '1.8rem',
+                    background: '#F5EEE6',
+                    padding: '0.35rem',
+                    borderRadius: '16px',
+                    border: '1px solid #E7DCD0',
+                  }}
+                >
+                  <button
+                    type="button"
+                    onClick={() => { setLoginMode('mobile'); setErrorMsg(null); }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '0.5rem',
+                      padding: '0.7rem 1rem',
+                      borderRadius: '12px',
+                      border: 'none',
+                      fontWeight: 800,
+                      fontSize: '0.88rem',
+                      cursor: 'pointer',
+                      background: loginMode === 'mobile' 
+                        ? 'linear-gradient(135deg, #801426 0%, #5B0C1A 100%)' 
+                        : 'transparent',
+                      color: loginMode === 'mobile' ? '#FFFFFF' : '#64748B',
+                      boxShadow: loginMode === 'mobile' ? '0 4px 14px rgba(128, 20, 38, 0.25)' : 'none',
+                      transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+                    }}
+                  >
+                    <svg style={{ width: '16px', height: '16px', fill: 'currentColor' }} viewBox="0 0 24 24">
+                      <path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/>
+                    </svg>
+                    <span>మొబైల్ నంబర్</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => { setLoginMode('uniqueId'); setErrorMsg(null); }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '0.5rem',
+                      padding: '0.7rem 1rem',
+                      borderRadius: '12px',
+                      border: 'none',
+                      fontWeight: 800,
+                      fontSize: '0.88rem',
+                      cursor: 'pointer',
+                      background: loginMode === 'uniqueId' 
+                        ? 'linear-gradient(135deg, #801426 0%, #5B0C1A 100%)' 
+                        : 'transparent',
+                      color: loginMode === 'uniqueId' ? '#FFFFFF' : '#64748B',
+                      boxShadow: loginMode === 'uniqueId' ? '0 4px 14px rgba(128, 20, 38, 0.25)' : 'none',
+                      transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+                    }}
+                  >
+                    <svg style={{ width: '16px', height: '16px', fill: 'currentColor' }} viewBox="0 0 24 24">
+                      <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
+                    </svg>
+                    <span>యూనిక్ ఐడీ</span>
+                  </button>
+                </div>
+
+                <form onSubmit={handleSendOtp}>
+                  {loginMode === 'mobile' ? (
+                    <div style={{ marginBottom: '1.4rem' }}>
+                      <label 
+                        htmlFor="phone-input" 
+                        style={{ display: 'block', fontSize: '0.88rem', fontWeight: 800, color: '#1E293B', marginBottom: '0.5rem' }}
+                      >
+                        <Bi en="Mobile Number (SMS / WhatsApp)" te="మొబైల్ నంబర్ (ఎస్ఎంఎస్ / వాట్సాప్)" />
+                      </label>
+
+                      {/* Unified High-End Continuous Phone Input Group */}
+                      <div 
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          borderRadius: '14px',
+                          border: '2px solid #E2D9CC',
+                          background: '#FFFFFF',
+                          overflow: 'hidden',
+                          boxShadow: '0 2px 6px rgba(0,0,0,0.02)',
+                          transition: 'all 0.2s ease',
+                        }}
+                      >
+                        <div 
+                          style={{
+                            padding: '0.85rem 1rem',
+                            background: '#FDFBF7',
+                            borderRight: '1.5px solid #EADDC7',
+                            color: '#801426',
+                            fontWeight: 800,
+                            fontSize: '1.05rem',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.35rem',
+                          }}
+                        >
+                          <span style={{ fontSize: '1rem' }}>🇮🇳</span>
+                          <span>+91</span>
+                        </div>
+
+                        <input
+                          id="phone-input"
+                          type="tel"
+                          placeholder="98480 12345"
+                          value={phone}
+                          maxLength={10}
+                          onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
+                          required
+                          style={{
+                            flex: 1,
+                            padding: '0.85rem 1rem',
+                            fontSize: '1.2rem',
+                            letterSpacing: '0.08em',
+                            fontWeight: 700,
+                            border: 'none',
+                            outline: 'none',
+                            color: '#0F172A',
+                            background: 'transparent',
+                          }}
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <div style={{ marginBottom: '1.4rem' }}>
+                      <label 
+                        htmlFor="unique-id-input"
+                        style={{ display: 'block', fontSize: '0.88rem', fontWeight: 800, color: '#1E293B', marginBottom: '0.5rem' }}
+                      >
+                        <Bi en="Candidate Unique ID" te="అభ్యర్థి యూనిక్ ఐడీ నంబర్" />
+                      </label>
+
+                      <div 
+                        style={{
+                          borderRadius: '14px',
+                          border: '2px solid #E2D9CC',
+                          background: '#FFFFFF',
+                          overflow: 'hidden',
+                          boxShadow: '0 2px 6px rgba(0,0,0,0.02)',
+                        }}
+                      >
+                        <input
+                          id="unique-id-input"
+                          type="text"
+                          placeholder="ఉదా: NS-M1042 లేదా NS-F1043"
+                          value={uniqueId}
+                          onChange={(e) => setUniqueId(e.target.value.toUpperCase())}
+                          required
+                          style={{
+                            width: '100%',
+                            padding: '0.85rem 1rem',
+                            fontSize: '1.15rem',
+                            letterSpacing: '0.06em',
+                            fontWeight: 800,
+                            color: '#801426',
+                            border: 'none',
+                            outline: 'none',
+                            background: 'transparent',
+                          }}
+                        />
+                      </div>
+                      <p style={{ margin: '0.45rem 0 0', fontSize: '0.82rem', color: '#64748B' }}>
+                        <Bi 
+                          en="OTP will be sent automatically to your registered linked phone." 
+                          te="మీ యూనిక్ ఐడీతో అనుసంధానమైన రిజిస్టర్డ్ మొబైల్‌కు ఓటీపీ పంపబడుతుంది." 
+                        />
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Redesigned Bank-Grade DPDP 2023 Security Seal */}
+                  <div 
+                    style={{
+                      background: 'linear-gradient(135deg, #F0FDF4 0%, #ECFDF5 100%)',
+                      border: '1.5px solid #BBF7D0',
+                      borderRadius: '16px',
+                      padding: '0.9rem 1.1rem',
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      gap: '0.75rem',
+                      marginBottom: '1.8rem',
+                    }}
+                  >
+                    <div 
+                      style={{
+                        width: '32px',
+                        height: '32px',
+                        borderRadius: '50%',
+                        background: '#DCFCE7',
+                        display: 'grid',
+                        placeItems: 'center',
+                        fontSize: '1rem',
+                        flexShrink: 0,
+                        border: '1px solid #86EFAC',
+                      }}
+                    >
+                      🛡️
+                    </div>
+                    <div>
+                      <strong style={{ display: 'block', fontSize: '0.88rem', color: '#14532D', fontWeight: 800 }}>
+                        <Bi en="DPDP Act 2023 Secure OTP Auth" te="డిజిటల్ పర్సనల్ డేటా ప్రొటెక్షన్ రక్షణ" />
+                      </strong>
+                      <p style={{ margin: '0.2rem 0 0', fontSize: '0.82rem', color: '#166534', lineHeight: 1.45 }}>
+                        <Bi 
+                          en="Passwordless architecture. Real SMS OTP directly dispatched to your phone." 
+                          te="ఎటువంటి పాస్‌వర్డ్‌లు గుర్తుంచుకోవలసిన అవసరం లేదు. మీ మొబైల్ SMS ద్వారా సురక్షిత ప్రవేశం." 
+                        />
+                      </p>
                     </div>
                   </div>
-                ) : (
-                  <div className="field">
-                    <label htmlFor="unique-id-input">
-                      <Bi en="Candidate Unique ID" te="అభ్యర్థి యూనిక్ ఐడీ నంబర్" />
-                    </label>
-                    <input
-                      id="unique-id-input"
-                      type="text"
-                      placeholder="ఉదా: NS-M1042 లేదా NS-F1043"
-                      value={uniqueId}
-                      onChange={(e) => setUniqueId(e.target.value.toUpperCase())}
-                      required
-                      style={{ fontSize: '1.1rem', letterSpacing: '0.05em', fontWeight: 700, color: 'var(--maroon)' }}
-                    />
-                    <p className="hint">
-                      <Bi 
-                        en="Your registered mobile will receive the OTP automatically upon entering your Unique ID." 
-                        te="మీ యూనిక్ ఐడీ నమోదు చేయగానే మీ రిజిస్టర్డ్ మొబైల్ నంబర్‌కు ఆటోమేటిక్‌గా ఓటీపీ పంపబడుతుంది." 
-                      />
-                    </p>
+
+                  {errorMsg && (
+                    <div 
+                      style={{
+                        padding: '0.85rem 1rem',
+                        background: '#FEF2F2',
+                        border: '1.5px solid #FECACA',
+                        borderRadius: '12px',
+                        color: '#991B1B',
+                        fontSize: '0.86rem',
+                        fontWeight: 600,
+                        marginBottom: '1.2rem',
+                      }}
+                    >
+                      ⚠️ {errorMsg}
+                    </div>
+                  )}
+
+                  {/* High-Converting Primary CTA Button */}
+                  <button 
+                    type="submit" 
+                    disabled={isSubmitting}
+                    style={{
+                      width: '100%',
+                      padding: '0.95rem 1.5rem',
+                      fontSize: '1.08rem',
+                      fontWeight: 800,
+                      borderRadius: '16px',
+                      border: '1.5px solid rgba(212, 175, 55, 0.45)',
+                      background: 'linear-gradient(135deg, #801426 0%, #5B0C1A 50%, #3B050E 100%)',
+                      color: '#FFFFFF',
+                      boxShadow: '0 10px 25px rgba(128, 20, 38, 0.35), 0 2px 8px rgba(212, 175, 55, 0.2)',
+                      cursor: isSubmitting ? 'not-allowed' : 'pointer',
+                      opacity: isSubmitting ? 0.75 : 1,
+                      transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '0.5rem',
+                    }}
+                  >
+                    <span>
+                      <Bi en={isSubmitting ? 'Sending SMS OTP…' : 'Send SMS OTP →'} te={isSubmitting ? 'ఎస్ఎంఎస్ పంపుతోంది…' : 'ఎస్ఎంఎస్ ఓటీపీ పంపండి →'} />
+                    </span>
+                  </button>
+                </form>
+              </div>
+            ) : (
+              <form onSubmit={handleVerifyOtp}>
+                {successMsg && (
+                  <div 
+                    style={{
+                      padding: '0.85rem 1rem',
+                      background: '#F0FDF4',
+                      border: '1.5px solid #BBF7D0',
+                      borderRadius: '12px',
+                      color: '#15803D',
+                      fontSize: '0.86rem',
+                      fontWeight: 600,
+                      marginBottom: '1.5rem',
+                      textAlign: 'center',
+                    }}
+                  >
+                    ✅ {successMsg}
                   </div>
                 )}
 
-                <div style={{ marginTop: '0.8rem', padding: '0.75rem 0.9rem', background: '#F0FDF4', border: '1.5px solid #BBF7D0', borderRadius: '10px', fontSize: '0.86rem', color: '#166534' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.2rem' }}>
-                    <span style={{ fontSize: '1.1rem' }}>🛡️</span>
-                    <strong>
-                      <Bi en="DPDP 2023 Secure OTP Auth" te="డిజిటల్ పర్సనల్ డేటా ప్రొటెక్షన్ రక్షణ" />
-                    </strong>
-                  </div>
-                  <p style={{ margin: 0, fontSize: '0.82rem', lineHeight: 1.5 }}>
-                    <Bi 
-                      en="No passwords to remember or steal. Direct SMS OTP verification to your linked phone." 
-                      te="పాస్‌వర్డ్ అవసరం లేకుండా నేరుగా మీ అనుసంధాన మొబైల్ ఎస్ఎంఎస్ ద్వారా సురక్షిత ప్రవేశం." 
-                    />
-                  </p>
+                <div style={{ marginBottom: '1.6rem', textAlign: 'center' }}>
+                  <label 
+                    htmlFor="otp-input"
+                    style={{ display: 'block', fontSize: '0.92rem', fontWeight: 800, color: '#1E293B', marginBottom: '0.6rem' }}
+                  >
+                    <Bi en="Enter 6-Digit SMS Verification Code" te="6 అంకెల ఎస్ఎంఎస్ ఓటీపీని నమోదు చేయండి" />
+                  </label>
+
+                  <input
+                    id="otp-input"
+                    type="text"
+                    placeholder="• • • • • •"
+                    value={otp}
+                    maxLength={6}
+                    onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
+                    required
+                    style={{
+                      width: '100%',
+                      maxWidth: '320px',
+                      margin: '0 auto',
+                      textAlign: 'center',
+                      fontSize: '1.8rem',
+                      letterSpacing: '0.4em',
+                      fontWeight: 900,
+                      color: '#801426',
+                      padding: '0.8rem 1rem',
+                      borderRadius: '16px',
+                      border: '2px solid #D4AF37',
+                      background: '#FFFDF9',
+                      outline: 'none',
+                      boxShadow: '0 4px 14px rgba(212, 175, 55, 0.15)',
+                    }}
+                  />
                 </div>
 
-                {errorMsg && <p className="alert" style={{ margin: '1rem 0' }}>{errorMsg}</p>}
+                {errorMsg && (
+                  <div 
+                    style={{
+                      padding: '0.85rem 1rem',
+                      background: '#FEF2F2',
+                      border: '1.5px solid #FECACA',
+                      borderRadius: '12px',
+                      color: '#991B1B',
+                      fontSize: '0.86rem',
+                      fontWeight: 600,
+                      marginBottom: '1.2rem',
+                    }}
+                  >
+                    ⚠️ {errorMsg}
+                  </div>
+                )}
 
-                <div style={{ marginTop: '1.8rem' }}>
-                  <button type="submit" className="btn" style={{ width: '100%', padding: '0.8rem', fontSize: '1.05rem' }} disabled={isSubmitting}>
-                    <Bi en={isSubmitting ? 'Sending SMS OTP…' : 'Send SMS OTP →'} te={isSubmitting ? 'ఎస్ఎంఎస్ పంపుతోంది…' : 'ఎస్ఎంఎస్ ఓటీపీ పంపండి →'} />
+                <button 
+                  type="submit" 
+                  disabled={isSubmitting}
+                  style={{
+                    width: '100%',
+                    padding: '0.95rem 1.5rem',
+                    fontSize: '1.08rem',
+                    fontWeight: 800,
+                    borderRadius: '16px',
+                    border: '1.5px solid rgba(212, 175, 55, 0.45)',
+                    background: 'linear-gradient(135deg, #801426 0%, #5B0C1A 50%, #3B050E 100%)',
+                    color: '#FFFFFF',
+                    boxShadow: '0 10px 25px rgba(128, 20, 38, 0.35)',
+                    cursor: isSubmitting ? 'not-allowed' : 'pointer',
+                    transition: 'all 0.25s ease',
+                  }}
+                >
+                  <Bi en={isSubmitting ? 'Verifying…' : 'Verify & Enter Portal →'} te={isSubmitting ? 'ధృవీకరిస్తోంది…' : 'ధృవీకరించి ప్రవేశించండి →'} />
+                </button>
+
+                <div style={{ textAlign: 'center', marginTop: '1.2rem' }}>
+                  <button 
+                    type="button" 
+                    onClick={() => { setStep('input'); setOtp(''); setErrorMsg(null); }}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      color: '#64748B',
+                      fontSize: '0.88rem',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      padding: '0.4rem 0.8rem',
+                    }}
+                  >
+                    ← వివరాలు మార్చండి (Change Credentials)
                   </button>
                 </div>
               </form>
-            </div>
-          ) : (
-            <form onSubmit={handleVerifyOtp}>
-              {successMsg && <p className="notice" style={{ margin: '0 0 1.2rem' }}>{successMsg}</p>}
+            )}
 
-              <div className="field">
-                <label htmlFor="otp-input">
-                  <Bi en="Enter 6-Digit SMS Code" te="6 అంకెల ఎస్ఎంఎస్ ఓటీపీని నమోదు చేయండి" />
-                </label>
-                <input
-                  id="otp-input"
-                  type="text"
-                  placeholder="1 2 3 4 5 6"
-                  value={otp}
-                  maxLength={6}
-                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
-                  required
-                  style={{ textAlign: 'center', fontSize: '1.5rem', letterSpacing: '0.3em', fontWeight: 700, color: 'var(--maroon)' }}
-                />
+            {/* Graceful Footer & Onboarding Link */}
+            <div 
+              style={{
+                textAlign: 'center',
+                marginTop: '2.4rem',
+                borderTop: '1px solid #EADDC7',
+                paddingTop: '1.4rem',
+                position: 'relative',
+              }}
+            >
+              {/* Centered Lamp Icon on Divider */}
+              <div 
+                style={{
+                  position: 'absolute',
+                  top: '-12px',
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  background: '#FFFFFF',
+                  padding: '0 10px',
+                  fontSize: '0.9rem',
+                }}
+              >
+                🪔
               </div>
 
-              {errorMsg && <p className="alert" style={{ margin: '1rem 0' }}>{errorMsg}</p>}
-
-              <div style={{ marginTop: '1.8rem' }}>
-                <button type="submit" className="btn" style={{ width: '100%', padding: '0.8rem', fontSize: '1.05rem' }} disabled={isSubmitting}>
-                  <Bi en={isSubmitting ? 'Verifying…' : 'Verify & Enter Portal →'} te={isSubmitting ? 'ధృవీకరిస్తోంది…' : 'ధృవీకరించి ప్రవేశించండి →'} />
-                </button>
-              </div>
-
-              <div style={{ textAlign: 'center', marginTop: '1rem' }}>
-                <button 
-                  type="button" 
-                  className="btn-ghost" 
-                  style={{ border: 'none', color: 'var(--text-muted)', fontSize: '0.85rem' }}
-                  onClick={() => { setStep('input'); setOtp(''); setErrorMsg(null); }}
+              <p style={{ margin: 0, fontSize: '0.92rem', color: '#64748B' }}>
+                <Bi en="Looking to register a new candidate?" te="కొత్తగా సంబంధం నమోదు చేసుకోబోతున్నారా?" />{' '}
+                <Link 
+                  href="/onboarding" 
+                  style={{
+                    color: '#801426',
+                    fontWeight: 800,
+                    textDecoration: 'none',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.2rem',
+                    borderBottom: '1.5px solid #D4AF37',
+                    paddingBottom: '1px',
+                  }}
                 >
-                  ← Change Credentials / వివరాలు మార్చండి
-                </button>
-              </div>
-            </form>
-          )}
-
-          <div style={{ textAlign: 'center', marginTop: '2rem', borderTop: '1px solid var(--border-light)', paddingTop: '1.2rem' }}>
-            <p style={{ margin: 0, fontSize: '0.9rem', color: 'var(--text-muted)' }}>
-              <Bi en="Looking to register a new candidate?" te="కొత్తగా సంబంధం నమోదు చేసుకోబోతున్నారా?" />{' '}
-              <Link href="/onboarding" style={{ color: 'var(--maroon)', fontWeight: 700 }}>
-                <Bi en="Start 7-Step Profile" te="ఇక్కడ ప్రారంభించండి" />
-              </Link>
-            </p>
+                  <Bi en="Start 7-Step Profile →" te="ఇక్కడ ప్రారంభించండి →" />
+                </Link>
+              </p>
+            </div>
           </div>
         </div>
       </div>
