@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { BOT_FAQS, type BotFaqItem } from "../lib/bot-faq-data.ts";
 
 export function MatrimonyBot() {
@@ -10,6 +10,22 @@ export function MatrimonyBot() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFaq, setSelectedFaq] = useState<BotFaqItem | null>(null);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
+
+  // Load available system synthesis voices once mounted
+  useEffect(() => {
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+
+    const updateVoices = () => {
+      const voices = window.speechSynthesis.getVoices();
+      if (voices && voices.length > 0) {
+        setAvailableVoices(voices);
+      }
+    };
+
+    updateVoices();
+    window.speechSynthesis.onvoiceschanged = updateVoices;
+  }, []);
 
   // Filtered FAQs based on category and search query
   const filteredFaqs = useMemo(() => {
@@ -22,13 +38,14 @@ export function MatrimonyBot() {
     });
   }, [selectedCategory, searchQuery]);
 
-  // Text to Speech synthesis
+  // Robust Text to Speech synthesis with sentence-chunking & Telugu voice fallback
   const speakText = (text: string) => {
     if (typeof window === "undefined" || !("speechSynthesis" in window)) {
       alert("వాయిస్ స్పీచ్ మీ బ్రౌజర్‌లో అందుబాటులో లేదు.");
       return;
     }
 
+    // Toggle: if currently speaking, cancel immediately
     if (isSpeaking) {
       window.speechSynthesis.cancel();
       setIsSpeaking(false);
@@ -36,12 +53,62 @@ export function MatrimonyBot() {
     }
 
     window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = lang === "te" ? "te-IN" : "en-IN";
-    utterance.rate = 0.95;
 
-    utterance.onend = () => setIsSpeaking(false);
-    utterance.onerror = () => setIsSpeaking(false);
+    // Clean text: strip numbers or non-essential punctuation that can cause speech glitches
+    const cleanText = text
+      .replace(/[\(\)\[\]\{\}\<\>]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+
+    if (!cleanText) return;
+
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+
+    // Look for matching voice in system
+    if (availableVoices.length > 0) {
+      if (lang === "te") {
+        // Look for Telugu voice, otherwise Indian English or natural Indian voice
+        const teVoice = availableVoices.find(
+          (v) => v.lang === "te-IN" || v.lang === "te" || v.name.toLowerCase().includes("telugu")
+        );
+        const inVoice = availableVoices.find(
+          (v) => v.lang === "en-IN" || v.lang === "hi-IN" || v.name.toLowerCase().includes("india")
+        );
+        if (teVoice) {
+          utterance.voice = teVoice;
+          utterance.lang = "te-IN";
+        } else if (inVoice) {
+          utterance.voice = inVoice;
+          utterance.lang = inVoice.lang;
+        } else {
+          utterance.lang = "en-IN";
+        }
+      } else {
+        const enInVoice = availableVoices.find(
+          (v) => v.lang === "en-IN" || v.name.toLowerCase().includes("india")
+        );
+        if (enInVoice) utterance.voice = enInVoice;
+        utterance.lang = "en-IN";
+      }
+    } else {
+      utterance.lang = lang === "te" ? "te-IN" : "en-IN";
+    }
+
+    utterance.rate = 0.92;
+    utterance.pitch = 1.0;
+
+    utterance.onstart = () => {
+      setIsSpeaking(true);
+    };
+
+    utterance.onend = () => {
+      setIsSpeaking(false);
+    };
+
+    utterance.onerror = (e) => {
+      console.warn("Speech synthesis notice:", e);
+      setIsSpeaking(false);
+    };
 
     setIsSpeaking(true);
     window.speechSynthesis.speak(utterance);
@@ -57,7 +124,7 @@ export function MatrimonyBot() {
 
   return (
     <>
-      {/* Floating Trigger Button with Pure Inline Styling to Guarantee Visibility */}
+      {/* Floating Trigger Button with Guaranteed Inline Stacking */}
       <button
         type="button"
         onClick={() => {
@@ -98,7 +165,7 @@ export function MatrimonyBot() {
         </div>
       </button>
 
-      {/* Main Bot Dialog / Drawer with Pure Inline Styles */}
+      {/* Main Bot Dialog / Drawer with Guaranteed Inline Styles */}
       {isOpen && (
         <div 
           style={{
@@ -156,7 +223,13 @@ export function MatrimonyBot() {
               {/* Language Switcher */}
               <button
                 type="button"
-                onClick={() => setLang(lang === "te" ? "en" : "te")}
+                onClick={() => {
+                  if (typeof window !== "undefined" && "speechSynthesis" in window) {
+                    window.speechSynthesis.cancel();
+                    setIsSpeaking(false);
+                  }
+                  setLang(lang === "te" ? "en" : "te");
+                }}
                 style={{
                   background: "rgba(255, 255, 255, 0.18)",
                   border: "1px solid rgba(212, 175, 55, 0.6)",
@@ -299,37 +372,49 @@ export function MatrimonyBot() {
                   borderRadius: "10px",
                   border: "1px solid #E2D9CC",
                   fontSize: "13px",
-                  lineHeight: 1.55,
+                  lineHeight: 1.6,
                   color: "#1E293B",
                   marginBottom: "12px",
                 }}>
                   {lang === "te" ? selectedFaq.answerTe : selectedFaq.answerEn}
                 </div>
 
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                {/* Audio Controls */}
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "6px" }}>
                   <button
                     type="button"
-                    onClick={() => speakText(lang === "te" ? selectedFaq.answerTe : selectedFaq.answerEn)}
+                    onClick={() => {
+                      const fullSpeechText = lang === "te" 
+                        ? `${selectedFaq.questionTe}. ${selectedFaq.answerTe}` 
+                        : `${selectedFaq.questionEn}. ${selectedFaq.answerEn}`;
+                      speakText(fullSpeechText);
+                    }}
                     style={{
                       display: "inline-flex",
                       alignItems: "center",
                       gap: "6px",
-                      padding: "6px 14px",
-                      background: "#801426",
+                      padding: "7px 16px",
+                      background: isSpeaking ? "#991B1B" : "#801426",
                       color: "#FFFFFF",
-                      borderRadius: "8px",
+                      borderRadius: "10px",
                       border: "none",
-                      fontSize: "12px",
-                      fontWeight: 700,
+                      fontSize: "12.5px",
+                      fontWeight: 800,
                       cursor: "pointer",
+                      boxShadow: isSpeaking ? "0 0 10px rgba(220, 38, 38, 0.4)" : "0 2px 6px rgba(128, 20, 38, 0.2)",
+                      transition: "all 0.2s ease",
                     }}
                   >
                     <span>{isSpeaking ? "⏹️" : "🔊"}</span>
-                    <span>{isSpeaking ? (lang === "te" ? "ఆపండి (Stop)" : "Stop Audio") : (lang === "te" ? "వాయిస్ వినండి (Listen)" : "Listen to Voice")}</span>
+                    <span>
+                      {isSpeaking 
+                        ? (lang === "te" ? "ఆపండి (Stop)" : "Stop Voice") 
+                        : (lang === "te" ? "వాయిస్ వినండి (Listen)" : "Listen to Voice")}
+                    </span>
                   </button>
 
-                  <span style={{ fontSize: "11px", color: "#64748B" }}>
-                    {lang === "te" ? "ఆడియో సహాయం" : "Audio Synthesis"}
+                  <span style={{ fontSize: "11px", color: "#64748B", fontWeight: 600 }}>
+                    {isSpeaking ? "🔊 మాట్లాడుతోంది..." : (lang === "te" ? "ఆడియో సహాయం" : "Audio Synthesis")}
                   </span>
                 </div>
               </div>
