@@ -10,6 +10,7 @@ import { Nav } from '../Nav.tsx';
 import { Bi } from '../onboarding/Wizard.tsx';
 import { PhotoFrame } from '../profiles/PhotoFrame.tsx';
 import { WhatsAppShareButton } from '../../components/WhatsAppShareButton';
+import { ALL_TELANGANA_DISTRICTS, ALL_ANDHRA_DISTRICTS } from '../../lib/telangana-districts-mandals.ts';
 
 type Search = Promise<Record<string, string | string[] | undefined>>;
 
@@ -297,26 +298,22 @@ export default async function DiscoverPage({ searchParams }: { searchParams: Sea
             </label>
             <select id="f-district" name="district" defaultValue={q.district ?? ''} style={{ width: '100%', height: '46px', padding: '0.65rem 0.8rem', borderRadius: '10px', border: '1.5px solid #CBD5E1', background: '#F8FAFC', fontSize: '0.92rem' }}>
               <option value="">All Regions · అన్ని ప్రాంతాలు</option>
-              <optgroup label="Telangana · తెలంగాణ">
-                <option value="hyderabad">Hyderabad · హైదరాబాద్</option>
-                <option value="warangal">Warangal · వరంగల్</option>
-                <option value="karimnagar">Karimnagar · కరీంనగర్</option>
-                <option value="nalgonda">Nalgonda · నల్గొండ</option>
-                <option value="khammam">Khammam · ఖమ్మం</option>
-                <option value="nizamabad">Nizamabad · నిజామాబాద్</option>
-                <option value="rangareddy">Rangareddy · రంగారెడ్డి</option>
-                <option value="medchal-malkajgiri">Medchal-Malkajgiri · మేడ్చల్-మల్కాజ్‌గిరి</option>
-                <option value="siddipet">Siddipet · సిద్దిపేట</option>
-                <option value="mahabubnagar">Mahabubnagar · మహబూబ్‌నగర్</option>
+              <optgroup label="Telangana · తెలంగాణ (33 Districts)">
+                {ALL_TELANGANA_DISTRICTS.map((d) => (
+                  <option key={d.slug} value={d.slug}>
+                    {d.nameEn} · {d.nameTe}
+                  </option>
+                ))}
               </optgroup>
-              <optgroup label="Andhra Pradesh · ఆంధ్రప్రదేశ్">
-                <option value="visakhapatnam">Visakhapatnam · విశాఖపట్నం</option>
-                <option value="vijayawada-ntr">Vijayawada (NTR) · విజయవాడ</option>
-                <option value="guntur">Guntur · గుంటూరు</option>
-                <option value="tirupati">Tirupati · తిరుపతి</option>
-                <option value="kurnool">Kurnool · కర్నూలు</option>
-                <option value="kakinada">Kakinada · కాకినాడ</option>
-                <option value="sri-potti-sriramulu-nellore">Nellore · నెల్లూరు</option>
+              <optgroup label="Andhra Pradesh · ఆంధ్రప్రదేశ్ (26 Districts)">
+                {ALL_ANDHRA_DISTRICTS.map((d) => (
+                  <option key={d.slug} value={d.slug}>
+                    {d.nameEn} · {d.nameTe}
+                  </option>
+                ))}
+              </optgroup>
+              <optgroup label="Pan-India & Diaspora · ఇతర ప్రాంతాలు">
+                <option value="other">Other States / Rest of India · ఇతర రాష్ట్రాలు</option>
               </optgroup>
             </select>
           </div>

@@ -1,5 +1,10 @@
+import { 
+  ALL_ANDHRA_DISTRICTS, 
+  ANDHRA_PRADESH_MANDALS_MAP,
+} from './geo/ap-districts-mandals';
+
 export interface MandalItem {
-  district: string;
+  district?: string;
   slug: string;
   nameEn: string;
   nameTe?: string;
@@ -10,73 +15,56 @@ export interface DistrictItem {
   code: string;
   nameEn: string;
   nameTe: string;
+  state: 'telangana' | 'andhra-pradesh' | 'other';
 }
 
-export const ALL_ANDHRA_DISTRICTS: DistrictItem[] = [
-  { slug: 'visakhapatnam', code: 'VSP', nameEn: 'Visakhapatnam', nameTe: 'విశాఖపట్నం' },
-  { slug: 'vijayawada-ntr', code: 'NTR', nameEn: 'NTR (Vijayawada)', nameTe: 'ఎన్టీఆర్ (విజయవాడ)' },
-  { slug: 'guntur', code: 'GNT', nameEn: 'Guntur', nameTe: 'గుంటూరు' },
-  { slug: 'tirupati', code: 'TPT', nameEn: 'Tirupati', nameTe: 'తిరుపతి' },
-  { slug: 'kurnool', code: 'KNL', nameEn: 'Kurnool', nameTe: 'కర్నూలు' },
-  { slug: 'kakinada', code: 'KKD', nameEn: 'Kakinada', nameTe: 'కాకినాడ' },
-  { slug: 'sri-potti-sriramulu-nellore', code: 'NLR', nameEn: 'Nellore', nameTe: 'నెల్లూరు' },
-  { slug: 'east-godavari', code: 'EGOD', nameEn: 'East Godavari (Rajamahendravaram)', nameTe: 'తూర్పు గోదావరి' },
-  { slug: 'west-godavari', code: 'WGOD', nameEn: 'West Godavari (Bhimavaram)', nameTe: 'పశ్చిమ గోదావరి' },
-  { slug: 'krishna', code: 'KSHN', nameEn: 'Krishna (Machilipatnam)', nameTe: 'కృష్ణా' },
-  { slug: 'eluru', code: 'ELR', nameEn: 'Eluru', nameTe: 'ఏలూరు' },
-  { slug: 'prakasam', code: 'PKSM', nameEn: 'Prakasam (Ongole)', nameTe: 'ప్రకాశం' },
-  { slug: 'bapatla', code: 'BPTL', nameEn: 'Bapatla', nameTe: 'బాపట్ల' },
-  { slug: 'palnadu', code: 'PLND', nameEn: 'Palnadu (Narasaraopet)', nameTe: 'పల్నాడు' },
-  { slug: 'kadapa-ysr', code: 'YSR', nameEn: 'YSR Kadapa', nameTe: 'వైఎస్సార్ కడప' },
-  { slug: 'anantapur', code: 'ANTP', nameEn: 'Anantapur', nameTe: 'అనంతపురం' },
-  { slug: 'sri-sathya-sai', code: 'SSSI', nameEn: 'Sri Sathya Sai (Puttaparthi)', nameTe: 'శ్రీ సత్యసాయి' },
-  { slug: 'chittoor', code: 'CHTR', nameEn: 'Chittoor', nameTe: 'చిత్తూరు' },
-  { slug: 'annamayya', code: 'ANMY', nameEn: 'Annamayya (Rayachoti)', nameTe: 'అన్నమయ్య' },
-  { slug: 'nandyal', code: 'NDYL', nameEn: 'Nandyal', nameTe: 'నంద్యాల' },
-  { slug: 'srikakulam', code: 'SKLM', nameEn: 'Srikakulam', nameTe: 'శ్రీకాకుళం' },
-  { slug: 'vizianagaram', code: 'VZNR', nameEn: 'Vizianagaram', nameTe: 'విజయనగరం' },
-  { slug: 'parvathipuram-manyam', code: 'PMNM', nameEn: 'Parvathipuram Manyam', nameTe: 'పార్వతీపురం మన్యం' },
-  { slug: 'alluri-sitharama-raju', code: 'ASR', nameEn: 'Alluri Sitharama Raju', nameTe: 'అల్లూరి సీతారామరాజు' },
-  { slug: 'anakapalli', code: 'AKPL', nameEn: 'Anakapalli', nameTe: 'అనకాపల్లి' },
-  { slug: 'konaseema', code: 'KNSM', nameEn: 'Dr. B.R. Ambedkar Konaseema', nameTe: 'డా. బి.ఆర్. అంబేద్కర్ కోనసీమ' },
+export const ALL_TELANGANA_DISTRICTS: DistrictItem[] = [
+  { slug: 'hyderabad', code: 'HYDB', nameEn: 'Hyderabad', nameTe: 'హైదరాబాద్', state: 'telangana' },
+  { slug: 'warangal', code: 'WRGL', nameEn: 'Warangal', nameTe: 'వరంగల్', state: 'telangana' },
+  { slug: 'hanumakonda', code: 'HNMK', nameEn: 'Hanumakonda', nameTe: 'హనుమకొండ', state: 'telangana' },
+  { slug: 'karimnagar', code: 'KRMN', nameEn: 'Karimnagar', nameTe: 'కరీంనగర్', state: 'telangana' },
+  { slug: 'nalgonda', code: 'NLGD', nameEn: 'Nalgonda', nameTe: 'నల్గొండ', state: 'telangana' },
+  { slug: 'khammam', code: 'KMMM', nameEn: 'Khammam', nameTe: 'ఖమ్మం', state: 'telangana' },
+  { slug: 'nizamabad', code: 'NZMB', nameEn: 'Nizamabad', nameTe: 'నిజామాబాద్', state: 'telangana' },
+  { slug: 'rangareddy', code: 'RNGR', nameEn: 'Rangareddy', nameTe: 'రంగారెడ్డి', state: 'telangana' },
+  { slug: 'medchal-malkajgiri', code: 'MDCL', nameEn: 'Medchal-Malkajgiri', nameTe: 'మేడ్చల్-మల్కాజ్‌గిరి', state: 'telangana' },
+  { slug: 'suryapet', code: 'SRPT', nameEn: 'Suryapet', nameTe: 'సూర్యాపేట', state: 'telangana' },
+  { slug: 'siddipet', code: 'SDPT', nameEn: 'Siddipet', nameTe: 'సిద్దిపేట', state: 'telangana' },
+  { slug: 'mahabubnagar', code: 'MBNR', nameEn: 'Mahabubnagar', nameTe: 'మహబూబ్‌నగర్', state: 'telangana' },
+  { slug: 'adilabad', code: 'ADLB', nameEn: 'Adilabad', nameTe: 'ఆదిలాబాద్', state: 'telangana' },
+  { slug: 'bhadradri-kothagudem', code: 'BDKT', nameEn: 'Bhadradri Kothagudem', nameTe: 'భద్రాద్రి కొత్తగూడెం', state: 'telangana' },
+  { slug: 'jagtial', code: 'JGTL', nameEn: 'Jagtial', nameTe: 'జగిత్యాల', state: 'telangana' },
+  { slug: 'jangaon', code: 'JNGN', nameEn: 'Jangaon', nameTe: 'జనగామ', state: 'telangana' },
+  { slug: 'jayashankar-bhupalpally', code: 'JSBP', nameEn: 'Jayashankar Bhupalpally', nameTe: 'జయశంకర్ భూపాలపల్లి', state: 'telangana' },
+  { slug: 'jogulamba-gadwal', code: 'JLGD', nameEn: 'Jogulamba Gadwal', nameTe: 'జోగులాంబ గద్వాల', state: 'telangana' },
+  { slug: 'kamareddy', code: 'KMRD', nameEn: 'Kamareddy', nameTe: 'కామారెడ్డి', state: 'telangana' },
+  { slug: 'komaram-bheem-asifabad', code: 'KBAS', nameEn: 'Komaram Bheem Asifabad', nameTe: 'కొమరం భీమ్ ఆసిఫాబాద్', state: 'telangana' },
+  { slug: 'mahabubabad', code: 'MBBD', nameEn: 'Mahabubabad', nameTe: 'మహబూబాబాద్', state: 'telangana' },
+  { slug: 'mancherial', code: 'MNCL', nameEn: 'Mancherial', nameTe: 'మంచిర్యాల', state: 'telangana' },
+  { slug: 'medak', code: 'MEDK', nameEn: 'Medak', nameTe: 'మెదక్', state: 'telangana' },
+  { slug: 'mulugu', code: 'MLGU', nameEn: 'Mulugu', nameTe: 'ములుగు', state: 'telangana' },
+  { slug: 'nagarkurnool', code: 'NGKL', nameEn: 'Nagarkurnool', nameTe: 'నాగర్‌కర్నూల్', state: 'telangana' },
+  { slug: 'narayanpet', code: 'NRPT', nameEn: 'Narayanpet', nameTe: 'నారాయణపేట', state: 'telangana' },
+  { slug: 'nirmal', code: 'NRML', nameEn: 'Nirmal', nameTe: 'నిర్మల్', state: 'telangana' },
+  { slug: 'peddapalli', code: 'PDPL', nameEn: 'Peddapalli', nameTe: 'పెద్దపల్లి', state: 'telangana' },
+  { slug: 'rajanna-sircilla', code: 'RJSC', nameEn: 'Rajanna Sircilla', nameTe: 'రాజన్న సిరిసిల్ల', state: 'telangana' },
+  { slug: 'sangareddy', code: 'SNGR', nameEn: 'Sangareddy', nameTe: 'సంగారెడ్డి', state: 'telangana' },
+  { slug: 'vikarabad', code: 'VKBD', nameEn: 'Vikarabad', nameTe: 'వికారాబాద్', state: 'telangana' },
+  { slug: 'wanaparthy', code: 'WNPT', nameEn: 'Wanaparthy', nameTe: 'వనపర్తి', state: 'telangana' },
+  { slug: 'yadadri-bhuvanagiri', code: 'YDBG', nameEn: 'Yadadri Bhuvanagiri', nameTe: 'యాదాద్రి భువనగిరి', state: 'telangana' },
 ];
 
-export const ALL_TELANGANA_DISTRICTS: DistrictItem[] = [
-  { slug: 'hyderabad', code: 'HYDB', nameEn: 'Hyderabad', nameTe: 'హైదరాబాద్' },
-  { slug: 'warangal', code: 'WRGL', nameEn: 'Warangal', nameTe: 'వరంగల్' },
-  { slug: 'hanumakonda', code: 'HNMK', nameEn: 'Hanumakonda', nameTe: 'హనుమకొండ' },
-  { slug: 'karimnagar', code: 'KRMN', nameEn: 'Karimnagar', nameTe: 'కరీంనగర్' },
-  { slug: 'nalgonda', code: 'NLGD', nameEn: 'Nalgonda', nameTe: 'నల్గొండ' },
-  { slug: 'khammam', code: 'KMMM', nameEn: 'Khammam', nameTe: 'ఖమ్మం' },
-  { slug: 'nizamabad', code: 'NZMB', nameEn: 'Nizamabad', nameTe: 'నిజామాబాద్' },
-  { slug: 'rangareddy', code: 'RNGR', nameEn: 'Rangareddy', nameTe: 'రంగారెడ్డి' },
-  { slug: 'medchal-malkajgiri', code: 'MDCL', nameEn: 'Medchal-Malkajgiri', nameTe: 'మేడ్చల్-మల్కాజ్‌గిరి' },
-  { slug: 'suryapet', code: 'SRPT', nameEn: 'Suryapet', nameTe: 'సూర్యాపేట' },
-  { slug: 'siddipet', code: 'SDPT', nameEn: 'Siddipet', nameTe: 'సిద్దిపేట' },
-  { slug: 'mahabubnagar', code: 'MBNR', nameEn: 'Mahabubnagar', nameTe: 'మహబూబ్‌నగర్' },
-  { slug: 'adilabad', code: 'ADLB', nameEn: 'Adilabad', nameTe: 'ఆదిలాబాద్' },
-  { slug: 'bhadradri-kothagudem', code: 'BDKT', nameEn: 'Bhadradri Kothagudem', nameTe: 'భద్రాద్రి కొత్తగూడెం' },
-  { slug: 'jagtial', code: 'JGTL', nameEn: 'Jagtial', nameTe: 'జగిత్యాల' },
-  { slug: 'jangaon', code: 'JNGN', nameEn: 'Jangaon', nameTe: 'జనగామ' },
-  { slug: 'jayashankar-bhupalpally', code: 'JSBP', nameEn: 'Jayashankar Bhupalpally', nameTe: 'జయశంకర్ భూపాలపల్లి' },
-  { slug: 'jogulamba-gadwal', code: 'JLGD', nameEn: 'Jogulamba Gadwal', nameTe: 'జోగులాంబ గద్వాల' },
-  { slug: 'kamareddy', code: 'KMRD', nameEn: 'Kamareddy', nameTe: 'కామారెడ్డి' },
-  { slug: 'komaram-bheem-asifabad', code: 'KBAS', nameEn: 'Komaram Bheem Asifabad', nameTe: 'కొమరం భీమ్ ఆసిఫాబాద్' },
-  { slug: 'mahabubabad', code: 'MBBD', nameEn: 'Mahabubabad', nameTe: 'మహబూబాబాద్' },
-  { slug: 'mancherial', code: 'MNCL', nameEn: 'Mancherial', nameTe: 'మంచిర్యాల' },
-  { slug: 'medak', code: 'MEDK', nameEn: 'Medak', nameTe: 'మెదక్' },
-  { slug: 'mulugu', code: 'MLGU', nameEn: 'Mulugu', nameTe: 'ములుగు' },
-  { slug: 'nagarkurnool', code: 'NGKL', nameEn: 'Nagarkurnool', nameTe: 'నాగర్‌కర్నూల్' },
-  { slug: 'narayanpet', code: 'NRPT', nameEn: 'Narayanpet', nameTe: 'నారాయణపేట' },
-  { slug: 'nirmal', code: 'NRML', nameEn: 'Nirmal', nameTe: 'నిర్మల్' },
-  { slug: 'peddapalli', code: 'PDPL', nameEn: 'Peddapalli', nameTe: 'పెద్దపల్లి' },
-  { slug: 'rajanna-sircilla', code: 'RJSC', nameEn: 'Rajanna Sircilla', nameTe: 'రాజన్న సిరిసిల్ల' },
-  { slug: 'sangareddy', code: 'SNGR', nameEn: 'Sangareddy', nameTe: 'సంగారెడ్డి' },
-  { slug: 'vikarabad', code: 'VKBD', nameEn: 'Vikarabad', nameTe: 'వికారాబాద్' },
-  { slug: 'wanaparthy', code: 'WNPT', nameEn: 'Wanaparthy', nameTe: 'వనపర్తి' },
-  { slug: 'yadadri-bhuvanagiri', code: 'YDBG', nameEn: 'Yadadri Bhuvanagiri', nameTe: 'యాదాద్రి భువనగిరి' },
+export { ALL_ANDHRA_DISTRICTS, ANDHRA_PRADESH_MANDALS_MAP };
+
+/**
+ * Complete list of all 59 Districts of Telangana (33) and Andhra Pradesh (26)
+ */
+export const ALL_COMMUNITY_DISTRICTS: DistrictItem[] = [
+  ...ALL_TELANGANA_DISTRICTS,
   ...ALL_ANDHRA_DISTRICTS,
 ];
+
+export const ALL_DISTRICTS = ALL_COMMUNITY_DISTRICTS;
 
 
 export const TELANGANA_MANDALS_MAP: Record<string, { slug: string; nameEn: string; nameTe: string }[]> = {
@@ -222,57 +210,48 @@ export const TELANGANA_MANDALS_MAP: Record<string, { slug: string; nameEn: strin
     { slug: 'nawabpet', nameEn: 'Nawabpet', nameTe: 'నవాబ్‌పేట' },
     { slug: 'koilkonda', nameEn: 'Koilkonda', nameTe: 'కోయిల్కొండ' },
   ],
-  'visakhapatnam': [
-    { slug: 'gajuwaka', nameEn: 'Gajuwaka', nameTe: 'గాజువాక' },
-    { slug: 'visakhapatnam-rural', nameEn: 'Visakhapatnam Rural', nameTe: 'విశాఖపట్నం రూరల్' },
-    { slug: 'maharanipeta', nameEn: 'Maharanipeta', nameTe: 'మహారాణిపేట' },
-    { slug: 'bheemunipatnam', nameEn: 'Bheemunipatnam', nameTe: 'భీమునిపట్నం' },
-    { slug: 'pendurthi', nameEn: 'Pendurthi', nameTe: 'పెందుర్తి' },
-    { slug: 'madhurawada', nameEn: 'Madhurawada', nameTe: 'మధురవాడ' },
-  ],
-  'vijayawada-ntr': [
-    { slug: 'vijayawada-urban', nameEn: 'Vijayawada Urban', nameTe: 'విజయవాడ అర్బన్' },
-    { slug: 'vijayawada-rural', nameEn: 'Vijayawada Rural', nameTe: 'విజయవాడ రూరల్' },
-    { slug: 'gunadala', nameEn: 'Gunadala', nameTe: 'గుణదల' },
-    { slug: 'jaggaiahpet', nameEn: 'Jaggaiahpet', nameTe: 'జగ్గయ్యపేట' },
-    { slug: 'nandigama', nameEn: 'Nandigama', nameTe: 'నందిగామ' },
-    { slug: 'ibrahimpatnam-ap', nameEn: 'Ibrahimpatnam', nameTe: 'ఇబ్రహీంపట్నం' },
-  ],
-  'guntur': [
-    { slug: 'guntur-urban', nameEn: 'Guntur Urban', nameTe: 'గుంటూరు అర్బన్' },
-    { slug: 'guntur-rural', nameEn: 'Guntur Rural', nameTe: 'గుంటూరు రూరల్' },
-    { slug: 'tenali', nameEn: 'Tenali', nameTe: 'తెనాలి' },
-    { slug: 'mangalagiri', nameEn: 'Mangalagiri', nameTe: 'మంగళగిరి' },
-    { slug: 'prathipadu', nameEn: 'Prathipadu', nameTe: 'ప్రత్తిపాడు' },
-    { slug: 'tadikonda', nameEn: 'Tadikonda', nameTe: 'తాడికొండ' },
-  ],
-  'tirupati': [
-    { slug: 'tirupati-urban', nameEn: 'Tirupati Urban', nameTe: 'తిరుపతి అర్బన్' },
-    { slug: 'tirupati-rural', nameEn: 'Tirupati Rural', nameTe: 'తిరుపతి రూరల్' },
-    { slug: 'chandragiri', nameEn: 'Chandragiri', nameTe: 'చంద్రగిరి' },
-    { slug: 'srikalahasti', nameEn: 'Srikalahasti', nameTe: 'శ్రీకాళహస్తి' },
-    { slug: 'renigunta', nameEn: 'Renigunta', nameTe: 'రేణిగుంట' },
-  ],
-  'kurnool': [
-    { slug: 'kurnool-urban', nameEn: 'Kurnool Urban', nameTe: 'కర్నూలు అర్బన్' },
-    { slug: 'kurnool-rural', nameEn: 'Kurnool Rural', nameTe: 'కర్నూలు రూరల్' },
-    { slug: 'yemmiganur', nameEn: 'Yemmiganur', nameTe: 'ఎమ్మిగనూరు' },
-    { slug: 'adoni', nameEn: 'Adoni', nameTe: 'ఆదోని' },
-    { slug: 'kodumur', nameEn: 'Kodumur', nameTe: 'కోడుమూరు' },
-  ],
 };
 
-// Fallback helper for remaining districts
+/**
+ * Returns authentic revenue mandals and major municipal towns for any district in Telangana or Andhra Pradesh.
+ * If district is outside specific map or is from another state, provides graceful fallback.
+ */
 export function getMandalsForDistrict(districtSlug: string): { slug: string; nameEn: string; nameTe: string }[] {
+  if (!districtSlug) return [];
+
+  // Check Telangana mandals
   if (TELANGANA_MANDALS_MAP[districtSlug]) {
     return TELANGANA_MANDALS_MAP[districtSlug];
   }
-  // Generic mandals if not yet in explicit map
+
+  // Check Andhra Pradesh mandals
+  if (ANDHRA_PRADESH_MANDALS_MAP[districtSlug]) {
+    return ANDHRA_PRADESH_MANDALS_MAP[districtSlug];
+  }
+
+  // Graceful fallback for remaining districts
   const clean = districtSlug.replace(/-/g, ' ');
   const cap = clean.charAt(0).toUpperCase() + clean.slice(1);
   return [
     { slug: `${districtSlug}-headquarter`, nameEn: `${cap} Urban / HQ`, nameTe: `${cap} ప్రధాన కేంద్రం` },
     { slug: `${districtSlug}-rural`, nameEn: `${cap} Rural`, nameTe: `${cap} రూరల్` },
     { slug: `${districtSlug}-central`, nameEn: `${cap} Central`, nameTe: `${cap} సెంట్రల్` },
+    { slug: `${districtSlug}-town`, nameEn: `${cap} Town`, nameTe: `${cap} పట్టణం` },
   ];
+}
+
+/**
+ * Look up district item by slug across all 59 districts
+ */
+export function getDistrictBySlug(slug: string): DistrictItem | undefined {
+  return ALL_COMMUNITY_DISTRICTS.find((d) => d.slug === slug);
+}
+
+/**
+ * Filter districts by state
+ */
+export function getDistrictsByState(state: 'telangana' | 'andhra-pradesh' | 'all'): DistrictItem[] {
+  if (state === 'telangana') return ALL_TELANGANA_DISTRICTS;
+  if (state === 'andhra-pradesh') return ALL_ANDHRA_DISTRICTS;
+  return ALL_COMMUNITY_DISTRICTS;
 }

@@ -167,7 +167,7 @@ export function QuickSearch({ districts }: { districts: string[] }) {
               onChange={(e) => setDistrict(e.target.value)}
               style={{ width: '100%', padding: '0.75rem 0.8rem', borderRadius: '12px', border: '1.5px solid #CBD5E1', background: '#F8FAFC', fontSize: '0.92rem', color: '#1E293B', fontWeight: 600 }}
             >
-              <option value="">{lang === 'en' ? 'All 33 Districts' : 'అన్ని 33 జిల్లాలు'}</option>
+              <option value="">{lang === 'en' ? 'All Districts (Telangana & AP)' : 'అన్ని జిల్లాలు (తెలంగాణ & ఆంధ్రప్రదేశ్)'}</option>
               {districts.map((d) => (
                 <option key={d} value={d}>{d}</option>
               ))}

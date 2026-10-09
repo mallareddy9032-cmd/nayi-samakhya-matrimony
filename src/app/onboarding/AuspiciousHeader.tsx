@@ -88,8 +88,8 @@ export function AuspiciousHeader() {
       </h1>
       <p style={{ margin: 0, color: '#B45309', fontWeight: 600, fontSize: '0.92rem' }}>
         <Bi 
-          en="Official Community Matrimonial Initiative · 33 Districts of Telangana" 
-          te="పవిత్ర సగోత్ర రక్షణ · తెలంగాణ 33 జిల్లాల అధికారిక వేదిక" 
+          en="Official Community Matrimonial Initiative · Telangana, Andhra Pradesh & Pan-India" 
+          te="పవిత్ర సగోత్ర రక్షణ · తెలంగాణ, ఆంధ్రప్రదేశ్ & అఖిల భారత అధికారిక వేదిక" 
         />
       </p>
     </header>

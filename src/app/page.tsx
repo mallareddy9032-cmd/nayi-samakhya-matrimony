@@ -222,13 +222,21 @@ const FEATURED_PROFILES = [
 ];
 
 const TELANGANA_DISTRICTS = [
-  'Hyderabad', 'Warangal', 'Karimnagar', 'Nalgonda', 'Khammam', 'Nizamabad',
+  // Telangana (33 Districts)
+  'Hyderabad', 'Warangal', 'Hanumakonda', 'Karimnagar', 'Nalgonda', 'Khammam', 'Nizamabad',
   'Rangareddy', 'Medchal-Malkajgiri', 'Siddipet', 'Suryapet', 'Mahabubnagar',
   'Adilabad', 'Bhadradri Kothagudem', 'Jagtial', 'Jangaon', 'Jayashankar Bhupalpally',
   'Jogulamba Gadwal', 'Kamareddy', 'Komaram Bheem Asifabad', 'Mahabubabad',
   'Mancherial', 'Medak', 'Mulugu', 'Nagarkurnool', 'Narayanpet', 'Nirmal',
   'Peddapalli', 'Rajanna Sircilla', 'Sangareddy', 'Vikarabad', 'Wanaparthy',
-  'Hanamkonda', 'Yadadri Bhuvanagiri'
+  'Yadadri Bhuvanagiri',
+  // Andhra Pradesh (26 Districts)
+  'Visakhapatnam', 'NTR (Vijayawada)', 'Guntur', 'Tirupati', 'Kurnool', 'Kakinada',
+  'Nellore (SPSR Nellore)', 'East Godavari (Rajamahendravaram)', 'West Godavari (Bhimavaram)',
+  'Krishna (Machilipatnam)', 'Eluru', 'Prakasam (Ongole)', 'Bapatla', 'Palnadu (Narasaraopet)',
+  'YSR Kadapa', 'Ananthapuramu', 'Sri Sathya Sai (Puttaparthi)', 'Chittoor',
+  'Annamayya (Rayachoti)', 'Nandyal', 'Srikakulam', 'Vizianagaram',
+  'Parvathipuram Manyam', 'Alluri Sitharama Raju', 'Anakapalli', 'Dr. B.R. Ambedkar Konaseema'
 ];
 
 export default function Home() {
@@ -340,8 +348,8 @@ export default function Home() {
               }}>
                 <span>✨</span>
                 <Bi 
-                  en="Official Community Matrimonial Initiative · 33 Districts" 
-                  te="అధికారిక నాయీ సమాఖ్య కల్యాణ వేదిక · 33 జిల్లాలు" 
+                  en="Official Community Matrimonial Initiative · 59 Districts (TG & AP) · Pan-India" 
+                  te="అధికారిక నాయీ సమాఖ్య కల్యాణ వేదిక · తెలంగాణ & ఆంధ్రప్రదేశ్ · అఖిల భారత వేదిక" 
                 />
               </span>
             </div>
@@ -372,8 +380,8 @@ export default function Home() {
               textShadow: '0 1px 4px rgba(0, 0, 0, 0.4)'
             }}>
               <Bi 
-                en="Connecting verified families across 33 districts and 589 mandals of Telangana and Andhra Pradesh. 100% Sagothra protected, DPDP-grade privacy, and absolutely zero private brokers or commercial exploitation." 
-                te="తెలంగాణ & ఆంధ్రప్రదేశ్ 33 జిల్లాల 589 మండలాల్లోని మన సమాజ సంబంధాలను ఒకచోట చేర్చే పవిత్ర వేదిక. 100% సగోత్ర రక్షణ, చట్టబద్ధమైన గోప్యత, మరియు ఎటువంటి ప్రైవేటు దళారులు లేని పారదర్శక సేవ." 
+                en="Connecting verified families across 59 districts of Telangana & Andhra Pradesh, alongside Telugu Nayi Brahmin families settled across India and worldwide. 100% Sagothra protected, DPDP-grade privacy, and absolutely zero private brokers or commercial exploitation." 
+                te="తెలంగాణ (33 జిల్లాలు) & ఆంధ్రప్రదేశ్ (26 జిల్లాలు) మరియు దేశవ్యాప్తంగా స్థిరపడిన మన తెలుగు నాయీ బ్రాహ్మణ కుటుంబాల పవిత్ర కల్యాణ వేదిక. 100% సగోత్ర రక్షణ, చట్టబద్ధమైన గోప్యత, మరియు ఎటువంటి ప్రైవేటు దళారులు లేని పారదర్శక సేవ." 
               />
             </p>
 
@@ -410,7 +418,7 @@ export default function Home() {
                 gap: '0.4rem'
               }}>
                 <span>📍</span>
-                <Bi en="Active in 33 Districts" te="33 జిల్లాల్లో ప్రత్యక్షం" />
+                <Bi en="Active in 59 Districts & Pan-India" te="59 జిల్లాలు & అఖిల భారత విస్తృతి" />
               </div>
 
               <div style={{ 
@@ -920,14 +928,14 @@ export default function Home() {
               <div>
                 <span style={{ fontSize: '0.8rem', fontWeight: 800, color: '#D4AF37', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Pillar 3</span>
                 <h3 style={{ fontSize: '1.3rem', margin: 0, color: '#801426', fontWeight: 800 }}>
-                  <Bi en="589 Mandal Coordinators" te="589 మండల సమన్వయకర్తల నెట్‌వర్క్" />
+                  <Bi en="Grassroots Mandal Coordinators" te="మండల సమన్వయకర్తల నెట్‌వర్క్" />
                 </h3>
               </div>
             </div>
             <p style={{ fontSize: '0.95rem', lineHeight: '1.7', color: '#475569', margin: 0 }}>
               <Bi 
-                en="Real grassroots verification in every mandal across all 33 Telangana districts. Our local community coordinators cross-verify identity, family background, and lineage authenticity."
-                te="తెలంగాణలోని మొత్తం 33 జిల్లాల 589 మండలాల్లో నియమించబడిన స్థానిక నాయీ సమాఖ్య సమన్వయకర్తల ద్వారా అభ్యర్థుల కుటుంబ నేపథ్యం మరియు గుర్తింపు ప్రత్యక్షంగా ధృవీకరించబడుతుంది."
+                en="Grassroots verification across mandals in Telangana, Andhra Pradesh, and nationwide community hubs. Our local coordinators cross-verify identity, family background, and lineage authenticity."
+                te="తెలంగాణ, ఆంధ్రప్రదేశ్‌లోని సమగ్ర మండలాల్లో మరియు దేశవ్యాప్త నెట్‌వర్క్‌లో స్థానిక నాయీ సమాఖ్య సమన్వయకర్తల ద్వారా అభ్యర్థుల కుటుంబ నేపథ్యం మరియు గుర్తింపు ప్రత్యక్షంగా ధృవీకరించబడుతుంది."
               />
             </p>
           </article>

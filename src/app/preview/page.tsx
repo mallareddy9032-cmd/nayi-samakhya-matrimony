@@ -88,7 +88,7 @@ function ConceptOnePreview() {
                 నాయీ సమాఖ్య కల్యాణ వేదిక
               </h2>
               <p style={{ margin: 0, fontSize: '0.8rem', color: '#718096' }}>
-                Nayi Samakhya Matrimony • Official 33 Districts Alliance
+                Nayi Samakhya Matrimony • Pan-Telugu & Pan-India Alliance
               </p>
             </div>
           </div>
@@ -124,11 +124,11 @@ function ConceptOnePreview() {
             ★ పవిత్ర సగోత్ర రక్షణ & చట్టబద్ధమైన గోప్యత
           </span>
           <h1 style={{ fontSize: '2.8rem', color: '#1A202C', margin: '1rem 0 0.8rem', lineHeight: '1.25', fontWeight: 800 }}>
-            తెలంగాణ నాయీ బ్రాహ్మణుల <br />
+            తెలంగాణ & ఆంధ్రప్రదేశ్ నాయీ బ్రాహ్మణుల <br />
             <span style={{ color: '#8B1D2C' }}>గౌరవప్రదమైన కల్యాణ వేదిక</span>
           </h1>
           <p style={{ fontSize: '1.1rem', color: '#4A5568', lineHeight: '1.7', margin: '0 0 1.5rem' }}>
-            33 జిల్లాల 589 మండలాల్లోని మన సమాజ కుటుంబాలను ఒకచోట చేర్చే నమ్మకమైన అధికారిక వేదిక. ఎటువంటి ప్రైవేటు దళారులు లేకుండా, పారదర్శకమైన విధానంతో సంబంధాలను వెతకండి.
+            తెలంగాణ & ఆంధ్రప్రదేశ్ 59 జిల్లాలలోని మరియు దేశవ్యాప్తంగా స్థిరపడిన మన సమాజ కుటుంబాలను ఒకచోట చేర్చే నమ్మకమైన అధికారిక వేదిక. ఎటువంటి ప్రైవేటు దళారులు లేకుండా, పారదర్శకమైన విధానంతో సంబంధాలను వెతకండి.
           </p>
           <div style={{ display: 'flex', gap: '1rem' }}>
             <Link
@@ -363,8 +363,10 @@ function ConceptTwoPreview() {
           <div>
             <label style={{ display: 'block', fontSize: '0.8rem', color: '#94A3B8', marginBottom: '0.3rem' }}>DISTRICT</label>
             <select style={{ width: '100%', background: '#0B132B', color: '#FFF', border: '1px solid #334155', padding: '0.6rem', borderRadius: '8px' }}>
-              <option>All 33 Districts</option>
+              <option>All Districts (Telangana & AP)</option>
               <option>Hyderabad</option>
+              <option>Visakhapatnam</option>
+              <option>Vijayawada (NTR)</option>
               <option>Warangal</option>
             </select>
           </div>

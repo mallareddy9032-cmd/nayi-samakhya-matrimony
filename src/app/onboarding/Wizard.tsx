@@ -14,7 +14,12 @@ import {
   type Bilingual,
   type Lang,
 } from '../../lib/onboarding.ts';
-import { ALL_TELANGANA_DISTRICTS, getMandalsForDistrict } from '../../lib/telangana-districts-mandals.ts';
+import { 
+  ALL_TELANGANA_DISTRICTS, 
+  ALL_ANDHRA_DISTRICTS, 
+  ALL_COMMUNITY_DISTRICTS, 
+  getMandalsForDistrict 
+} from '../../lib/telangana-districts-mandals.ts';
 import { useLanguage } from '../../context/LanguageContext.tsx';
 
 type Gothra = { id: string; nameEn: string; nameTe: string };
@@ -61,7 +66,9 @@ const GENERIC: Bilingual = { en: 'Please enter required information here.', te: 
 
 const EMPTY = {
   displayName: '', gender: '', dateOfBirth: '', gothraId: '', proposedEn: '', proposedTe: '', maternalLineage: '',
-  vocation: 'corporate_tech_civil', district: 'hyderabad', mandal: 'ameerpet', educationDegree: '', occupation: '', incomeBracket: '6l_12l', enterprise: false,
+  vocation: 'corporate_tech_civil', state: 'telangana', district: 'hyderabad', mandal: 'ameerpet',
+  otherState: '', otherCity: '', otherLocality: '',
+  educationDegree: '', occupation: '', incomeBracket: '6l_12l', enterprise: false,
   salonHubSlug: '', birthTime: '', birthPlace: '', nakshatra: '', photoVisibility: 'public_verified', phone: '', email: '',
   whatsapp: '', doorAddress: '', pledge: true, masking: true, dpdp: true, coordinator: true,
 };
@@ -73,8 +80,24 @@ const orNull = (s: string): string | null => (s.trim() === '' ? null : s);
 
 function toPayload(f: Form, lang: Lang) {
   // Normalize district & mandal slugs
-  const distSlug = f.district ? slugify(f.district) : '';
-  const mandSlug = f.mandal ? slugify(f.mandal) : '';
+  let distSlug = f.district ? slugify(f.district) : '';
+  let mandSlug = f.mandal ? slugify(f.mandal) : '';
+
+  if (f.state === 'other') {
+    const rawCity = f.otherCity || f.otherState || 'other-state';
+    distSlug = slugify(rawCity).slice(0, 40) || 'other-state';
+    const rawLocality = f.otherLocality || 'other-mandal';
+    mandSlug = slugify(rawLocality).slice(0, 40) || 'other-mandal';
+  }
+
+  let defaultAddress = 'India';
+  if (f.state === 'other') {
+    defaultAddress = [f.otherLocality, f.otherCity, f.otherState, 'India'].filter(Boolean).join(', ');
+  } else if (f.state === 'andhra-pradesh') {
+    defaultAddress = f.mandal ? `${f.mandal}, ${f.district}, Andhra Pradesh` : 'Andhra Pradesh, India';
+  } else {
+    defaultAddress = f.mandal ? `${f.mandal}, ${f.district}, Telangana` : 'Telangana, India';
+  }
 
   return {
     lang,
@@ -112,7 +135,7 @@ function toPayload(f: Form, lang: Lang) {
       phone: f.phone || '', 
       email: orNull(f.email), 
       whatsapp: orNull(f.whatsapp), 
-      doorAddress: f.doorAddress || (f.mandal ? `${f.mandal}, ${f.district}, Telangana` : 'Telangana, India') 
+      doorAddress: f.doorAddress || defaultAddress 
     },
   };
 }
@@ -296,15 +319,59 @@ export function Wizard({ membershipId, gothras, startStep, reviewNote }: Props) 
     reader.readAsDataURL(file);
   };
 
-  const districtsList = ALL_TELANGANA_DISTRICTS;
-  const currentMandals = useMemo(() => getMandalsForDistrict(form.district || 'hyderabad'), [form.district]);
+  const districtsList = useMemo(() => {
+    if (form.state === 'andhra-pradesh') return ALL_ANDHRA_DISTRICTS;
+    if (form.state === 'telangana') return ALL_TELANGANA_DISTRICTS;
+    return ALL_COMMUNITY_DISTRICTS;
+  }, [form.state]);
+
+  const currentMandals = useMemo(() => {
+    if (form.state === 'other') return [];
+    return getMandalsForDistrict(form.district || (form.state === 'andhra-pradesh' ? 'visakhapatnam' : 'hyderabad'));
+  }, [form.state, form.district]);
 
   useEffect(() => {
     // When district changes, default mandal to first available
-    if (currentMandals.length > 0 && !currentMandals.some(m => m.slug === form.mandal)) {
+    if (form.state !== 'other' && currentMandals.length > 0 && !currentMandals.some(m => m.slug === form.mandal)) {
       setForm(f => ({ ...f, mandal: currentMandals[0]?.slug ?? '' }));
     }
-  }, [form.district, currentMandals]);
+  }, [form.state, form.district, currentMandals]);
+
+  const onStateChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const newState = e.target.value;
+    if (newState === 'andhra-pradesh') {
+      const defaultDist = ALL_ANDHRA_DISTRICTS[0]?.slug ?? 'visakhapatnam';
+      const mandals = getMandalsForDistrict(defaultDist);
+      setForm(f => ({
+        ...f,
+        state: newState,
+        district: defaultDist,
+        mandal: mandals[0]?.slug ?? '',
+      }));
+    } else if (newState === 'telangana') {
+      const defaultDist = ALL_TELANGANA_DISTRICTS[0]?.slug ?? 'hyderabad';
+      const mandals = getMandalsForDistrict(defaultDist);
+      setForm(f => ({
+        ...f,
+        state: newState,
+        district: defaultDist,
+        mandal: mandals[0]?.slug ?? '',
+      }));
+    } else {
+      setForm(f => ({
+        ...f,
+        state: 'other',
+        district: 'other-state',
+        mandal: 'other-mandal',
+      }));
+    }
+    setErrors(prev => {
+      const next = { ...prev };
+      delete next['heritage.ancestralNativeDistrict'];
+      delete next['heritage.ancestralNativeMandal'];
+      return next;
+    });
+  };
 
   const onDistrictChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const newDistrict = e.target.value;
@@ -679,54 +746,118 @@ export function Wizard({ membershipId, gothras, startStep, reviewNote }: Props) 
                 </div>
               </fieldset>
 
-              {/* Native Homeland: Strictly District and Dynamic Mandal (No Zone) */}
+              {/* Native Homeland: State, District, Mandal (Telangana, Andhra Pradesh, & Other States) */}
               <fieldset style={{ border: '1.5px solid var(--border-light)', borderRadius: '16px', padding: '1.5rem', background: '#FAFAF9' }}>
                 <legend style={{ fontWeight: 800, color: 'var(--maroon)', padding: '0 0.5rem' }}>
-                  <Bi en="Ancestral Homeland (Telangana & Andhra Pradesh)" te="పూర్వీకుల స్వస్థలం (తెలుగు రాష్ట్రాలు)" />
+                  <Bi en="Ancestral Homeland & Region (Pan-Telugu & Pan-India)" te="పూర్వీకుల స్వస్థలం & ప్రాంతం (తెలుగు రాష్ట్రాలు & భారత్)" />
                 </legend>
 
-                <div className="grid-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.2rem' }}>
-                  <div className="field">
-                    <label htmlFor="heritage-ancestralNativeDistrict" style={{ display: 'block', fontWeight: 700, marginBottom: '0.4rem', color: '#334155' }}>
-                      <Bi en="District" te="జిల్లా" />
-                    </label>
-                    <select 
-                      value={form.district} 
-                      onChange={onDistrictChange} 
-                      {...a11y('heritage.ancestralNativeDistrict')}
-                      required
-                    >
-                      <option value="">{lang === 'te' ? '— స్వస్థల జిల్లా ఎంచుకోండి —' : '— Select District —'}</option>
-                      {districtsList.map((d) => (
-                        <option key={d.slug} value={d.slug}>
-                          {lang === 'te' ? `${d.nameTe} (${d.nameEn})` : `${d.nameEn} (${d.nameTe})`}
-                        </option>
-                      ))}
-                    </select>
-                    {err('heritage.ancestralNativeDistrict')}
-                  </div>
-
-                  <div className="field">
-                    <label htmlFor="heritage-ancestralNativeMandal" style={{ display: 'block', fontWeight: 700, marginBottom: '0.4rem', color: '#334155' }}>
-                      <Bi en="Mandal" te="మండలం" />
-                    </label>
-                    <select 
-                      value={form.mandal} 
-                      onChange={onMandalChange} 
-                      disabled={!form.district}
-                      {...a11y('heritage.ancestralNativeMandal')}
-                      required
-                    >
-                      <option value="">{lang === 'te' ? '— స్వస్థల మండలం ఎంచుకోండి —' : '— Select Mandal —'}</option>
-                      {currentMandals.map((m) => (
-                        <option key={m.slug} value={m.slug}>
-                          {lang === 'te' ? `${m.nameTe || m.nameEn}` : m.nameEn}
-                        </option>
-                      ))}
-                    </select>
-                    {err('heritage.ancestralNativeMandal')}
-                  </div>
+                {/* State / Region Selector */}
+                <div className="field" style={{ marginBottom: '1.2rem' }}>
+                  <label htmlFor="heritage-state" style={{ display: 'block', fontWeight: 700, marginBottom: '0.4rem', color: '#334155' }}>
+                    <Bi en="State / Geographic Region" te="రాష్ట్రం / భౌగోళిక ప్రాంతం" />
+                  </label>
+                  <select 
+                    id="heritage-state"
+                    value={form.state} 
+                    onChange={onStateChange} 
+                    style={{ fontWeight: 600, width: '100%', padding: '0.75rem', borderRadius: '10px', border: '1.5px solid #CBD5E1' }}
+                  >
+                    <option value="telangana">{lang === 'te' ? 'తెలంగాణ (33 జిల్లాలు)' : 'Telangana (33 Districts)'}</option>
+                    <option value="andhra-pradesh">{lang === 'te' ? 'ఆంధ్రప్రదేశ్ (26 జిల్లాలు)' : 'Andhra Pradesh (26 Districts)'}</option>
+                    <option value="other">{lang === 'te' ? 'ఇతర రాష్ట్రాలు / విదేశాలు (Other States / Diaspora)' : 'Other Indian States / Overseas Diaspora'}</option>
+                  </select>
                 </div>
+
+                {form.state === 'other' ? (
+                  <div style={{ display: 'grid', gap: '1.2rem' }}>
+                    <div className="grid-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.2rem' }}>
+                      <div className="field">
+                        <label htmlFor="heritage-otherState" style={{ display: 'block', fontWeight: 700, marginBottom: '0.4rem', color: '#334155' }}>
+                          <Bi en="State / Territory / Country" te="రాష్ట్రం / కేంద్రపాలిత ప్రాంతం / దేశం" />
+                        </label>
+                        <input
+                          id="heritage-otherState"
+                          type="text"
+                          placeholder={lang === 'te' ? 'ఉదా. కర్ణాటక, మహారాష్ట్ర, తమిళనాడు' : 'e.g. Karnataka, Maharashtra, Tamil Nadu, USA'}
+                          value={form.otherState}
+                          onChange={setText('otherState')}
+                          required
+                        />
+                      </div>
+
+                      <div className="field">
+                        <label htmlFor="heritage-otherCity" style={{ display: 'block', fontWeight: 700, marginBottom: '0.4rem', color: '#334155' }}>
+                          <Bi en="City / District / Town" te="నగరం / జిల్లా / పట్టణం" />
+                        </label>
+                        <input
+                          id="heritage-otherCity"
+                          type="text"
+                          placeholder={lang === 'te' ? 'ఉదా. బెంగళూరు, ముంబై, పూణే, చెన్నై' : 'e.g. Bengaluru, Mumbai, Pune, Chennai'}
+                          value={form.otherCity}
+                          onChange={setText('otherCity')}
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    <div className="field">
+                      <label htmlFor="heritage-otherLocality" style={{ display: 'block', fontWeight: 700, marginBottom: '0.4rem', color: '#334155' }}>
+                        <Bi en="Area / Locality / Mandal / Colony" te="ప్రాంతం / మండలం / కాలనీ" />
+                      </label>
+                      <input
+                        id="heritage-otherLocality"
+                        type="text"
+                        placeholder={lang === 'te' ? 'ఉదా. ఇందిరానగర్, వైట్‌ఫీల్డ్, థానే' : 'e.g. Indiranagar, Whitefield, Thane'}
+                        value={form.otherLocality}
+                        onChange={setText('otherLocality')}
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <div className="grid-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.2rem' }}>
+                    <div className="field">
+                      <label htmlFor="heritage-ancestralNativeDistrict" style={{ display: 'block', fontWeight: 700, marginBottom: '0.4rem', color: '#334155' }}>
+                        <Bi en="District" te="జిల్లా" />
+                      </label>
+                      <select 
+                        value={form.district} 
+                        onChange={onDistrictChange} 
+                        {...a11y('heritage.ancestralNativeDistrict')}
+                        required
+                      >
+                        <option value="">{lang === 'te' ? '— స్వస్థల జిల్లా ఎంచుకోండి —' : '— Select District —'}</option>
+                        {districtsList.map((d) => (
+                          <option key={d.slug} value={d.slug}>
+                            {lang === 'te' ? `${d.nameTe} (${d.nameEn})` : `${d.nameEn} (${d.nameTe})`}
+                          </option>
+                        ))}
+                      </select>
+                      {err('heritage.ancestralNativeDistrict')}
+                    </div>
+
+                    <div className="field">
+                      <label htmlFor="heritage-ancestralNativeMandal" style={{ display: 'block', fontWeight: 700, marginBottom: '0.4rem', color: '#334155' }}>
+                        <Bi en="Mandal / Town" te="మండలం / పట్టణం" />
+                      </label>
+                      <select 
+                        value={form.mandal} 
+                        onChange={onMandalChange} 
+                        disabled={!form.district}
+                        {...a11y('heritage.ancestralNativeMandal')}
+                        required
+                      >
+                        <option value="">{lang === 'te' ? '— స్వస్థల మండలం ఎంచుకోండి —' : '— Select Mandal —'}</option>
+                        {currentMandals.map((m) => (
+                          <option key={m.slug} value={m.slug}>
+                            {lang === 'te' ? `${m.nameTe || m.nameEn}` : m.nameEn}
+                          </option>
+                        ))}
+                      </select>
+                      {err('heritage.ancestralNativeMandal')}
+                    </div>
+                  </div>
+                )}
               </fieldset>
             </div>
           )}
@@ -1016,7 +1147,7 @@ export function Wizard({ membershipId, gothras, startStep, reviewNote }: Props) 
                           👑 {form.gender === 'male' ? <Bi en="Groom" te="వరుడు" /> : form.gender === 'female' ? <Bi en="Bride" te="వధువు" /> : '—'}
                         </span>
                         <span className="patrika-tag" style={{ color: '#475569', borderColor: '#CBD5E1', background: '#F8FAFC' }}>
-                          🆔 NSM-TG-{(form.district || 'HYD').slice(0, 4).toUpperCase()}-DRAFT
+                          🆔 NSM-{form.state === 'andhra-pradesh' ? 'AP' : form.state === 'other' ? 'IN' : 'TG'}-{(form.district || 'HYD').slice(0, 4).toUpperCase()}-DRAFT
                         </span>
                       </div>
                     </div>
@@ -1076,25 +1207,35 @@ export function Wizard({ membershipId, gothras, startStep, reviewNote }: Props) 
                       </div>
                       <dl className="patrika-details-list">
                         <div className="patrika-item">
-                          <dt className="patrika-item-label"><Bi en="District" te="జిల్లా" />:</dt>
+                          <dt className="patrika-item-label"><Bi en="State / Region" te="రాష్ట్రం / ప్రాంతం" />:</dt>
                           <dd className="patrika-item-val">
-                            {selectedDistrict ? (lang === 'te' ? selectedDistrict.nameTe : selectedDistrict.nameEn) : form.district || '—'}
+                            {form.state === 'andhra-pradesh' 
+                              ? <Bi en="Andhra Pradesh (26 Districts)" te="ఆంధ్రప్రదేశ్ (26 జిల్లాలు)" />
+                              : form.state === 'other' 
+                                ? (form.otherState ? `${form.otherState} (Other State)` : <Bi en="Other State / Rest of India" te="ఇతర రాష్ట్రాలు / భారత్" />)
+                                : <Bi en="Telangana (33 Districts)" te="తెలంగాణ (33 జిల్లాలు)" />}
                           </dd>
                         </div>
                         <div className="patrika-item">
-                          <dt className="patrika-item-label"><Bi en="Mandal" te="మండలం" />:</dt>
+                          <dt className="patrika-item-label"><Bi en="District / City" te="జిల్లా / నగరం" />:</dt>
                           <dd className="patrika-item-val">
-                            {selectedMandal ? (lang === 'te' ? (selectedMandal.nameTe || selectedMandal.nameEn) : selectedMandal.nameEn) : form.mandal || '—'}
+                            {form.state === 'other' 
+                              ? (form.otherCity || form.otherState || '—')
+                              : selectedDistrict ? (lang === 'te' ? selectedDistrict.nameTe : selectedDistrict.nameEn) : form.district || '—'}
                           </dd>
                         </div>
                         <div className="patrika-item">
-                          <dt className="patrika-item-label"><Bi en="State" te="రాష్ట్రం" />:</dt>
-                          <dd className="patrika-item-val"><Bi en="Telangana (33 Districts)" te="తెలంగాణ (33 జిల్లాలు)" /></dd>
+                          <dt className="patrika-item-label"><Bi en="Mandal / Locality" te="మండలం / ప్రాంతం" />:</dt>
+                          <dd className="patrika-item-val">
+                            {form.state === 'other'
+                              ? (form.otherLocality || '—')
+                              : selectedMandal ? (lang === 'te' ? (selectedMandal.nameTe || selectedMandal.nameEn) : selectedMandal.nameEn) : form.mandal || '—'}
+                          </dd>
                         </div>
                         <div className="patrika-item">
                           <dt className="patrika-item-label"><Bi en="Verification" te="ధృవీకరణ" />:</dt>
                           <dd className="patrika-item-val" style={{ color: '#059669' }}>
-                            <Bi en="Mandal Coordinator Assigned" te="మండల సమన్వయకర్త కేటాయింపు" />
+                            <Bi en="Community Coordinator Assigned" te="సమాఖ్య సమన్వయకర్త కేటాయింపు" />
                           </dd>
                         </div>
                       </dl>

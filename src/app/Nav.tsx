@@ -30,7 +30,7 @@ export function Nav({ claims }: { claims?: SsoClaims | null }) {
               నాయీ సమాఖ్య కల్యాణ వేదిక
             </span>
             <span style={{ display: 'block', fontSize: '0.78rem', color: '#64748B', fontWeight: 600 }}>
-              Nayi Samakhya Matrimony · 33 Districts
+              Nayi Samakhya Matrimony · Telangana, AP & Pan-India
             </span>
           </div>
         </Link>
